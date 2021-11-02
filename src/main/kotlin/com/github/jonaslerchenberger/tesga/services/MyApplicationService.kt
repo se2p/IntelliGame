@@ -1,6 +1,6 @@
-package org.jetbrains.plugins.template.services
+package com.github.jonaslerchenberger.tesga.services
 
-import org.jetbrains.plugins.template.MyBundle
+import com.github.jonaslerchenberger.tesga.MyBundle
 
 class MyApplicationService {
 
