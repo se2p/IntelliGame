@@ -8,11 +8,12 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.github.jonaslerchenberger.tesga.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.jonaslerchenberger.tesga.services.MyProjectService"/>
+        <projectService serviceImplementation="com.github.jonaslerchenberger.tesga.services.ProjectService"/>
+        <notificationGroup id="Custom Notification Group" displayType="BALLOON"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.jonaslerchenberger.tesga.listeners.MyProjectManagerListener"
+        <listener class="com.github.jonaslerchenberger.tesga.listeners.ProjectManagerImpl"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 </idea-plugin>
