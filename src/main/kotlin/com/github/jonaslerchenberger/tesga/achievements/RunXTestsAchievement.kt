@@ -1,23 +1,22 @@
 package com.github.jonaslerchenberger.tesga.achievements
 
-import com.github.jonaslerchenberger.tesga.listeners.ActionAchievement
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
 import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.ide.util.PropertiesComponent
 
 class RunXTestsAchievement {
     companion object : SMTRunnerEventsListener,
-        ActionAchievement() {
+        Achievement() {
         override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
         }
 
         override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
-            var progress = SetXBreakpointsAchievement.progress()
+            var progress = progress()
             progress += 1
             if (progress == nextStep()) {
                 showAchievementNotification("Congratulations! You unlocked the Bronze Tester Achievement")
             }
-            SetXBreakpointsAchievement.updateProgress(progress)
+            updateProgress(progress)
         }
 
         override fun onTestsCountInSuite(count: Int) {

@@ -1,13 +1,12 @@
 package com.github.jonaslerchenberger.tesga.achievements
 
-import com.github.jonaslerchenberger.tesga.listeners.ActionAchievement
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.xdebugger.breakpoints.XBreakpoint
 import com.intellij.xdebugger.breakpoints.XBreakpointListener
 
 class SetXMethodBreakpointsAchievement {
     companion object : XBreakpointListener<XBreakpoint<*>>,
-        ActionAchievement() {
+        Achievement() {
         override fun breakpointAdded(breakpoint: XBreakpoint<*>) {
             if (breakpoint.type.id == "java-method") {
                 var progress = progress()

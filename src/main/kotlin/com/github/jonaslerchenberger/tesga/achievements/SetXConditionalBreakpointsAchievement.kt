@@ -1,6 +1,5 @@
 package com.github.jonaslerchenberger.tesga.achievements
 
-import com.github.jonaslerchenberger.tesga.listeners.ActionAchievement
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.xdebugger.breakpoints.XBreakpoint
 import com.intellij.xdebugger.breakpoints.XBreakpointListener
@@ -8,7 +7,7 @@ import com.intellij.xdebugger.impl.breakpoints.XBreakpointBase
 
 class SetXConditionalBreakpointsAchievement {
     companion object : XBreakpointListener<XBreakpoint<*>>,
-        ActionAchievement() {
+        Achievement() {
 
         override fun breakpointChanged(breakpoint: XBreakpoint<*>) {
             if (breakpoint is XBreakpointBase<*, *, *>) {

@@ -16,4 +16,11 @@
         <listener class="com.github.jonaslerchenberger.tesga.listeners.ProjectManagerImpl"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
+    <actions>
+        <action id="com.github.jonaslerchenberger.tesga.actions.OpenInformationDialogAction"
+                class="com.github.jonaslerchenberger.tesga.actions.OpenInformationDialogAction"
+                text="Show Achievement Progress" description="Opens the dialog with all achievements ">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+    </actions>
 </idea-plugin>

@@ -3,39 +3,34 @@ package com.github.jonaslerchenberger.tesga.services
 import com.github.jonaslerchenberger.tesga.MyBundle
 import com.github.jonaslerchenberger.tesga.achievements.*
 import com.github.jonaslerchenberger.tesga.components.MoreInformationDialog
-import com.github.jonaslerchenberger.tesga.listeners.ActionAchievement
-import com.github.jonaslerchenberger.tesga.listeners.TestListener
+import com.github.jonaslerchenberger.tesga.achievements.Achievement
+import com.github.jonaslerchenberger.tesga.listeners.BulkFileListenerImpl
+import com.github.jonaslerchenberger.tesga.listeners.EditorListenerImpl
 import com.intellij.coverage.CoverageDataManagerImpl
-import com.intellij.execution.ExecutionListener
-import com.intellij.execution.ExecutionManager
-import com.intellij.execution.filters.ConsoleInputFilterProvider
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.editor.actionSystem.EditorActionManager
-import com.intellij.openapi.extensions.Extensions
 import com.intellij.openapi.project.Project
-import com.intellij.util.messages.Topic
 import com.intellij.xdebugger.XDebuggerManager
 import com.intellij.xdebugger.breakpoints.XBreakpointListener
 
 class ProjectService(private val project: Project) {
-    private val actionAchievements = listOf<ActionAchievement>()
+    private val actionAchievements = listOf<Achievement>()
 
     init {
         println(MyBundle.message("projectService", project.name))
         PropertiesComponent.getInstance()
 //        val jlistener = TestListener(project)
-        val usedXPrintfDebuggingAchievement = UsedXPrintfDebuggingAchievement(project)
+        val editorListenerImpl = EditorListenerImpl()
+        val bulkFileListenerImpl = BulkFileListenerImpl()
 //        val setXConditionalBreakpointsAchievement = SetXConditionalBreakpointsAchievement(project)
 //
 //        val actionAchievements = listOf<ActionAchievement>(AssertTriggeredByTestAchievement, SetXConditionalBreakpointsAchievement, RunXDebuggerModeAchievement)
 //        Util.setActionAchievements(actionAchievements)
 //        project.getMessageBus().connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, jlistener)
-        project.getMessageBus().connect().subscribe(ExecutionManager.EXECUTION_TOPIC, usedXPrintfDebuggingAchievement)
-        project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, AssertTriggeredByTestAchievement)
+        project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, TriggerXAssertsByTestsAchievement)
         project.messageBus.connect().subscribe(XDebuggerManager.TOPIC, RunXDebuggerModeAchievement)
         project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, RunXTestsAchievement)
         project.messageBus.connect().subscribe(XBreakpointListener.TOPIC, SetXBreakpointsAchievement)
@@ -43,6 +38,17 @@ class ProjectService(private val project: Project) {
         project.messageBus.connect().subscribe(XBreakpointListener.TOPIC, SetXFieldWatchpointsAchievement)
         project.messageBus.connect().subscribe(XBreakpointListener.TOPIC, SetXLineBreakpointsAchievement)
         project.messageBus.connect().subscribe(XBreakpointListener.TOPIC, SetXMethodBreakpointsAchievement)
+        project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, FindXBugsAchievement)
+        project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, UseXPrintfDebuggingAchievement)
+        project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, RepairXWrongTestsAchievement)
+        project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, RefactorCodeAchievement)
+
+        FindXBugsAchievement.setProject(project)
+        UseXPrintfDebuggingAchievement.setProject(project)
+        RepairXWrongTestsAchievement.setProject(project)
+        RefactorCodeAchievement.setProject(project)
+//        project.messageBus.connect().subscribe(EditorTrackerListener.TOPIC, editorListenerImpl)
+//        project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, bulkFileListenerImpl)
         /*project.messageBus.connect().setDefaultHandler { method, objects ->
             for (`object` in objects) {
                 println("method:$method");

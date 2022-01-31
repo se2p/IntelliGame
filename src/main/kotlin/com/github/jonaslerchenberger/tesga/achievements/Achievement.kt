@@ -1,13 +1,11 @@
-package com.github.jonaslerchenberger.tesga.listeners
+package com.github.jonaslerchenberger.tesga.achievements
 
-import com.github.jonaslerchenberger.tesga.achievements.AssertTriggeredByTestAchievement
 import com.github.jonaslerchenberger.tesga.components.MoreInformationDialog
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.project.Project
 
-abstract class ActionAchievement() {
+abstract class Achievement() {
     // absolute number of calling the action of the achievement
     abstract fun progress(): Int
 

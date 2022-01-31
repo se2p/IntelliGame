@@ -1,14 +1,12 @@
 package com.github.jonaslerchenberger.tesga.achievements
 
-import com.github.jonaslerchenberger.tesga.listeners.ActionAchievement
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
 import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.ide.util.PropertiesComponent
-import com.intellij.openapi.project.Project
 
-class AssertTriggeredByTestAchievement{
+class TriggerXAssertsByTestsAchievement{
     companion object: SMTRunnerEventsListener,
-    ActionAchievement() {
+    Achievement() {
         override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
         }
 

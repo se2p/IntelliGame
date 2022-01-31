@@ -2,7 +2,7 @@ package com.github.jonaslerchenberger.tesga.services
 
 import com.github.jonaslerchenberger.tesga.achievements.*
 import com.github.jonaslerchenberger.tesga.components.MoreInformationDialog
-import com.github.jonaslerchenberger.tesga.listeners.ActionAchievement
+import com.github.jonaslerchenberger.tesga.achievements.Achievement
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
@@ -28,11 +28,12 @@ class Util {
                 .notify(null)
         }
 
-        fun getActionAchievements(): List<ActionAchievement> {
+        fun getAchievements(): List<Achievement> {
             return listOf(
-                AssertTriggeredByTestAchievement, RunXDebuggerModeAchievement, RunXTestsAchievement, SetXBreakpointsAchievement,
+                TriggerXAssertsByTestsAchievement, RunXDebuggerModeAchievement, RunXTestsAchievement, SetXBreakpointsAchievement,
                 SetXConditionalBreakpointsAchievement, SetXFieldWatchpointsAchievement, SetXLineBreakpointsAchievement,
-                SetXMethodBreakpointsAchievement
+                SetXMethodBreakpointsAchievement, UseXPrintfDebuggingAchievement, FindXBugsAchievement, RepairXWrongTestsAchievement,
+                RefactorCodeAchievement
             )
         }
     }

@@ -32,7 +32,7 @@ class MoreInformationDialog(val project: Project?) : DialogWrapper(project, null
 
         val main = JPanel()
         main.minimumSize = Dimension(400, 300)
-        main.preferredSize = Dimension(800, 600)
+        main.preferredSize = Dimension(840, 600)
         main.border = JBEmptyBorder(10)
         val content = panel {
             row {
@@ -55,7 +55,7 @@ class MoreInformationDialog(val project: Project?) : DialogWrapper(project, null
 
     fun achievementList(parentDisposable: Disposable): DialogPanel {
         val panel = panel {
-            for (achievement in Util.getActionAchievements()) {
+            for (achievement in Util.getAchievements()) {
                 row {
                     label(achievement.getName()).horizontalAlign(HorizontalAlign.LEFT)
                     label(achievement.getDescription()).horizontalAlign(HorizontalAlign.LEFT)
