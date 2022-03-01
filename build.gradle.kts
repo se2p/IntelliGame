@@ -7,13 +7,13 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.5.30"
+    id("org.jetbrains.kotlin.jvm") version "1.6.10"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.1.6"
+    id("org.jetbrains.intellij") version "1.4.0"
     // Gradle Changelog Plugin
-    id("org.jetbrains.changelog") version "1.3.0"
+    id("org.jetbrains.changelog") version "1.3.1"
     // Gradle Qodana Plugin
-    id("org.jetbrains.qodana") version "0.1.12"
+    id("org.jetbrains.qodana") version "0.1.13"
 }
 
 group = properties("pluginGroup")
@@ -27,6 +27,8 @@ repositories {
 dependencies {
     implementation("org.apache.commons:commons-text:1.9")
     implementation("io.github.java-diff-utils:java-diff-utils:4.11")
+    implementation("org.jetbrains.intellij.deps:intellij-coverage-reporter:1.0.656")
+    implementation("com.github.adedayo.intellij.sdk:coverage:142.1")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin

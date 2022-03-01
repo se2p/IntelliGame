@@ -5,6 +5,9 @@
     <vendor>jonaslerchenberger</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.coverage</depends>
+    <depends>com.intellij.modules.java</depends>
+    <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.github.jonaslerchenberger.tesga.services.MyApplicationService"/>
@@ -16,6 +19,10 @@
         <listener class="com.github.jonaslerchenberger.tesga.listeners.ProjectManagerImpl"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
+
+    <projectListeners>
+        <listener class="com.github.jonaslerchenberger.tesga.listeners.TestListener" topic="com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener"/>
+    </projectListeners>
     <actions>
         <action id="com.github.jonaslerchenberger.tesga.actions.OpenInformationDialogAction"
                 class="com.github.jonaslerchenberger.tesga.actions.OpenInformationDialogAction"

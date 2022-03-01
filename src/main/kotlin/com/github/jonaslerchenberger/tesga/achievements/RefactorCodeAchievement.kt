@@ -95,7 +95,7 @@ object RefactorCodeAchievement : SMTRunnerEventsListener, Achievement() {
                     }
                     var progress = progress()
                     progress += counter
-                    if (progress == nextStep()) {
+                    if (progress >= nextStep()) {
                         showAchievementNotification("Congratulations! You unlocked the 'Shine in new splendour' Achievement")
                     }
                     updateProgress(progress)
