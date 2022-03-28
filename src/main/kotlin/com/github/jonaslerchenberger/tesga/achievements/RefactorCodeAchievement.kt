@@ -158,16 +158,7 @@ object RefactorCodeAchievement : SMTRunnerEventsListener, Achievement() {
         return "Shine in new splendour"
     }
 
-    override fun nextStep(): Int {
-        if (progress() > 5) {
-            if (progress() > 50) {
-                if (progress() > 500) {
-                    return 2500;
-                }
-                return 500;
-            }
-            return 50;
-        }
-        return 5;
+    override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {
+        return linkedMapOf(0 to 5, 1 to 50, 2 to 500, 3 to 2500)
     }
 }

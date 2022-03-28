@@ -5,7 +5,7 @@ import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 
-abstract class Achievement() {
+abstract class Achievement {
     // absolute number of calling the action of the achievement
     abstract fun progress(): Int
 
@@ -16,7 +16,29 @@ abstract class Achievement() {
 
     abstract fun getName(): String
 
-    abstract fun nextStep(): Int
+    abstract fun getStepLevelMatrix(): LinkedHashMap<Int, Int>
+
+    open fun getLevel(): Int {
+        val stepLevelMatrix = getStepLevelMatrix()
+        val progress = progress()
+        for ((key, value) in stepLevelMatrix) {
+            if (progress < value ) {
+                return key
+            }
+        }
+        return 4
+    }
+
+    open fun nextStep(): Int {
+        val stepLevelMatrix = getStepLevelMatrix()
+        val progress = progress()
+        for ((key, value) in stepLevelMatrix) {
+            if (progress < value ) {
+                return value
+            }
+        }
+        return 0
+    }
 
     fun showAchievementNotification(message: String) {
         NotificationGroupManager.getInstance().getNotificationGroup("Custom Notification Group")

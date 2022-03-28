@@ -3,6 +3,8 @@ package com.github.jonaslerchenberger.tesga.listeners
 import com.github.jonaslerchenberger.tesga.achievements.*
 import com.github.jonaslerchenberger.tesga.util.CoverageInfo
 import com.intellij.coverage.*
+import com.intellij.coverage.view.CoverageViewManager
+import com.intellij.coverage.view.CoverageViewTreeStructure
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
@@ -41,55 +43,66 @@ object CoverageListener : CoverageSuiteListener {
                 }
 
                 override fun onSuccess() {
+                    val viewManager = CoverageViewManager.getInstance(myProject!!)
+                    val structure = CoverageViewTreeStructure(myProject, suitesBundle, viewManager.state)
                     val javaPackageFile: VirtualFile? = VirtualFileManager.getInstance().findFileByNioPath(
                         Path.of(
-                            myProject?.basePath ?: "", "/src/main/java"
+                            myProject.basePath ?: "", "/src/main/java"
                         )
                     )
                     if (javaPackageFile != null) {
 //                        val projectDir : PsiDirectory = PsiDirectoryFactory.getInstance(CoverageListener.myProject).createDirectory(
 //                            javaPackageFile)
 //                        val result = annotator.getDirCoverageInformationString(projectDir, suitesBundle, dataManager)
-                        val field: Field = annotator.javaClass.getDeclaredField("myDirCoverageInfos")
-                        field.isAccessible = true
-                        val value: HashMap<Any, Any> = field.get(annotator) as HashMap<Any, Any>
-                        val coverageInfo = value[javaPackageFile]
-                        var coveredLineCount = 0
-                        var totalLineCount = 0
-                        var totalClassCount = 0
-                        var coveredClassCount = 0
-                        var totalMethodCount = 0
-                        var coveredMethodCount = 0
-                        var coveredBranchCount = 0
-                        var totalBranchCount = 0
-                        if (coverageInfo != null) {
-                            coveredLineCount =
-                                coverageInfo.javaClass.getMethod("getCoveredLineCount").invoke(coverageInfo) as Int
-                            totalLineCount = getFieldAsInt(coverageInfo, "totalLineCount")
-                            totalClassCount = getFieldAsInt(coverageInfo, "totalClassCount")
-                            coveredClassCount = getFieldAsInt(coverageInfo, "coveredClassCount")
-                            totalMethodCount = getFieldAsInt(coverageInfo, "totalMethodCount")
-                            coveredMethodCount = getFieldAsInt(coverageInfo, "coveredMethodCount")
-                            coveredBranchCount = getFieldAsInt(coverageInfo, "coveredBranchCount")
-                            totalBranchCount = getFieldAsInt(coverageInfo, "totalBranchCount")
+                        // Check for dir coverage information
+                        val dirCoverageInfosField: Field = annotator.javaClass.getDeclaredField("myDirCoverageInfos")
+                        dirCoverageInfosField.isAccessible = true
+                        val dirCoverageInfosValue: HashMap<Any, Any> = dirCoverageInfosField.get(annotator) as HashMap<Any, Any>
+                        val dirCoverageInfo = dirCoverageInfosValue[javaPackageFile]
+                        if (dirCoverageInfo != null) {
+                            val coverageInfo = extractCoverageInfos(dirCoverageInfo)
+                            CoverXLinesAchievement.triggerAchievement(coverageInfo)
+                            CoverXMethodsAchievement.triggerAchievement(coverageInfo)
+                            CoverXClassesAchievement.triggerAchievement(coverageInfo)
+                            CoverXBranchesAchievement.triggerAchievement(coverageInfo)
                         }
-                        val convertedCoverageInfo = CoverageInfo(
-                            totalClassCount,
-                            coveredClassCount,
-                            totalMethodCount,
-                            coveredMethodCount,
-                            totalLineCount,
-                            coveredLineCount,
-                            totalBranchCount,
-                            coveredBranchCount
-                        )
-                        CoverXLinesAchievement.triggerAchievement(convertedCoverageInfo)
-                        CoverXMethodsAchievement.triggerAchievement(convertedCoverageInfo)
-                        CoverXClassesAchievement.triggerAchievement(convertedCoverageInfo)
-                        CoverXBranchesAchievement.triggerAchievement(convertedCoverageInfo)
+                        // Check for class coverage information
+                        val classCoverageInfosField: Field = annotator.javaClass.getDeclaredField("myClassCoverageInfos")
+                        classCoverageInfosField.isAccessible = true
+                        val classCoverageInfosValue: Map<Any, Any> = classCoverageInfosField.get(annotator) as Map<Any, Any>
+                        for ((key, value) in classCoverageInfosValue) {
+                            val coverageInfo = extractCoverageInfos(value)
+                            GetXLineCoverageInClassesWithYLinesAchievement.triggerAchievement(coverageInfo,
+                                key as String
+                            )
+                            GetXBranchCoverageInClassesWithYBranchesAchievement.triggerAchievement(coverageInfo, key)
+                            GetXMethodCoverageInClassesWithYMethodsAchievement.triggerAchievement(coverageInfo, key)
+                        }
                     }
                 }
             })
+    }
+
+    private fun extractCoverageInfos(coverageInfo: Any): CoverageInfo {
+        val coveredLineCount =
+            coverageInfo.javaClass.getMethod("getCoveredLineCount").invoke(coverageInfo) as Int
+        val totalLineCount = getFieldAsInt(coverageInfo, "totalLineCount")
+        val totalClassCount = getFieldAsInt(coverageInfo, "totalClassCount")
+        val coveredClassCount = getFieldAsInt(coverageInfo, "coveredClassCount")
+        val totalMethodCount = getFieldAsInt(coverageInfo, "totalMethodCount")
+        val coveredMethodCount = getFieldAsInt(coverageInfo, "coveredMethodCount")
+        val coveredBranchCount = getFieldAsInt(coverageInfo, "coveredBranchCount")
+        val totalBranchCount = getFieldAsInt(coverageInfo, "totalBranchCount")
+        return CoverageInfo(
+            totalClassCount,
+            coveredClassCount,
+            totalMethodCount,
+            coveredMethodCount,
+            totalLineCount,
+            coveredLineCount,
+            totalBranchCount,
+            coveredBranchCount
+        )
     }
 
     private fun findUnderlyingField(clazz: Class<*>, fieldName: String): Field? {
@@ -103,7 +116,7 @@ object CoverageListener : CoverageSuiteListener {
         return null
     }
 
-    fun getFieldAsInt(coverageInfo: Any, fieldName: String): Int {
+    private fun getFieldAsInt(coverageInfo: Any, fieldName: String): Int {
         val field: Field? = findUnderlyingField(coverageInfo.javaClass, fieldName)
         return if (field == null) {
             0

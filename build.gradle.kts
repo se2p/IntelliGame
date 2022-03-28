@@ -29,6 +29,7 @@ dependencies {
     implementation("io.github.java-diff-utils:java-diff-utils:4.11")
     implementation("org.jetbrains.intellij.deps:intellij-coverage-reporter:1.0.656")
     implementation("com.github.adedayo.intellij.sdk:coverage:142.1")
+    implementation("com.github.tsantalis:refactoring-miner:2.2.0")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin

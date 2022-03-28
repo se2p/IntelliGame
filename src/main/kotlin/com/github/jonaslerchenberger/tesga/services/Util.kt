@@ -45,7 +45,14 @@ class Util {
                 CoverXLinesAchievement,
                 CoverXMethodsAchievement,
                 CoverXClassesAchievement,
-                CoverXBranchesAchievement
+                CoverXBranchesAchievement,
+                AddTestsAchievement,
+                RefactorXTestNamesAchievement,
+                RefactorExtractXMethodsAchievement,
+                RefactorInlineXMethodsAchievement,
+                GetXLineCoverageInClassesWithYLinesAchievement,
+                GetXMethodCoverageInClassesWithYMethodsAchievement,
+                GetXBranchCoverageInClassesWithYBranchesAchievement
             )
         }
     }

@@ -107,6 +107,10 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
         return "Bug Finder"
     }
 
+    override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {
+        return linkedMapOf(0 to 3, 1 to 10, 2 to 100, 3 to 1000)
+    }
+
     override fun nextStep(): Int {
         if (progress() > 3) {
             if (progress() > 10) {

@@ -30,16 +30,7 @@ object CoverXMethodsAchievement: Achievement() {
         return "Check your methods"
     }
 
-    override fun nextStep(): Int {
-        if (progress() > 10) {
-            if (progress() > 100) {
-                if (progress() > 1000) {
-                    return 10000;
-                }
-                return 1000;
-            }
-            return 100;
-        }
-        return 10;
+    override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {
+        return linkedMapOf(0 to 10, 1 to 100, 2 to 1000, 3 to 10000)
     }
 }
