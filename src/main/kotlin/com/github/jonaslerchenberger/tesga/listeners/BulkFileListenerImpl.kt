@@ -20,7 +20,6 @@ object BulkFileListenerImpl : BulkFileListener {
     private var filesUnderObservation = hashMapOf<String, UMLModel>()
 
     override fun before(events: MutableList<out VFileEvent>) {
-        println("events$events")
         for (event in events) {
             if (event.path.endsWith(".java")) {
                 val folder = File(event.path).parentFile

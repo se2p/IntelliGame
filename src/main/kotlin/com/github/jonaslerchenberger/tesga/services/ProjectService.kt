@@ -4,11 +4,10 @@ import com.github.jonaslerchenberger.tesga.MyBundle
 import com.github.jonaslerchenberger.tesga.achievements.*
 import com.github.jonaslerchenberger.tesga.components.MoreInformationDialog
 import com.github.jonaslerchenberger.tesga.achievements.Achievement
-import com.github.jonaslerchenberger.tesga.listeners.BulkFileListenerImpl
-import com.github.jonaslerchenberger.tesga.listeners.CoverageListener
-import com.github.jonaslerchenberger.tesga.listeners.EditorListenerImpl
+import com.github.jonaslerchenberger.tesga.listeners.*
 import com.github.jonaslerchenberger.tesga.listeners.TestListener
 import com.intellij.coverage.CoverageDataManagerImpl
+import com.intellij.execution.ExecutionManager
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.notification.NotificationAction
@@ -45,6 +44,7 @@ class ProjectService(private val project: Project) {
         project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, UseXPrintfDebuggingAchievement)
         project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, RepairXWrongTestsAchievement)
         project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, RefactorCodeAchievement)
+        project.messageBus.connect().subscribe(ExecutionManager.EXECUTION_TOPIC, ExecutionListenerImpl)
 
         project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, BulkFileListenerImpl)
 
@@ -87,7 +87,6 @@ class ProjectService(private val project: Project) {
             .addAction(
                 NotificationAction.createSimple("Show more information",
                     Runnable {
-                        println("New Information")
                         val dialog = MoreInformationDialog(project)
                         dialog.show()
 

@@ -18,7 +18,6 @@ class Util {
                 .addAction(
                     NotificationAction.createSimple("Show more information",
                         Runnable {
-                            println("New Information")
                             val dialog = MoreInformationDialog(null)
                             dialog.show()
 
@@ -55,5 +54,54 @@ class Util {
                 GetXBranchCoverageInClassesWithYBranchesAchievement
             )
         }
+
+        fun getRefactoringAchievements(): List<Achievement> {
+            return listOf(
+                RefactorCodeAchievement,
+                RefactorXTestNamesAchievement,
+                RefactorExtractXMethodsAchievement,
+                RefactorInlineXMethodsAchievement
+            )
+        }
+
+        fun getCoverageAchievements(): List<Achievement> {
+            return listOf(
+                CoverXLinesAchievement,
+                CoverXMethodsAchievement,
+                CoverXClassesAchievement,
+                CoverXBranchesAchievement,
+            )
+        }
+
+        fun getAdvancedCoverageAchievements(): List<Achievement> {
+            return listOf(
+                GetXLineCoverageInClassesWithYLinesAchievement,
+                GetXMethodCoverageInClassesWithYMethodsAchievement,
+                GetXBranchCoverageInClassesWithYBranchesAchievement
+            )
+        }
+
+        fun getDebuggingAchievements(): List<Achievement> {
+            return listOf(
+                RunXDebuggerModeAchievement,
+                SetXBreakpointsAchievement,
+                SetXConditionalBreakpointsAchievement,
+                SetXFieldWatchpointsAchievement,
+                SetXLineBreakpointsAchievement,
+                SetXMethodBreakpointsAchievement,
+                UseXPrintfDebuggingAchievement,
+            )
+        }
+
+        fun getTestsAchievement(): List<Achievement> {
+            return listOf(
+                RunXTestsAchievement,
+                TriggerXAssertsByTestsAchievement,
+                FindXBugsAchievement,
+                RepairXWrongTestsAchievement,
+                AddTestsAchievement
+            )
+        }
+
     }
 }

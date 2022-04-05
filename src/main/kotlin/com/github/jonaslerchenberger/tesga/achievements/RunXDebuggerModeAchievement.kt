@@ -10,7 +10,7 @@ object RunXDebuggerModeAchievement : XDebuggerManagerListener,
         var progress = progress()
         progress += 1
         if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked the Bronze Debugger Achievement")
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Mr Debugger' Achievement")
         }
         updateProgress(progress)
         super.processStarted(debugProcess)

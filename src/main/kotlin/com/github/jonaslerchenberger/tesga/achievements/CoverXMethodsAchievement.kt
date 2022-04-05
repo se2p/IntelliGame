@@ -8,7 +8,7 @@ object CoverXMethodsAchievement: Achievement() {
         var progress = progress()
         progress += coverageInfo.coveredMethodCount
         if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked 'Check your methods' Achievement")
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Check your methods' Achievement")
         }
         updateProgress(progress)
     }

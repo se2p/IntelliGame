@@ -8,7 +8,7 @@ object CoverXClassesAchievement: Achievement() {
         var progress = progress()
         progress += coverageInfo.coveredClassCount
         if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked 'Check your classes' Achievement")
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Check your classes' Achievement")
         }
         updateProgress(progress)
     }

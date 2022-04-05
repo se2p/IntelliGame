@@ -1,7 +1,6 @@
 package com.github.jonaslerchenberger.tesga.achievements
 
 import com.intellij.ide.util.PropertiesComponent
-import com.intellij.psi.PsiModifierList
 import com.intellij.psi.PsiTreeChangeEvent
 import com.intellij.psi.PsiTreeChangeListener
 import com.intellij.psi.impl.source.PsiModifierListImpl
@@ -52,7 +51,7 @@ object AddTestsAchievement: Achievement(), PsiTreeChangeListener{
             var progress = progress()
             progress++
             if (progress == nextStep()) {
-                showAchievementNotification("Congratulations! You unlocked 'Safety first' Achievement")
+                showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Safety first' Achievement")
             }
             updateProgress(progress)
         }

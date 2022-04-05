@@ -5,17 +5,21 @@ import com.intellij.ide.util.PropertiesComponent
 
 object GetXBranchCoverageInClassesWithYBranchesAchievement  : Achievement() {
     fun triggerAchievement(coverageInfo: CoverageInfo, className: String) {
-        if ((coverageInfo.coveredBranchCount.toDouble() / coverageInfo.totalBranchCount) >= requiredCoverage()
-            && coverageInfo.totalBranchCount >= requiredTotalBranches()
+        if (coverageInfo.totalBranchCount >= requiredTotalBranches()
             && !getClassesWhichFulfillRequirements().split(",").contains(className)
         ) {
-            var classesWhichFulfillRequirements = getClassesWhichFulfillRequirements()
-            classesWhichFulfillRequirements += ",$className"
-            updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
-            if (progress() == nextStep()) {
-                showAchievementNotification("Congratulations! You unlocked 'Class Reviewer - Branches' Achievement")
-                updateClassesWhichFulfillRequirements("")
-                increaseLevel()
+            val achievedCoverage = coverageInfo.coveredBranchCount.toDouble() / coverageInfo.totalBranchCount
+            if (achievedCoverage >= requiredCoverage()) {
+                var classesWhichFulfillRequirements = getClassesWhichFulfillRequirements()
+                classesWhichFulfillRequirements += ",$className"
+                updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
+                if (progress() == nextStep()) {
+                    showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Class Reviewer - Branches' Achievement")
+                    updateClassesWhichFulfillRequirements("")
+                    increaseLevel()
+                }
+            } else if (achievedCoverage >= requiredCoverage() - 0.02) {
+                showAchievementNotification("Hey you are about to fulfill a requirement for an Achievement progress! Only " + ((requiredCoverage() - achievedCoverage) * 100) + "% Branch-coverage missing in the class" + className + ". Keep going!")
             }
         }
     }

@@ -7,7 +7,7 @@ object RunWithCoverageAchievement: Achievement() {
         var progress = progress()
         progress += 1
         if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked 'Gotta Catch ’Em All' Achievement")
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Gotta Catch ’Em All' Achievement")
         }
         updateProgress(progress)
     }

@@ -7,7 +7,7 @@ object RefactorInlineXMethodsAchievement: Achievement() {
         var progress = progress()
         progress++
         if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked 'The Method Inliner' Achievement")
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'The Method Inliner' Achievement")
         }
         updateProgress(progress)
     }

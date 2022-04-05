@@ -49,7 +49,6 @@ abstract class Achievement {
             .addAction(
                 NotificationAction.createSimple("Show more information",
                     Runnable {
-                        println("New Information")
                         val dialog = MoreInformationDialog(null)
                         dialog.show()
 

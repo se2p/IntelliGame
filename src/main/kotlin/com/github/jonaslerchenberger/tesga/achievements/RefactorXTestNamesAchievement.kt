@@ -8,7 +8,7 @@ object RefactorXTestNamesAchievement : Achievement() {
         var progress = progress()
         progress++
         if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked 'The Eponym' Achievement")
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'The Eponym' Achievement")
         }
         updateProgress(progress)
     }

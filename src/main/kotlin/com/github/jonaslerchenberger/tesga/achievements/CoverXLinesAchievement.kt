@@ -8,7 +8,7 @@ object CoverXLinesAchievement: Achievement() {
         var progress = progress()
         progress += coverageInfo.coveredLineCount
         if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked 'Line-by-line' Achievement")
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Line-by-line' Achievement")
         }
         updateProgress(progress)
     }

@@ -5,17 +5,21 @@ import com.intellij.ide.util.PropertiesComponent
 
 object GetXLineCoverageInClassesWithYLinesAchievement : Achievement() {
     fun triggerAchievement(coverageInfo: CoverageInfo, className: String) {
-        if ((coverageInfo.coveredLineCount.toDouble() / coverageInfo.totalLineCount) >= requiredCoverage()
-            && coverageInfo.totalLineCount >= requiredTotalLines()
+        if (coverageInfo.totalLineCount >= requiredTotalLines()
             && !getClassesWhichFulfillRequirements().split(",").contains(className)
         ) {
-            var classesWhichFulfillRequirements = getClassesWhichFulfillRequirements()
-            classesWhichFulfillRequirements += ",$className"
-            updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
-            if (progress() == nextStep()) {
-                showAchievementNotification("Congratulations! You unlocked 'Class Reviewer - Lines' Achievement")
-                updateClassesWhichFulfillRequirements("")
-                increaseLevel()
+            val achievedCoverage = coverageInfo.coveredLineCount.toDouble() / coverageInfo.totalLineCount
+            if (achievedCoverage >= requiredCoverage()) {
+                var classesWhichFulfillRequirements = getClassesWhichFulfillRequirements()
+                classesWhichFulfillRequirements += ",$className"
+                updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
+                if (progress() == nextStep()) {
+                    showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Class Reviewer - Lines' Achievement")
+                    updateClassesWhichFulfillRequirements("")
+                    increaseLevel()
+                }
+            } else if (achievedCoverage >= requiredCoverage() - 0.02) {
+                showAchievementNotification("Hey you are about to fulfill a requirement for an Achievement progress! Only " + ((requiredCoverage() - achievedCoverage) * 100) + "% Line-coverage missing in the class" + className + ". Keep going!")
             }
         }
     }
@@ -38,7 +42,7 @@ object GetXLineCoverageInClassesWithYLinesAchievement : Achievement() {
         properties.setValue("GetXLineCoverageInClassesWithYLinesAchievement", classesWhichFulfillRequirements, "")
     }
 
-    private fun getClassesWhichFulfillRequirements(): String {
+    public fun getClassesWhichFulfillRequirements(): String {
         val properties = PropertiesComponent.getInstance()
         return properties.getValue("GetXLineCoverageInClassesWithYLinesAchievement", "")
     }

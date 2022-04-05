@@ -47,7 +47,7 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
                     var progress = progress()
                     progress += 1
                     if (progress == nextStep()) {
-                        showAchievementNotification("Congratulations! You unlocked the 'Bug Finder' Achievement")
+                        showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Bug Finder' Achievement")
                     }
                     updateProgress(progress)
                 } else {

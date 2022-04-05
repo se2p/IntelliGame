@@ -7,7 +7,7 @@ object RefactorExtractXMethodsAchievement: Achievement() {
         var progress = progress()
         progress++
         if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked 'The Method Extractor' Achievement")
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'The Method Extractor' Achievement")
         }
         updateProgress(progress)
     }

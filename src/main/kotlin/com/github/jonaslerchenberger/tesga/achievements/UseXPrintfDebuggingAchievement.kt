@@ -41,7 +41,7 @@ object UseXPrintfDebuggingAchievement : SMTRunnerEventsListener, Achievement() {
                         var progress = progress()
                         progress += 1
                         if (progress == nextStep()) {
-                            showAchievementNotification("Congratulations! You unlocked the 'Console is the new Debug Mode' Achievement")
+                            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Console is the new Debug Mode' Achievement")
                         }
                         updateProgress(progress)
                     }

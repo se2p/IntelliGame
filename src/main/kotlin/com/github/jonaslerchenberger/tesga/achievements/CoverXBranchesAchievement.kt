@@ -8,7 +8,7 @@ object CoverXBranchesAchievement: Achievement() {
         var progress = progress()
         progress += coverageInfo.coveredBranchCount
         if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked 'Check your branches' Achievement")
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Check your branches' Achievement")
         }
         updateProgress(progress)
     }

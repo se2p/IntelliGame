@@ -53,7 +53,7 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
                     var progress = progress()
                     progress += 1
                     if (progress == nextStep()) {
-                        showAchievementNotification("Congratulations! You unlocked the 'Test Fixer' Achievement")
+                        showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Test Fixer' Achievement")
                     }
                     updateProgress(progress)
                 } else {
