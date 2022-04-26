@@ -32,15 +32,21 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
 
     override fun onTestFinished(test: SMTestProxy) {
         val key = test.locationUrl
+        val fileUrl = (test.locationUrl?.removeRange(test.locationUrl!!.lastIndexOf("."), test.locationUrl!!.length)
+            ?.removePrefix("java:test://")
+            ?.replace(".", "/")
+            ?: "")
         val pathToTest =
-            PROJECT?.basePath + "/src/test/java/" + test.parent.name.replace(".", "/") + ".java"
+            PROJECT?.basePath + "/src/test/java/" + fileUrl + ".java"
         val pathToCode =
-            PROJECT?.basePath + "/src/main/java/" + test.parent.name.dropLast(4).replace(".", "/")+ ".java"
+            PROJECT?.basePath + "/src/main/java/" + fileUrl.dropLast(4) + ".java"
         val testFile = File(pathToTest);
         val codeFile = File(pathToCode)
         if (key != null && testFile.exists() && codeFile.exists()) {
-            val testFileContent = FileUtils.readFileToString(testFile, Charset.defaultCharset()).replace(System.getProperty("line.separator"), "")
-            val codeFileContent = FileUtils.readFileToString(codeFile, Charset.defaultCharset()).replace(System.getProperty("line.separator"), "")
+            val testFileContent = FileUtils.readFileToString(testFile, Charset.defaultCharset())
+                .replace(System.getProperty("line.separator"), "")
+            val codeFileContent = FileUtils.readFileToString(codeFile, Charset.defaultCharset())
+                .replace(System.getProperty("line.separator"), "")
             if (test.magnitudeInfo == TestStateInfo.Magnitude.FAILED_INDEX) {
                 if (!testsUnderObservation.containsKey(key) && !classesUnderObservation.containsKey(key)) {
                     testsUnderObservation[key] = testFileContent
@@ -52,10 +58,7 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
                 ) {
                     var progress = progress()
                     progress += 1
-                    if (progress == nextStep()) {
-                        showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Test Fixer' Achievement")
-                    }
-                    updateProgress(progress)
+                    handleProgress(progress)
                 } else {
                     testsUnderObservation.remove(key)
                     classesUnderObservation.remove(key)

@@ -9,10 +9,7 @@ object RunXDebuggerModeAchievement : XDebuggerManagerListener,
     override fun processStarted(debugProcess: XDebugProcess) {
         var progress = progress()
         progress += 1
-        if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Mr Debugger' Achievement")
-        }
-        updateProgress(progress)
+        handleProgress(progress)
         super.processStarted(debugProcess)
     }
 

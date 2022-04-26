@@ -9,9 +9,6 @@ object SetXBreakpointsAchievement : XBreakpointListener<XBreakpoint<*>>,
     override fun breakpointAdded(breakpoint: XBreakpoint<*>) {
         var progress = progress()
         progress += 1
-        if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Take some breaks' Achievement")
-        }
         updateProgress(progress)
         super.breakpointAdded(breakpoint)
     }

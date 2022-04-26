@@ -10,10 +10,7 @@ object SetXLineBreakpointsAchievement : XBreakpointListener<XBreakpoint<*>>,
         if (breakpoint.type.id == "java-line") {
             var progress = progress()
             progress += 1
-            if (progress == nextStep()) {
-                showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Break the line' Achievement")
-            }
-            updateProgress(progress)
+            handleProgress(progress)
         }
         super.breakpointAdded(breakpoint)
     }

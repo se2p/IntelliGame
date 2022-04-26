@@ -10,10 +10,7 @@ object SetXFieldWatchpointsAchievement : XBreakpointListener<XBreakpoint<*>>,
         if (breakpoint.type.id == "java-field") {
             var progress = progress()
             progress += 1
-            if (progress == nextStep()) {
-                showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'On the Watch' Achievement")
-            }
-            updateProgress(progress)
+            handleProgress(progress)
         }
         super.breakpointAdded(breakpoint)
     }

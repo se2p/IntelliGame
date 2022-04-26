@@ -10,10 +10,7 @@ object SetXMethodBreakpointsAchievement : XBreakpointListener<XBreakpoint<*>>,
         if (breakpoint.type.id == "java-method") {
             var progress = progress()
             progress += 1
-            if (progress == nextStep()) {
-                showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Break the Method' Achievement")
-            }
-            updateProgress(progress)
+            handleProgress(progress)
         }
         super.breakpointAdded(breakpoint)
     }

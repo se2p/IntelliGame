@@ -2,14 +2,11 @@ package com.github.jonaslerchenberger.tesga.achievements
 
 import com.intellij.ide.util.PropertiesComponent
 
-object RefactorExtractXMethodsAchievement: Achievement() {
+object RefactorExtractXMethodsAchievement : Achievement() {
     fun triggerAchievement() {
         var progress = progress()
         progress++
-        if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'The Method Extractor' Achievement")
-        }
-        updateProgress(progress)
+        handleProgress(progress)
     }
 
     override fun progress(): Int {

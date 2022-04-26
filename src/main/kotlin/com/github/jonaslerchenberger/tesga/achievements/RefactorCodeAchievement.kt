@@ -51,7 +51,7 @@ object RefactorCodeAchievement : SMTRunnerEventsListener, Achievement() {
                 if (!testsUnderObservation.containsKey(key) && !classesUnderObservation.containsKey(key)) {
                     testsUnderObservation[key] = testFileContent
                     classesUnderObservation[key] = codeFileContent
-                } else if (testsUnderObservation[key] == testFileContent){
+                } else if (testsUnderObservation[key] == testFileContent) {
 //                    val countChangesCommandVisitor = CountChangesCommandVisitor()
 //                    val fileToCompare = classesUnderObservation[key]
 //
@@ -96,7 +96,17 @@ object RefactorCodeAchievement : SMTRunnerEventsListener, Achievement() {
                     var progress = progress()
                     progress += counter
                     if (progress >= nextStep()) {
-                        showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Shine in new splendour' Achievement")
+                        updateProgress(progress)
+                        showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the  '" + getName() + "' achievement!")
+                    } else {
+                        val progressGroupBeforeUpdate = getProgressGroup()
+                        updateProgress(progress)
+                        val progressGroupAfterUpdate = getProgressGroup()
+                        if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
+                            showAchievementNotification(
+                                "You are making progress on an achievement! Only " + progressGroupAfterUpdate.second + "% are missing for the next level of the '" + getName() + "' achievement!"
+                            )
+                        }
                     }
                     updateProgress(progress)
                     classesUnderObservation[key] = codeFileContent

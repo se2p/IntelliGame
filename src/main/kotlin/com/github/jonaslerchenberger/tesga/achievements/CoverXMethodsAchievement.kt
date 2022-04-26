@@ -3,15 +3,25 @@ package com.github.jonaslerchenberger.tesga.achievements
 import com.github.jonaslerchenberger.tesga.util.CoverageInfo
 import com.intellij.ide.util.PropertiesComponent
 
-object CoverXMethodsAchievement: Achievement() {
+object CoverXMethodsAchievement : Achievement() {
     fun triggerAchievement(coverageInfo: CoverageInfo) {
         var progress = progress()
         progress += coverageInfo.coveredMethodCount
-        if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Check your methods' Achievement")
+        if (progress >= nextStep()) {
+            updateProgress(progress)
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the '" + getName() + "' achievement!")
+        } else {
+            val progressGroupBeforeUpdate = getProgressGroup()
+            updateProgress(progress)
+            val progressGroupAfterUpdate = getProgressGroup()
+            if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
+                showAchievementNotification(
+                    "You are making progress on an achievement! Only " + progressGroupAfterUpdate.second + "% are missing for the next level of the '" + getName() + "' achievement!"
+                )
+            }
         }
-        updateProgress(progress)
     }
+
     override fun progress(): Int {
         val properties = PropertiesComponent.getInstance()
         return properties.getInt("coverXMethodsAchievement", 0)

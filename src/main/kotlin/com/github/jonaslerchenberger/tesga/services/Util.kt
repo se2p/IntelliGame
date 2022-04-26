@@ -51,7 +51,10 @@ class Util {
                 RefactorInlineXMethodsAchievement,
                 GetXLineCoverageInClassesWithYLinesAchievement,
                 GetXMethodCoverageInClassesWithYMethodsAchievement,
-                GetXBranchCoverageInClassesWithYBranchesAchievement
+                GetXBranchCoverageInClassesWithYBranchesAchievement,
+                RunXTestSuitesAchievement,
+                RunXTestSuitesWithXTestsAchievement,
+                RefactorAddXAssertionsAchievement
             )
         }
 
@@ -60,7 +63,8 @@ class Util {
                 RefactorCodeAchievement,
                 RefactorXTestNamesAchievement,
                 RefactorExtractXMethodsAchievement,
-                RefactorInlineXMethodsAchievement
+                RefactorInlineXMethodsAchievement,
+                RefactorAddXAssertionsAchievement
             )
         }
 
@@ -69,7 +73,7 @@ class Util {
                 CoverXLinesAchievement,
                 CoverXMethodsAchievement,
                 CoverXClassesAchievement,
-                CoverXBranchesAchievement,
+                CoverXBranchesAchievement
             )
         }
 
@@ -89,13 +93,15 @@ class Util {
                 SetXFieldWatchpointsAchievement,
                 SetXLineBreakpointsAchievement,
                 SetXMethodBreakpointsAchievement,
-                UseXPrintfDebuggingAchievement,
+                UseXPrintfDebuggingAchievement
             )
         }
 
         fun getTestsAchievement(): List<Achievement> {
             return listOf(
                 RunXTestsAchievement,
+                RunXTestSuitesAchievement,
+                RunXTestSuitesWithXTestsAchievement,
                 TriggerXAssertsByTestsAchievement,
                 FindXBugsAchievement,
                 RepairXWrongTestsAchievement,

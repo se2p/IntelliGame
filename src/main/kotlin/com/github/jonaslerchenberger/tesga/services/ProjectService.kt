@@ -3,9 +3,7 @@ package com.github.jonaslerchenberger.tesga.services
 import com.github.jonaslerchenberger.tesga.MyBundle
 import com.github.jonaslerchenberger.tesga.achievements.*
 import com.github.jonaslerchenberger.tesga.components.MoreInformationDialog
-import com.github.jonaslerchenberger.tesga.achievements.Achievement
 import com.github.jonaslerchenberger.tesga.listeners.*
-import com.github.jonaslerchenberger.tesga.listeners.TestListener
 import com.intellij.coverage.CoverageDataManagerImpl
 import com.intellij.execution.ExecutionManager
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
@@ -35,6 +33,8 @@ class ProjectService(private val project: Project) {
         project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, TriggerXAssertsByTestsAchievement)
         project.messageBus.connect().subscribe(XDebuggerManager.TOPIC, RunXDebuggerModeAchievement)
         project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, RunXTestsAchievement)
+        project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, RunXTestSuitesAchievement)
+        project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, RunXTestSuitesWithXTestsAchievement)
         project.messageBus.connect().subscribe(XBreakpointListener.TOPIC, SetXBreakpointsAchievement)
         project.messageBus.connect().subscribe(XBreakpointListener.TOPIC, SetXConditionalBreakpointsAchievement)
         project.messageBus.connect().subscribe(XBreakpointListener.TOPIC, SetXFieldWatchpointsAchievement)
@@ -47,6 +47,7 @@ class ProjectService(private val project: Project) {
         project.messageBus.connect().subscribe(ExecutionManager.EXECUTION_TOPIC, ExecutionListenerImpl)
 
         project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, BulkFileListenerImpl)
+        project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, RefactorAddXAssertionsAchievement)
 
 //        project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, TestListener)
 

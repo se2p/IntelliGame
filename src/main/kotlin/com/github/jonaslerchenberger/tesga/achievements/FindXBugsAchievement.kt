@@ -32,10 +32,17 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
     override fun onTestFinished(test: SMTestProxy) {
         val key = test.locationUrl
         val path =
-            PROJECT?.basePath + "/src/test/java/" + test.parent.name.replace(".", "/") + ".java"
-        val testFile = File(path);
+            PROJECT?.basePath + "/src/test/java/" + (test.locationUrl?.removeRange(
+                test.locationUrl!!.lastIndexOf("."),
+                test.locationUrl!!.length
+            )
+                ?.removePrefix("java:test://")
+                ?.replace(".", "/")
+                ?: "") + ".java"
+        val testFile = File(path)
         if (key != null && testFile.exists()) {
-            val fileContent = FileUtils.readFileToString(testFile, Charset.defaultCharset()).replace(System.getProperty("line.separator"), "")
+            val fileContent = FileUtils.readFileToString(testFile, Charset.defaultCharset())
+                .replace(System.getProperty("line.separator"), "")
             if (test.magnitudeInfo == TestStateInfo.Magnitude.FAILED_INDEX) {
                 if (!testsUnderObservation.containsKey(key)) {
                     testsUnderObservation[key] = fileContent
@@ -45,11 +52,8 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
                     testsUnderObservation[key] == fileContent
                 ) {
                     var progress = progress()
-                    progress += 1
-                    if (progress == nextStep()) {
-                        showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Bug Finder' Achievement")
-                    }
-                    updateProgress(progress)
+                    progress++
+                    handleProgress(progress)
                 } else {
                     testsUnderObservation.remove(key)
                 }
@@ -98,9 +102,9 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
     }
 
     override fun getDescription(): String {
-        return "Find bugs in the code with your tests. "
-//                "Your test code should be the same between " +
-//                "the first failed test run and the first successful run."
+        return "Find bugs in the code with your tests. " +
+                "Your test code should be the same between " +
+                "the first failed test run and the first successful run."
     }
 
     override fun getName(): String {

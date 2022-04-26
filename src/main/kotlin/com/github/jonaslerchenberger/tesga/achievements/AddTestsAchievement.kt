@@ -5,7 +5,7 @@ import com.intellij.psi.PsiTreeChangeEvent
 import com.intellij.psi.PsiTreeChangeListener
 import com.intellij.psi.impl.source.PsiModifierListImpl
 
-object AddTestsAchievement: Achievement(), PsiTreeChangeListener{
+object AddTestsAchievement : Achievement(), PsiTreeChangeListener {
     override fun progress(): Int {
         val properties = PropertiesComponent.getInstance()
         return properties.getInt("AddTestsAchievement", 0)
@@ -47,13 +47,10 @@ object AddTestsAchievement: Achievement(), PsiTreeChangeListener{
     }
 
     override fun childAdded(event: PsiTreeChangeEvent) {
-        if ((event.child as PsiModifierListImpl).text.equals("@Test")) {
+        if ((event.child is PsiModifierListImpl) && (event.child as PsiModifierListImpl).text.equals("@Test")) {
             var progress = progress()
             progress++
-            if (progress == nextStep()) {
-                showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Safety first' Achievement")
-            }
-            updateProgress(progress)
+            handleProgress(progress)
         }
     }
 

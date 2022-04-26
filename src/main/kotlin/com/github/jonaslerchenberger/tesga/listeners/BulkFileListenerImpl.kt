@@ -3,7 +3,6 @@ package com.github.jonaslerchenberger.tesga.listeners
 import com.github.jonaslerchenberger.tesga.achievements.RefactorExtractXMethodsAchievement
 import com.github.jonaslerchenberger.tesga.achievements.RefactorInlineXMethodsAchievement
 import com.github.jonaslerchenberger.tesga.achievements.RefactorXTestNamesAchievement
-import com.intellij.openapi.fileEditor.impl.LoadTextUtil
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 import gr.uom.java.xmi.UMLModel
@@ -31,7 +30,6 @@ object BulkFileListenerImpl : BulkFileListener {
     }
 
     override fun after(events: MutableList<out VFileEvent>) {
-        println("events$events")
         for (event in events) {
             if (event.path.endsWith(".java")) {
                 val folder = File(event.path).parentFile
@@ -60,6 +58,8 @@ object BulkFileListenerImpl : BulkFileListener {
             var text = events[0].file?.let { LoadTextUtil.loadText(it) }
             println("text$text")
         }*/
+        //TODO: activate generation
+        //CSVReportGenerator.generateCSVReport()
         super.after(events)
     }
 

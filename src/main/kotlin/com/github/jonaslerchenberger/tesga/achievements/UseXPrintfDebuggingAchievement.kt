@@ -40,10 +40,7 @@ object UseXPrintfDebuggingAchievement : SMTRunnerEventsListener, Achievement() {
                     if (classesUnderObservation.containsKey(key) && classesUnderObservation[key]!! < printlnCounter) {
                         var progress = progress()
                         progress += 1
-                        if (progress == nextStep()) {
-                            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Console is the new Debug Mode' Achievement")
-                        }
-                        updateProgress(progress)
+                        handleProgress(progress)
                     }
                     classesUnderObservation[key] = printlnCounter
                 }

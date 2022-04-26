@@ -2,15 +2,13 @@ package com.github.jonaslerchenberger.tesga.achievements
 
 import com.intellij.ide.util.PropertiesComponent
 
-object RunWithCoverageAchievement: Achievement() {
+object RunWithCoverageAchievement : Achievement() {
     fun triggerAchievement() {
         var progress = progress()
         progress += 1
-        if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Gotta Catch ’Em All' Achievement")
-        }
-        updateProgress(progress)
+        handleProgress(progress)
     }
+
     override fun progress(): Int {
         val properties = PropertiesComponent.getInstance()
         return properties.getInt("runWithCoverageAchievement", 0)

@@ -2,14 +2,11 @@ package com.github.jonaslerchenberger.tesga.achievements
 
 import com.intellij.ide.util.PropertiesComponent
 
-object RefactorInlineXMethodsAchievement: Achievement() {
+object RefactorInlineXMethodsAchievement : Achievement() {
     fun triggerAchievement() {
         var progress = progress()
         progress++
-        if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'The Method Inliner' Achievement")
-        }
-        updateProgress(progress)
+        handleProgress(progress)
     }
 
     override fun progress(): Int {

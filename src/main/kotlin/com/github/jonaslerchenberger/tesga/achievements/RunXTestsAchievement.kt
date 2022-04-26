@@ -10,14 +10,21 @@ object RunXTestsAchievement : SMTRunnerEventsListener, Achievement() {
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
         var progress = progress()
-        progress += 1
-        if (progress == nextStep()) {
-            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the 'Tester' - Achievement")
+        progress += testsRoot.children.sumOf { it.children.size }
+        if (progress >= nextStep()) {
+            updateProgress(progress)
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the '" + getName() + "' - Achievement")
+        } else {
+            val progressGroupBeforeUpdate = getProgressGroup()
+            updateProgress(progress)
+            val progressGroupAfterUpdate = getProgressGroup()
+            if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
+                showAchievementNotification(
+                    "You are making progress on an achievement! Only " + progressGroupAfterUpdate.second + "% are still missing for the next level of the '" + getName() + "' Achievement!"
+                )
+            }
         }
-        updateProgress(progress)
-        if (GetXLineCoverageInClassesWithYLinesAchievement.getLevel() == 0 && GetXLineCoverageInClassesWithYLinesAchievement.getClassesWhichFulfillRequirements() == "") {
-            showAchievementNotification("You might want to run your tests with coverage to see if you missed anything!")
-        }
+
     }
 
     override fun onTestsCountInSuite(count: Int) {
@@ -70,11 +77,11 @@ object RunXTestsAchievement : SMTRunnerEventsListener, Achievement() {
     }
 
     override fun getDescription(): String {
-        return "Can be achieved by executing tests"
+        return "Every single test execution counts as progress"
     }
 
     override fun getName(): String {
-        return "Mr Tester"
+        return "Test Executor"
     }
 
     override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {

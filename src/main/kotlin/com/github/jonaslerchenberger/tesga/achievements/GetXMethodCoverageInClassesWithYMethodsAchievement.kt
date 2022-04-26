@@ -14,12 +14,16 @@ object GetXMethodCoverageInClassesWithYMethodsAchievement : Achievement() {
                 classesWhichFulfillRequirements += ",$className"
                 updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
                 if (progress() == nextStep()) {
-                    showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the  'Class Reviewer - Methods' Achievement")
+                    showAchievementNotification("Congratulations! You unlocked level " + (getLevel() + 1) + " of the  'Class Reviewer - Methods' Achievement")
                     updateClassesWhichFulfillRequirements("")
                     increaseLevel()
                 }
             } else if (achievedCoverage >= requiredCoverage() - 0.02) {
-                showAchievementNotification("Hey you are about to fulfill a requirement for an Achievement progress! Only " + ((requiredCoverage() - achievedCoverage) * 100) + "% Method-coverage missing in the class" + className + ". Keep going!")
+                showAchievementNotification(
+                    "Hey you are about to fulfill a requirement for an Achievement progress! Only " + "%.2f".format(
+                        (requiredCoverage() - achievedCoverage) * 100
+                    ) + "% Method-coverage missing in the class " + className + ". Keep going!"
+                )
             }
         }
     }

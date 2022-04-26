@@ -4,12 +4,17 @@ import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
 import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.ide.util.PropertiesComponent
 
-object TriggerXAssertsByTestsAchievement : SMTRunnerEventsListener,
-    Achievement() {
+object RunXTestSuitesAchievement : SMTRunnerEventsListener, Achievement() {
     override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
     }
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
+        var progress = progress()
+        progress += 1
+        handleProgress(progress)
+        if (GetXLineCoverageInClassesWithYLinesAchievement.getLevel() == 0 && GetXLineCoverageInClassesWithYLinesAchievement.getClassesWhichFulfillRequirements() == "") {
+            showAchievementNotification("You might want to run your tests with coverage to see if you missed anything!")
+        }
     }
 
     override fun onTestsCountInSuite(count: Int) {
@@ -22,11 +27,6 @@ object TriggerXAssertsByTestsAchievement : SMTRunnerEventsListener,
     }
 
     override fun onTestFailed(test: SMTestProxy) {
-        if (test.stacktrace!!.startsWith("java.lang.AssertionError")) {
-            var progress = progress()
-            progress += 1
-            handleProgress(progress)
-        }
     }
 
     override fun onTestIgnored(test: SMTestProxy) {
@@ -58,23 +58,23 @@ object TriggerXAssertsByTestsAchievement : SMTRunnerEventsListener,
 
     override fun progress(): Int {
         val properties = PropertiesComponent.getInstance()
-        return properties.getInt("assertTriggeredByTest", 0)
+        return properties.getInt("runXTestSuitesAchievement", 0)
     }
 
     override fun updateProgress(progress: Int) {
         val properties = PropertiesComponent.getInstance()
-        properties.setValue("assertTriggeredByTest", progress, 0)
+        properties.setValue("runXTestSuitesAchievement", progress, 0)
     }
 
     override fun getDescription(): String {
-        return "Asserts have to be triggered by tests"
+        return "Can be achieved by running tests"
     }
 
     override fun getName(): String {
-        return "Assert and Tested"
+        return "Mr Tester"
     }
 
     override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {
-        return linkedMapOf(0 to 3, 1 to 10, 2 to 100, 3 to 1000)
+        return linkedMapOf(0 to 3, 1 to 100, 2 to 1000, 3 to 10000)
     }
 }

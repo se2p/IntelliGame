@@ -165,7 +165,7 @@ class MoreInformationDialog(val project: Project?) :
                     }.layout(RowLayout.PARENT_GRID)
                 }
             }
-            groupRowsRange("Refactoring") {
+            groupRowsRange("Test Refactoring") {
                 for (achievement in Util.getRefactoringAchievements()) {
                     row {
                         when (achievement.getLevel()) {
