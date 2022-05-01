@@ -21,9 +21,12 @@ object BulkFileListenerImpl : BulkFileListener {
     override fun before(events: MutableList<out VFileEvent>) {
         for (event in events) {
             if (event.path.endsWith(".java")) {
-                val folder = File(event.path).parentFile
-                val modelBefore: UMLModel = UMLModelASTReader(folder).umlModel
-                filesUnderObservation[folder.path] = modelBefore
+                val file = File(event.path)
+                if (file.exists()) {
+                    val folder = file.parentFile
+                    val modelBefore: UMLModel = UMLModelASTReader(folder).umlModel
+                    filesUnderObservation[folder.path] = modelBefore
+                }
             }
         }
         super.before(events)
@@ -32,23 +35,26 @@ object BulkFileListenerImpl : BulkFileListener {
     override fun after(events: MutableList<out VFileEvent>) {
         for (event in events) {
             if (event.path.endsWith(".java")) {
-                val folder = File(event.path).parentFile
-                var modelAfter: UMLModel = UMLModelASTReader(folder).umlModel
-                var modelBefore = filesUnderObservation[folder.path]
-                val modelDiff: UMLModelDiff? = modelBefore?.diff(modelAfter)
-                val refactorings: List<Refactoring> = modelDiff?.refactorings ?: listOf()
-                for (refactoring in refactorings) {
-                    when (refactoring) {
-                        is RenameOperationRefactoring -> {
-                            if (refactoring.originalOperation.name.length < refactoring.renamedOperation.name.length) {
-                                RefactorXTestNamesAchievement.triggerAchievement()
+                val file = File(event.path)
+                if (file.exists()) {
+                    val folder = file.parentFile
+                    var modelAfter: UMLModel = UMLModelASTReader(folder).umlModel
+                    var modelBefore = filesUnderObservation[folder.path]
+                    val modelDiff: UMLModelDiff? = modelBefore?.diff(modelAfter)
+                    val refactorings: List<Refactoring> = modelDiff?.refactorings ?: listOf()
+                    for (refactoring in refactorings) {
+                        when (refactoring) {
+                            is RenameOperationRefactoring -> {
+                                if (refactoring.originalOperation.name.length < refactoring.renamedOperation.name.length) {
+                                    RefactorXTestNamesAchievement.triggerAchievement()
+                                }
                             }
-                        }
-                        is ExtractOperationRefactoring -> {
-                            RefactorExtractXMethodsAchievement.triggerAchievement()
-                        }
-                        is InlineOperationRefactoring -> {
-                            RefactorInlineXMethodsAchievement.triggerAchievement()
+                            is ExtractOperationRefactoring -> {
+                                RefactorExtractXMethodsAchievement.triggerAchievement()
+                            }
+                            is InlineOperationRefactoring -> {
+                                RefactorInlineXMethodsAchievement.triggerAchievement()
+                            }
                         }
                     }
                 }

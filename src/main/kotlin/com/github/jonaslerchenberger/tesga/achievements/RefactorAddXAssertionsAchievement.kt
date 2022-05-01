@@ -11,11 +11,14 @@ object RefactorAddXAssertionsAchievement : BulkFileListener, Achievement() {
         for (event in events) {
             if (event.path.endsWith("Test.java")) {
                 val file = File(event.path)
-                val counter =
-                    countAsserts(file.readText().replace("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)".toRegex(), ""))
-                filesUnderObservation[event.path] = counter
+                if (file.exists()) {
+                    val counter =
+                        countAsserts(
+                            file.readText().replace("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)".toRegex(), "")
+                        )
+                    filesUnderObservation[event.path] = counter
+                }
             }
-
             super.before(events)
         }
     }
@@ -24,21 +27,25 @@ object RefactorAddXAssertionsAchievement : BulkFileListener, Achievement() {
         for (event in events) {
             if (event.path.endsWith("Test.java")) {
                 val file = File(event.path)
-                val counter =
-                    countAsserts(file.readText().replace("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)".toRegex(), ""))
-                if (filesUnderObservation.containsKey(event.path) && filesUnderObservation[event.path]!! < counter) {
-                    var progress = progress()
-                    progress += 1
-                    handleProgress(progress)
+                if (file.exists()) {
+                    val counter =
+                        countAsserts(
+                            file.readText().replace("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)".toRegex(), "")
+                        )
+                    if (filesUnderObservation.containsKey(event.path) && filesUnderObservation[event.path]!! < counter) {
+                        var progress = progress()
+                        progress += 1
+                        handleProgress(progress)
+                    }
+                    filesUnderObservation[event.path] = counter
                 }
-                filesUnderObservation[event.path] = counter
             }
         }
         super.after(events)
     }
 
     private fun countAsserts(string: String): Int {
-        return string.split("assert").dropLastWhile { it.isEmpty() }.toTypedArray().size - 1
+        return (string.split("assert").dropLastWhile { it.isEmpty() }.toTypedArray().size - 1).coerceAtLeast(0)
     }
 
     override fun progress(): Int {
