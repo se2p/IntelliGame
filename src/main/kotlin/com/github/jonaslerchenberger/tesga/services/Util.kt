@@ -70,6 +70,7 @@ class Util {
 
         fun getCoverageAchievements(): List<Achievement> {
             return listOf(
+                RunWithCoverageAchievement,
                 CoverXLinesAchievement,
                 CoverXMethodsAchievement,
                 CoverXClassesAchievement,

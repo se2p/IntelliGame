@@ -26,7 +26,7 @@ abstract class Achievement {
                 return key
             }
         }
-        return 4
+        return 3
     }
 
     open fun nextStep(): Int {
@@ -37,7 +37,7 @@ abstract class Achievement {
                 return value
             }
         }
-        return 0
+        return stepLevelMatrix.getValue(stepLevelMatrix.size - 1)
     }
 
     fun showAchievementNotification(message: String) {
@@ -67,17 +67,17 @@ abstract class Achievement {
      */
     protected fun getProgressGroup(): Pair<Int, String> {
         val progressInPercent = (progress().toFloat() / nextStep())
-        val missingPercent = "%.2f".format(((1.00 - progressInPercent) * 100))
+        val reachedPercentage = "%.2f".format((progressInPercent * 100))
         if (progressInPercent >= 0.25) {
             if (progressInPercent >= 0.5) {
                 if (progressInPercent >= 0.75) {
-                    return Pair(3, missingPercent)
+                    return Pair(3, reachedPercentage)
                 }
-                return Pair(2, missingPercent)
+                return Pair(2, reachedPercentage)
             }
-            return Pair(1, missingPercent)
+            return Pair(1, reachedPercentage)
         }
-        return Pair(0, missingPercent)
+        return Pair(0, reachedPercentage)
     }
 
     protected fun handleProgress(progress: Int) {
@@ -90,7 +90,7 @@ abstract class Achievement {
             val progressGroupAfterUpdate = getProgressGroup()
             if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
                 showAchievementNotification(
-                    "You are making progress on an achievement! Only " + progressGroupAfterUpdate.second + "% are missing for the next level of the '" + getName() + "' achievement!"
+                    "You are making progress on an achievement! You have already reached " + progressGroupAfterUpdate.second + "% of the next level of the '" + getName() + "' achievement!"
                 )
             }
         }

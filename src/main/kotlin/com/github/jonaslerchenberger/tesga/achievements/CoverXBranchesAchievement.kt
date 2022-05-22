@@ -16,7 +16,7 @@ object CoverXBranchesAchievement : Achievement() {
             val progressGroupAfterUpdate = getProgressGroup()
             if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
                 showAchievementNotification(
-                    "You are making progress on an achievement! Only " + progressGroupAfterUpdate.second + "% are missing for the next level of the '" + getName() + "' achievement!"
+                    "You are making progress on an achievement! You have already reached " + progressGroupAfterUpdate.second + "% of the next level of the '" + getName() + "' achievement!"
                 )
             }
         }
@@ -33,7 +33,7 @@ object CoverXBranchesAchievement : Achievement() {
     }
 
     override fun getDescription(): String {
-        return "Cover X branches with your tests"
+        return "Cover X branches with your tests. Attention: for this achievement the tracing option of the IntelliJ Runner must be enabled."
     }
 
     override fun getName(): String {

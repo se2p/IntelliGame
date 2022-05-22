@@ -11,7 +11,11 @@ object GetXBranchCoverageInClassesWithYBranchesAchievement : Achievement() {
             val achievedCoverage = coverageInfo.coveredBranchCount.toDouble() / coverageInfo.totalBranchCount
             if (achievedCoverage >= requiredCoverage()) {
                 var classesWhichFulfillRequirements = getClassesWhichFulfillRequirements()
-                classesWhichFulfillRequirements += ",$className"
+                if (classesWhichFulfillRequirements == "") {
+                    classesWhichFulfillRequirements = className
+                } else {
+                    classesWhichFulfillRequirements += ",$className"
+                }
                 updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
                 if (progress() == nextStep()) {
                     showAchievementNotification("Congratulations! You unlocked level " + (getLevel() + 1) + " of the 'Class Reviewer - Branches' Achievement")
@@ -62,7 +66,7 @@ object GetXBranchCoverageInClassesWithYBranchesAchievement : Achievement() {
     }
 
     override fun getDescription(): String {
-        return "Cover " + nextStep() + " classes which have at least " + requiredTotalBranches() + " branches by at least " + requiredCoverage() * 100 + "%"
+        return "Cover " + nextStep() + " classes which have at least " + requiredTotalBranches() + " branches by at least " + requiredCoverage() * 100 + "%. Attention: for this achievement the tracing option of the IntelliJ Runner must be enabled."
     }
 
     override fun getName(): String {

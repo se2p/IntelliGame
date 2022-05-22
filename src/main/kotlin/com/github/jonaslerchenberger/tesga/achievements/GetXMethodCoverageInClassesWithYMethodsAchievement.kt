@@ -11,7 +11,11 @@ object GetXMethodCoverageInClassesWithYMethodsAchievement : Achievement() {
             val achievedCoverage = coverageInfo.coveredMethodCount.toDouble() / coverageInfo.totalMethodCount
             if (achievedCoverage >= requiredCoverage()) {
                 var classesWhichFulfillRequirements = getClassesWhichFulfillRequirements()
-                classesWhichFulfillRequirements += ",$className"
+                if (classesWhichFulfillRequirements == "") {
+                    classesWhichFulfillRequirements = className
+                } else {
+                    classesWhichFulfillRequirements += ",$className"
+                }
                 updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
                 if (progress() == nextStep()) {
                     showAchievementNotification("Congratulations! You unlocked level " + (getLevel() + 1) + " of the  'Class Reviewer - Methods' Achievement")
