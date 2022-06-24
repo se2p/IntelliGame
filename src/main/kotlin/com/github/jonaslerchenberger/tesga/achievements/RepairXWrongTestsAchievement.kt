@@ -59,6 +59,8 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
                     var progress = progress()
                     progress += 1
                     handleProgress(progress)
+                    testsUnderObservation.remove(key)
+                    classesUnderObservation.remove(key)
                 } else {
                     testsUnderObservation.remove(key)
                     classesUnderObservation.remove(key)

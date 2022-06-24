@@ -46,8 +46,8 @@ class ProjectService(private val project: Project) {
         project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, RefactorCodeAchievement)
         project.messageBus.connect().subscribe(ExecutionManager.EXECUTION_TOPIC, ExecutionListenerImpl)
 
-        project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, BulkFileListenerImpl)
         project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, RefactorAddXAssertionsAchievement)
+        project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, BulkFileListenerImpl)
 
 //        project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, TestListener)
 
@@ -71,12 +71,6 @@ class ProjectService(private val project: Project) {
 
         val psiManager = PsiManagerImpl.getInstance(project);
         psiManager.addPsiTreeChangeListener(AddTestsAchievement, Disposer.newDisposable())
-
-        NotificationGroupManager.getInstance().getNotificationGroup("Custom Notification Group")
-            .createNotification("Plugin started successfully", NotificationType.INFORMATION)
-            .notify(project)
-
-        showAchievementNotification("Just for testing")
     }
 
     fun showAchievementNotification(message: String) {

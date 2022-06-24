@@ -64,8 +64,6 @@ object BulkFileListenerImpl : BulkFileListener {
             var text = events[0].file?.let { LoadTextUtil.loadText(it) }
             println("text$text")
         }*/
-        //TODO: activate generation
-        //CSVReportGenerator.generateCSVReport()
         super.after(events)
     }
 

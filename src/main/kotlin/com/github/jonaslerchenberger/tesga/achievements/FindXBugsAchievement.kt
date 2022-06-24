@@ -54,6 +54,7 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
                     var progress = progress()
                     progress++
                     handleProgress(progress)
+                    testsUnderObservation.remove(key)
                 } else {
                     testsUnderObservation.remove(key)
                 }
