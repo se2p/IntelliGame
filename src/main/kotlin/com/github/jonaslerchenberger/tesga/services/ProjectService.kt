@@ -44,7 +44,6 @@ class ProjectService(private val project: Project) {
         project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, UseXPrintfDebuggingAchievement)
         project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, RepairXWrongTestsAchievement)
         project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, RefactorCodeAchievement)
-        project.messageBus.connect().subscribe(ExecutionManager.EXECUTION_TOPIC, ExecutionListenerImpl)
 
         project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, RefactorAddXAssertionsAchievement)
         project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, BulkFileListenerImpl)
