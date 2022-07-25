@@ -13,7 +13,7 @@ object SetXConditionalBreakpointsAchievement : XBreakpointListener<XBreakpoint<*
             if (breakpoint.isConditionEnabled && breakpoint.getConditionExpression() != null) {
                 var progress = progress()
                 progress += 1
-                updateProgress(progress)
+                handleProgress(progress)
             }
         }
         super.breakpointChanged(breakpoint)

@@ -9,7 +9,7 @@ object SetXBreakpointsAchievement : XBreakpointListener<XBreakpoint<*>>,
     override fun breakpointAdded(breakpoint: XBreakpoint<*>) {
         var progress = progress()
         progress += 1
-        updateProgress(progress)
+        handleProgress(progress)
         super.breakpointAdded(breakpoint)
     }
 
