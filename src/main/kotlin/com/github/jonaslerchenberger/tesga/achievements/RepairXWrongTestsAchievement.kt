@@ -32,7 +32,7 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
 
     override fun onTestFinished(test: SMTestProxy) {
         val key = test.locationUrl
-        val fileUrl = (test.locationUrl?.removeRange(test.locationUrl!!.lastIndexOf("."), test.locationUrl!!.length)
+        val fileUrl = (test.locationUrl?.removeRange(test.locationUrl!!.lastIndexOf("/"), test.locationUrl!!.length)
             ?.removePrefix("java:test://")
             ?.replace(".", "/")
             ?: "")

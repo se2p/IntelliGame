@@ -32,9 +32,12 @@ object UseXPrintfDebuggingAchievement : SMTRunnerEventsListener, Achievement() {
         val key = test.locationUrl
         if (key != null) {
             if (test.magnitudeInfo == TestStateInfo.Magnitude.FAILED_INDEX) {
-                val path =
-                    PROJECT?.basePath + "/src/main/java/" + test.parent.name.dropLast(4).replace(".", "/") + ".java"
-                val classUnderTest = File(path);
+                val fileUrl = (test.locationUrl?.removeRange(test.locationUrl!!.lastIndexOf("/"), test.locationUrl!!.length)
+                    ?.removePrefix("java:test://")
+                    ?.replace(".", "/")
+                    ?: "")
+                val pathToCode = PROJECT?.basePath + "/src/main/java/" + fileUrl.dropLast(4) + ".java"
+                val classUnderTest = File(pathToCode);
                 if (classUnderTest.exists()) {
                     val printlnCounter = countPrintls(classUnderTest.readText())
                     if (classesUnderObservation.containsKey(key) && classesUnderObservation[key]!! < printlnCounter) {

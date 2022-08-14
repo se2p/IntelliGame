@@ -21,7 +21,7 @@ object AddTestsAchievement : Achievement(), PsiTreeChangeListener {
     }
 
     override fun getName(): String {
-        return "Safety first"
+        return "Safety First"
     }
 
     override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {

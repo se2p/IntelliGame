@@ -40,6 +40,7 @@ class MoreInformationDialog(val project: Project?) :
                     icon(TrophyIcons.trophySilverLightIcon)
                 }
                 icon(TrophyIcons.trophyGoldIcon)
+                icon(TrophyIcons.trophyPlatinIcon)
                 label("").resizableColumn()
             }.resizableRow()
             val dialogPanel = achievementList(myDisposable)
@@ -74,16 +75,24 @@ class MoreInformationDialog(val project: Project?) :
                             }
                             3 -> icon(TrophyIcons.trophyGoldIcon)
                             else -> {
-                                icon(TrophyIcons.trophyDefaultIcon)
+                                icon(TrophyIcons.trophyPlatinIcon)
                             }
                         }
                         label(achievement.getName()).horizontalAlign(HorizontalAlign.LEFT)
                         contextHelp(achievement.getDescription(), achievement.getName())
-                        val progressBar = JProgressBar(0, achievement.nextStep())
-                        progressBar.value = achievement.progress()
-                        progressBar.isStringPainted = false
-                        cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
-                        label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
+                        if (achievement.getLevel() > 3) {
+                            val progressBar = JProgressBar(1, 1)
+                            progressBar.value = achievement.progress()
+                            progressBar.isStringPainted = false
+                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            label(achievement.progress().toString())
+                        } else {
+                            val progressBar = JProgressBar(0, achievement.nextStep())
+                            progressBar.value = achievement.progress()
+                            progressBar.isStringPainted = false
+                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
+                        }
                     }.layout(RowLayout.PARENT_GRID)
                 }
             }
@@ -100,16 +109,24 @@ class MoreInformationDialog(val project: Project?) :
                             }
                             3 -> icon(TrophyIcons.trophyGoldIcon)
                             else -> {
-                                icon(TrophyIcons.trophyDefaultIcon)
+                                icon(TrophyIcons.trophyPlatinIcon)
                             }
                         }
                         label(achievement.getName()).horizontalAlign(HorizontalAlign.LEFT)
                         contextHelp(achievement.getDescription(), achievement.getName())
-                        val progressBar = JProgressBar(0, achievement.nextStep())
-                        progressBar.value = achievement.progress()
-                        progressBar.isStringPainted = false
-                        cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
-                        label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
+                        if (achievement.getLevel() > 3) {
+                            val progressBar = JProgressBar(1, 1)
+                            progressBar.value = achievement.progress()
+                            progressBar.isStringPainted = false
+                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            label(achievement.progress().toString())
+                        } else {
+                            val progressBar = JProgressBar(0, achievement.nextStep())
+                            progressBar.value = achievement.progress()
+                            progressBar.isStringPainted = false
+                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
+                        }
                     }.layout(RowLayout.PARENT_GRID)
                 }
             }
@@ -126,16 +143,24 @@ class MoreInformationDialog(val project: Project?) :
                             }
                             3 -> icon(TrophyIcons.trophyGoldIcon)
                             else -> {
-                                icon(TrophyIcons.trophyDefaultIcon)
+                                icon(TrophyIcons.trophyPlatinIcon)
                             }
                         }
                         label(achievement.getName()).horizontalAlign(HorizontalAlign.LEFT)
                         contextHelp(achievement.getDescription(), achievement.getName())
-                        val progressBar = JProgressBar(0, achievement.nextStep())
-                        progressBar.value = achievement.progress()
-                        progressBar.isStringPainted = false
-                        cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
-                        label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
+                        if (achievement.getLevel() > 3) {
+                            val progressBar = JProgressBar(1, 1)
+                            progressBar.value = achievement.progress()
+                            progressBar.isStringPainted = false
+                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            label(achievement.progress().toString())
+                        } else {
+                            val progressBar = JProgressBar(0, achievement.nextStep())
+                            progressBar.value = achievement.progress()
+                            progressBar.isStringPainted = false
+                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
+                        }
                     }.layout(RowLayout.PARENT_GRID)
                 }
             }
@@ -152,16 +177,24 @@ class MoreInformationDialog(val project: Project?) :
                             }
                             3 -> icon(TrophyIcons.trophyGoldIcon)
                             else -> {
-                                icon(TrophyIcons.trophyDefaultIcon)
+                                icon(TrophyIcons.trophyPlatinIcon)
                             }
                         }
                         label(achievement.getName()).horizontalAlign(HorizontalAlign.LEFT)
                         contextHelp(achievement.getDescription(), achievement.getName())
-                        val progressBar = JProgressBar(0, achievement.nextStep())
-                        progressBar.value = achievement.progress()
-                        progressBar.isStringPainted = false
-                        cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
-                        label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
+                        if (achievement.getLevel() > 3) {
+                            val progressBar = JProgressBar(1, 1)
+                            progressBar.value = achievement.progress()
+                            progressBar.isStringPainted = false
+                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            label(achievement.progress().toString())
+                        } else {
+                            val progressBar = JProgressBar(0, achievement.nextStep())
+                            progressBar.value = achievement.progress()
+                            progressBar.isStringPainted = false
+                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
+                        }
                     }.layout(RowLayout.PARENT_GRID)
                 }
             }
@@ -178,16 +211,24 @@ class MoreInformationDialog(val project: Project?) :
                             }
                             3 -> icon(TrophyIcons.trophyGoldIcon)
                             else -> {
-                                icon(TrophyIcons.trophyDefaultIcon)
+                                icon(TrophyIcons.trophyPlatinIcon)
                             }
                         }
                         label(achievement.getName()).horizontalAlign(HorizontalAlign.LEFT)
                         contextHelp(achievement.getDescription(), achievement.getName())
-                        val progressBar = JProgressBar(0, achievement.nextStep())
-                        progressBar.value = achievement.progress()
-                        progressBar.isStringPainted = false
-                        cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
-                        label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
+                        if (achievement.getLevel() > 3) {
+                            val progressBar = JProgressBar(1, 1)
+                            progressBar.value = achievement.progress()
+                            progressBar.isStringPainted = false
+                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            label(achievement.progress().toString())
+                        } else {
+                            val progressBar = JProgressBar(0, achievement.nextStep())
+                            progressBar.value = achievement.progress()
+                            progressBar.isStringPainted = false
+                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
+                        }
                     }.layout(RowLayout.PARENT_GRID)
                 }
             }

@@ -26,32 +26,28 @@ object RefactorCodeAchievement : SMTRunnerEventsListener, Achievement() {
     }
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
-    }
+        for (test in testsRoot.children) {
+            val key = test.locationUrl
+            val fileUrl = test.locationUrl
+                ?.removePrefix("java:suite://")
+                ?.replace(".", "/")
+                ?: ""
+            val pathToCode = PROJECT?.basePath + "/src/main/java/" + fileUrl.dropLast(4) + ".java"
+            val pathToTest = PROJECT?.basePath + "/src/test/java/" + fileUrl.replace(".", "/") + ".java"
 
-    override fun onTestsCountInSuite(count: Int) {
-    }
+            val testFile = File(pathToTest);
+            val codeFile = File(pathToCode)
 
-    override fun onTestStarted(test: SMTestProxy) {
-    }
-
-    override fun onTestFinished(test: SMTestProxy) {
-        val key = test.locationUrl
-        val pathToTest = PROJECT?.basePath + "/src/test/java/" + test.parent.name.replace(".", "/") + ".java"
-        val pathToCode =
-            PROJECT?.basePath + "/src/main/java/" + test.parent.name.dropLast(4).replace(".", "/") + ".java"
-        val testFile = File(pathToTest);
-        val codeFile = File(pathToCode)
-
-        if (key != null && testFile.exists() && codeFile.exists()) {
+            if (key != null && testFile.exists() && codeFile.exists()) {
 //            val testFileContent = FileUtils.readFileToString(testFile, "utf-8")
 //            val codeFileContent = FileUtils.lineIterator(codeFile, "utf-8")
-            val testFileContent = FileUtils.readFileToString(testFile, "utf-8")
-            val codeFileContent = Files.readAllLines(codeFile.toPath())
-            if (test.magnitudeInfo == TestStateInfo.Magnitude.PASSED_INDEX) {
-                if (!testsUnderObservation.containsKey(key) && !classesUnderObservation.containsKey(key)) {
-                    testsUnderObservation[key] = testFileContent
-                    classesUnderObservation[key] = codeFileContent
-                } else if (testsUnderObservation[key] == testFileContent) {
+                val testFileContent = FileUtils.readFileToString(testFile, "utf-8")
+                val codeFileContent = Files.readAllLines(codeFile.toPath())
+                if (test.magnitudeInfo == TestStateInfo.Magnitude.PASSED_INDEX) {
+                    if (!testsUnderObservation.containsKey(key) && !classesUnderObservation.containsKey(key)) {
+                        testsUnderObservation[key] = testFileContent
+                        classesUnderObservation[key] = codeFileContent
+                    } else if (testsUnderObservation[key] == testFileContent) {
 //                    val countChangesCommandVisitor = CountChangesCommandVisitor()
 //                    val fileToCompare = classesUnderObservation[key]
 //
@@ -80,44 +76,53 @@ object RefactorCodeAchievement : SMTRunnerEventsListener, Achievement() {
 //                    }
 //                    var counter = countChangesCommandVisitor.counter
 
-                    val fileToCompare = classesUnderObservation[key]
-                    val patch: Patch<String> = DiffUtils.diff(fileToCompare, codeFileContent)
-                    var counter = 0
-                    for (delta in patch.deltas) {
-                        if (delta.type.equals(DeltaType.INSERT)) {
-                            counter += delta.target.lines.size
-                        } else if (delta.type.equals(DeltaType.DELETE)) {
-                            counter += delta.source.lines.size
-                        } else if (delta.type.equals(DeltaType.CHANGE)) {
-                            counter += delta.source.lines.size
-                            counter += delta.target.lines.size
+                        val fileToCompare = classesUnderObservation[key]
+                        val patch: Patch<String> = DiffUtils.diff(fileToCompare, codeFileContent)
+                        var counter = 0
+                        for (delta in patch.deltas) {
+                            if (delta.type.equals(DeltaType.INSERT)) {
+                                counter += delta.target.lines.size
+                            } else if (delta.type.equals(DeltaType.DELETE)) {
+                                counter += delta.source.lines.size
+                            } else if (delta.type.equals(DeltaType.CHANGE)) {
+                                counter += delta.source.lines.size
+                                counter += delta.target.lines.size
+                            }
                         }
-                    }
-                    var progress = progress()
-                    progress += counter
-                    if (progress >= nextStep()) {
-                        updateProgress(progress)
-                        showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the  '" + getName() + "' achievement!")
-                    } else {
-                        val progressGroupBeforeUpdate = getProgressGroup()
-                        updateProgress(progress)
-                        val progressGroupAfterUpdate = getProgressGroup()
-                        if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
-                            showAchievementNotification(
-                                "You are making progress on an achievement! You have already reached " + progressGroupAfterUpdate.second + "% of the next level of the '" + getName() + "' achievement!"
-                            )
+                        var progress = progress()
+                        progress += counter
+                        if (progress >= nextStep()) {
+                            updateProgress(progress)
+                            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the  '" + getName() + "' achievement!")
+                        } else {
+                            val progressGroupBeforeUpdate = getProgressGroup()
+                            updateProgress(progress)
+                            val progressGroupAfterUpdate = getProgressGroup()
+                            if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
+                                showAchievementNotification(
+                                    "You are making progress on an achievement! You have already reached " + progressGroupAfterUpdate.second + "% of the next level of the '" + getName() + "' achievement!"
+                                )
+                            }
                         }
+                        classesUnderObservation[key] = codeFileContent
                     }
-                    updateProgress(progress)
-                    classesUnderObservation[key] = codeFileContent
-                }
-            } else if (test.magnitudeInfo == TestStateInfo.Magnitude.FAILED_INDEX) {
-                if (testsUnderObservation.containsKey(key) && classesUnderObservation.containsKey(key)) {
-                    testsUnderObservation.remove(key)
-                    classesUnderObservation.remove(key)
+                } else if (test.magnitudeInfo == TestStateInfo.Magnitude.FAILED_INDEX) {
+                    if (testsUnderObservation.containsKey(key) && classesUnderObservation.containsKey(key)) {
+                        testsUnderObservation.remove(key)
+                        classesUnderObservation.remove(key)
+                    }
                 }
             }
         }
+    }
+
+    override fun onTestsCountInSuite(count: Int) {
+    }
+
+    override fun onTestStarted(test: SMTestProxy) {
+    }
+
+    override fun onTestFinished(test: SMTestProxy) {
     }
 
     override fun onTestFailed(test: SMTestProxy) {

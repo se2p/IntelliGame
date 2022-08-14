@@ -33,7 +33,7 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
         val key = test.locationUrl
         val path =
             PROJECT?.basePath + "/src/test/java/" + (test.locationUrl?.removeRange(
-                test.locationUrl!!.lastIndexOf("."),
+                test.locationUrl!!.lastIndexOf("/"),
                 test.locationUrl!!.length
             )
                 ?.removePrefix("java:test://")

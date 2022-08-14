@@ -26,7 +26,7 @@ abstract class Achievement {
                 return key
             }
         }
-        return 3
+        return 4
     }
 
     open fun nextStep(): Int {
