@@ -24,7 +24,7 @@ class ProjectService(private val project: Project) {
         println(MyBundle.message("projectService", project.name))
         PropertiesComponent.getInstance()
 //        val jlistener = TestListener(project)
-        val editorListenerImpl = EditorListenerImpl()
+//        val editorListenerImpl = EditorListenerImpl()
 //        val setXConditionalBreakpointsAchievement = SetXConditionalBreakpointsAchievement(project)
 //
 //        val actionAchievements = listOf<ActionAchievement>(AssertTriggeredByTestAchievement, SetXConditionalBreakpointsAchievement, RunXDebuggerModeAchievement)
@@ -54,7 +54,7 @@ class ProjectService(private val project: Project) {
         UseXPrintfDebuggingAchievement.setProject(project)
         RepairXWrongTestsAchievement.setProject(project)
         RefactorCodeAchievement.setProject(project)
-        TestListener.setProject(project)
+//        TestListener.setProject(project)
 //        project.messageBus.connect().subscribe(EditorTrackerListener.TOPIC, editorListenerImpl)
 //        project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, bulkFileListenerImpl)
         /*project.messageBus.connect().setDefaultHandler { method, objects ->

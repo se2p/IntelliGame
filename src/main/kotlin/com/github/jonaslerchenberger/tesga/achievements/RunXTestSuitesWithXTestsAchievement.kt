@@ -94,7 +94,7 @@ object RunXTestSuitesWithXTestsAchievement : SMTRunnerEventsListener, Achievemen
     }
 
     override fun getName(): String {
-        return "Mr Tester - Advanced"
+        return "Tester - Advanced"
     }
 
     override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {

@@ -28,7 +28,7 @@ object RunXDebuggerModeAchievement : XDebuggerManagerListener,
     }
 
     override fun getName(): String {
-        return "Mr Debugger"
+        return "Debugger"
     }
 
     override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {
