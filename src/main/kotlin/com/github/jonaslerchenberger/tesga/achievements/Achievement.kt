@@ -16,6 +16,9 @@ abstract class Achievement {
 
     abstract fun getName(): String
 
+    /**
+     * The key is the level (0-4) and the value is the required progress to achieve this level
+     */
     abstract fun getStepLevelMatrix(): LinkedHashMap<Int, Int>
 
     open fun getLevel(): Int {
@@ -29,6 +32,10 @@ abstract class Achievement {
         return 4
     }
 
+    /**
+     * Get the next step with the help of the stepLevelMatrix.
+     * Next step = which progress you need to get to the next level.
+     */
     open fun nextStep(): Int {
         val stepLevelMatrix = getStepLevelMatrix()
         val progress = progress()
@@ -40,6 +47,9 @@ abstract class Achievement {
         return stepLevelMatrix.getValue(stepLevelMatrix.size - 1)
     }
 
+    /**
+     * Shows the balloon with the given message.
+     */
     fun showAchievementNotification(message: String) {
         NotificationGroupManager.getInstance().getNotificationGroup("Custom Notification Group")
             .createNotification(
