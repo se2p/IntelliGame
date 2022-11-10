@@ -33,6 +33,10 @@ dependencies {
     implementation("org.apache.commons:commons-csv:1.9.0")
 }
 
+configurations.all {
+    exclude(group = "org.slf4j", module = "slf4j-log4j12")
+}
+
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
     pluginName.set(properties("pluginName"))
