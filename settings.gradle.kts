@@ -1,1 +1,1 @@
-rootProject.name = "TesGa"
+rootProject.name = "IntelliGame"

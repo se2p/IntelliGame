@@ -1,31 +1,30 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.jonaslerchenberger.tesga</id>
-    <name>TesGa</name>
-    <vendor>jonaslerchenberger</vendor>
+    <id>de.uni_passau.fim.se2.intelligame</id>
+    <name>IntelliGame</name>
+    <vendor>philippstraubinger</vendor>
 
     <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.coverage</depends>
     <depends>com.intellij.modules.java</depends>
     <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.jonaslerchenberger.tesga.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.jonaslerchenberger.tesga.services.ProjectService"/>
+        <applicationService serviceImplementation="de.uni_passau.fim.se2.intelligame.services.MyApplicationService"/>
+        <projectService serviceImplementation="de.uni_passau.fim.se2.intelligame.services.ProjectService"/>
         <notificationGroup id="Custom Notification Group" displayType="BALLOON"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.jonaslerchenberger.tesga.listeners.ProjectManagerImpl"
+        <listener class="de.uni_passau.fim.se2.intelligame.listeners.ProjectManagerImpl"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 
     <projectListeners>
-        <listener class="com.github.jonaslerchenberger.tesga.listeners.TestListener" topic="com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener"/>
+        <listener class="de.uni_passau.fim.se2.intelligame.listeners.TestListener" topic="com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener"/>
     </projectListeners>
     <actions>
-        <action id="com.github.jonaslerchenberger.tesga.actions.OpenInformationDialogAction"
-                class="com.github.jonaslerchenberger.tesga.actions.OpenInformationDialogAction"
+        <action id="de.uni_passau.fim.se2.intelligame.actions.OpenInformationDialogAction"
+                class="de.uni_passau.fim.se2.intelligame.actions.OpenInformationDialogAction"
                 text="Show Achievement Progress" description="Opens the dialog with all achievements ">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>

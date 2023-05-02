@@ -7,11 +7,11 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.6.10"
+    id("org.jetbrains.kotlin.jvm") version "1.8.21"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.4.0"
+    id("org.jetbrains.intellij") version "1.13.3"
     // Gradle Changelog Plugin
-    id("org.jetbrains.changelog") version "1.3.1"
+    id("org.jetbrains.changelog") version "2.0.0"
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
 }
@@ -25,12 +25,10 @@ repositories {
 }
 
 dependencies {
-    implementation("org.apache.commons:commons-text:1.9")
-    implementation("io.github.java-diff-utils:java-diff-utils:4.11")
-    implementation("org.jetbrains.intellij.deps:intellij-coverage-reporter:1.0.656")
-    implementation("com.github.adedayo.intellij.sdk:coverage:142.1")
+    implementation("org.apache.commons:commons-text:1.10.0")
+    implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("com.github.tsantalis:refactoring-miner:2.2.0")
-    implementation("org.apache.commons:commons-csv:1.9.0")
+    implementation("org.apache.commons:commons-csv:1.10.0")
 }
 
 configurations.all {
