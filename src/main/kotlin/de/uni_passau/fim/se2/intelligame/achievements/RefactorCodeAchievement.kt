@@ -22,8 +22,7 @@ object RefactorCodeAchievement : SMTRunnerEventsListener, Achievement() {
         PROJECT = project
     }
 
-    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
-    }
+    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
         for (test in testsRoot.children) {
@@ -93,67 +92,57 @@ object RefactorCodeAchievement : SMTRunnerEventsListener, Achievement() {
                         progress += counter
                         if (progress >= nextStep()) {
                             updateProgress(progress)
-                            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the  '" + getName() + "' achievement!")
+                            showAchievementNotification("Congratulations! You unlocked level " +
+                                    getLevel() + " of the  '" + getName() + "' achievement!")
                         } else {
                             val progressGroupBeforeUpdate = getProgressGroup()
                             updateProgress(progress)
                             val progressGroupAfterUpdate = getProgressGroup()
                             if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
                                 showAchievementNotification(
-                                    "You are making progress on an achievement! You have already reached " + progressGroupAfterUpdate.second + "% of the next level of the '" + getName() + "' achievement!"
+                                    "You are making progress on an achievement! You have already reached " +
+                                            progressGroupAfterUpdate.second + "% of the next level of the '" +
+                                            getName() + "' achievement!"
                                 )
                             }
                         }
                         classesUnderObservation[key] = codeFileContent
                     }
-                } else if (test.magnitudeInfo == TestStateInfo.Magnitude.FAILED_INDEX) {
-                    if (testsUnderObservation.containsKey(key) && classesUnderObservation.containsKey(key)) {
-                        testsUnderObservation.remove(key)
-                        classesUnderObservation.remove(key)
-                    }
+                } else if (test.magnitudeInfo == TestStateInfo.Magnitude.FAILED_INDEX
+                    && testsUnderObservation.containsKey(key)
+                    && classesUnderObservation.containsKey(key)) {
+                    testsUnderObservation.remove(key)
+                    classesUnderObservation.remove(key)
                 }
             }
         }
     }
 
-    override fun onTestsCountInSuite(count: Int) {
-    }
+    override fun onTestsCountInSuite(count: Int) = Unit
 
-    override fun onTestStarted(test: SMTestProxy) {
-    }
+    override fun onTestStarted(test: SMTestProxy) = Unit
 
-    override fun onTestFinished(test: SMTestProxy) {
-    }
+    override fun onTestFinished(test: SMTestProxy) = Unit
 
-    override fun onTestFailed(test: SMTestProxy) {
-    }
+    override fun onTestFailed(test: SMTestProxy) = Unit
 
-    override fun onTestIgnored(test: SMTestProxy) {
-    }
+    override fun onTestIgnored(test: SMTestProxy) = Unit
 
-    override fun onSuiteFinished(suite: SMTestProxy) {
-    }
+    override fun onSuiteFinished(suite: SMTestProxy) = Unit
 
-    override fun onSuiteStarted(suite: SMTestProxy) {
-    }
+    override fun onSuiteStarted(suite: SMTestProxy) = Unit
 
-    override fun onCustomProgressTestsCategory(categoryName: String?, testCount: Int) {
-    }
+    override fun onCustomProgressTestsCategory(categoryName: String?, testCount: Int) = Unit
 
-    override fun onCustomProgressTestStarted() {
-    }
+    override fun onCustomProgressTestStarted() = Unit
 
-    override fun onCustomProgressTestFailed() {
-    }
+    override fun onCustomProgressTestFailed() = Unit
 
-    override fun onCustomProgressTestFinished() {
-    }
+    override fun onCustomProgressTestFinished() = Unit
 
-    override fun onSuiteTreeNodeAdded(testProxy: SMTestProxy?) {
-    }
+    override fun onSuiteTreeNodeAdded(testProxy: SMTestProxy?) = Unit
 
-    override fun onSuiteTreeStarted(suite: SMTestProxy?) {
-    }
+    override fun onSuiteTreeStarted(suite: SMTestProxy?) = Unit
 
     override fun progress(): Int {
         val properties = PropertiesComponent.getInstance()

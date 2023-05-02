@@ -18,7 +18,8 @@ object GetXBranchCoverageInClassesWithYBranchesAchievement : Achievement() {
                 }
                 updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
                 if (progress() == nextStep()) {
-                    showAchievementNotification("Congratulations! You unlocked level " + (getLevel() + 1) + " of the 'Class Reviewer - Branches' Achievement")
+                    showAchievementNotification("Congratulations! You unlocked level " +
+                            (getLevel() + 1) + " of the 'Class Reviewer - Branches' Achievement")
                     updateClassesWhichFulfillRequirements("")
                     increaseLevel()
                 }
@@ -42,8 +43,7 @@ object GetXBranchCoverageInClassesWithYBranchesAchievement : Achievement() {
         }
     }
 
-    override fun updateProgress(progress: Int) {
-    }
+    override fun updateProgress(progress: Int) = Unit
 
     private fun updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements: String) {
         val properties = PropertiesComponent.getInstance()
@@ -66,7 +66,10 @@ object GetXBranchCoverageInClassesWithYBranchesAchievement : Achievement() {
     }
 
     override fun getDescription(): String {
-        return "Cover " + nextStep() + " classes which have at least " + requiredTotalBranches() + " branches by at least " + requiredCoverage() * 100 + "%. Attention: for this achievement the tracing option of the IntelliJ Runner must be enabled."
+        return "Cover " + nextStep() + " classes which have at least "+
+                requiredTotalBranches() + " branches by at least " +
+                requiredCoverage() * 100 + "%. Attention: for this achievement the tracing option of " +
+                "the IntelliJ Runner must be enabled."
     }
 
     override fun getName(): String {

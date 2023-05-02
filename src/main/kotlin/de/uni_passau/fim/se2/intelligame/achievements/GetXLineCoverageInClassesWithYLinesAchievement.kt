@@ -18,7 +18,8 @@ object GetXLineCoverageInClassesWithYLinesAchievement : Achievement() {
                 }
                 updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
                 if (progress() == nextStep()) {
-                    showAchievementNotification("Congratulations! You unlocked level " + (getLevel() + 1) + " of the 'Class Reviewer - Lines' Achievement")
+                    showAchievementNotification("Congratulations! You unlocked level " + (getLevel() + 1)
+                            + " of the 'Class Reviewer - Lines' Achievement")
                     updateClassesWhichFulfillRequirements("")
                     increaseLevel()
                 }
@@ -42,8 +43,7 @@ object GetXLineCoverageInClassesWithYLinesAchievement : Achievement() {
         }
     }
 
-    override fun updateProgress(progress: Int) {
-    }
+    override fun updateProgress(progress: Int) = Unit
 
     private fun updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements: String) {
         val properties = PropertiesComponent.getInstance()
@@ -66,7 +66,8 @@ object GetXLineCoverageInClassesWithYLinesAchievement : Achievement() {
     }
 
     override fun getDescription(): String {
-        return "Cover " + nextStep() + " classes which have at least " + requiredTotalLines() + " lines by at least " + requiredCoverage() * 100 + "%"
+        return "Cover " + nextStep() + " classes which have at least " +
+                requiredTotalLines() + " lines by at least " + requiredCoverage() * 100 + "%"
     }
 
     override fun getName(): String {

@@ -14,7 +14,7 @@ object RefactorAddXAssertionsAchievement : BulkFileListener, Achievement() {
                 if (file.exists()) {
                     val counter =
                         countAsserts(
-                            file.readText().replace("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)".toRegex(), "")
+                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
                         )
                     filesUnderObservation[event.path] = counter
                 }
@@ -30,9 +30,10 @@ object RefactorAddXAssertionsAchievement : BulkFileListener, Achievement() {
                 if (file.exists()) {
                     val counter =
                         countAsserts(
-                            file.readText().replace("(?:/\\*(?:[^*]|(?:\\*+[^*/]))*\\*+/)|(?://.*)".toRegex(), "")
+                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
                         )
-                    if (filesUnderObservation.containsKey(event.path) && filesUnderObservation[event.path]!! < counter) {
+                    if (filesUnderObservation.containsKey(event.path)
+                        && filesUnderObservation[event.path]!! < counter) {
                         var progress = progress()
                         progress += 1
                         handleProgress(progress)

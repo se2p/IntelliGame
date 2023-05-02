@@ -18,17 +18,13 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
         PROJECT = project
     }
 
-    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
-    }
+    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
 
-    override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
-    }
+    override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
 
-    override fun onTestsCountInSuite(count: Int) {
-    }
+    override fun onTestsCountInSuite(count: Int) = Unit
 
-    override fun onTestStarted(test: SMTestProxy) {
-    }
+    override fun onTestStarted(test: SMTestProxy) = Unit
 
     override fun onTestFinished(test: SMTestProxy) {
         val key = test.locationUrl
@@ -69,35 +65,25 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
         }
     }
 
-    override fun onTestFailed(test: SMTestProxy) {
-    }
+    override fun onTestFailed(test: SMTestProxy) = Unit
 
-    override fun onTestIgnored(test: SMTestProxy) {
-    }
+    override fun onTestIgnored(test: SMTestProxy) = Unit
 
-    override fun onSuiteFinished(suite: SMTestProxy) {
-    }
+    override fun onSuiteFinished(suite: SMTestProxy) = Unit
 
-    override fun onSuiteStarted(suite: SMTestProxy) {
-    }
+    override fun onSuiteStarted(suite: SMTestProxy) = Unit
 
-    override fun onCustomProgressTestsCategory(categoryName: String?, testCount: Int) {
-    }
+    override fun onCustomProgressTestsCategory(categoryName: String?, testCount: Int) = Unit
 
-    override fun onCustomProgressTestStarted() {
-    }
+    override fun onCustomProgressTestStarted() = Unit
 
-    override fun onCustomProgressTestFailed() {
-    }
+    override fun onCustomProgressTestFailed() = Unit
 
-    override fun onCustomProgressTestFinished() {
-    }
+    override fun onCustomProgressTestFinished() = Unit
 
-    override fun onSuiteTreeNodeAdded(testProxy: SMTestProxy?) {
-    }
+    override fun onSuiteTreeNodeAdded(testProxy: SMTestProxy?) = Unit
 
-    override fun onSuiteTreeStarted(suite: SMTestProxy?) {
-    }
+    override fun onSuiteTreeStarted(suite: SMTestProxy?) = Unit
 
     override fun progress(): Int {
         val properties = PropertiesComponent.getInstance()

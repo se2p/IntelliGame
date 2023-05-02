@@ -38,14 +38,15 @@ object BulkFileListenerImpl : BulkFileListener {
                 val file = File(event.path)
                 if (file.exists()) {
                     val folder = file.parentFile
-                    var modelAfter: UMLModel = UMLModelASTReader(folder).umlModel
-                    var modelBefore = filesUnderObservation[folder.path]
+                    val modelAfter: UMLModel = UMLModelASTReader(folder).umlModel
+                    val modelBefore = filesUnderObservation[folder.path]
                     val modelDiff: UMLModelDiff? = modelBefore?.diff(modelAfter)
                     val refactorings: List<Refactoring> = modelDiff?.refactorings ?: listOf()
                     for (refactoring in refactorings) {
                         when (refactoring) {
                             is RenameOperationRefactoring -> {
-                                if (refactoring.originalOperation.name.length < refactoring.renamedOperation.name.length) {
+                                if (refactoring.originalOperation.name.length
+                                    < refactoring.renamedOperation.name.length) {
                                     RefactorXTestNamesAchievement.triggerAchievement()
                                 }
                             }

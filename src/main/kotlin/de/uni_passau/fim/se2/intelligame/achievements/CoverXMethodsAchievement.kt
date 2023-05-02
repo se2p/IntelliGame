@@ -9,14 +9,17 @@ object CoverXMethodsAchievement : Achievement() {
         progress += coverageInfo.coveredMethodCount
         if (progress >= nextStep()) {
             updateProgress(progress)
-            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the '" + getName() + "' achievement!")
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the '" +
+                    getName() + "' achievement!")
         } else {
             val progressGroupBeforeUpdate = getProgressGroup()
             updateProgress(progress)
             val progressGroupAfterUpdate = getProgressGroup()
             if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
                 showAchievementNotification(
-                    "You are making progress on an achievement! You have already reached " + progressGroupAfterUpdate.second + "% of the next level of the '" + getName() + "' achievement!"
+                    "You are making progress on an achievement! You have already reached " +
+                            progressGroupAfterUpdate.second + "% of the next level of the '" +
+                            getName() + "' achievement!"
                 )
             }
         }

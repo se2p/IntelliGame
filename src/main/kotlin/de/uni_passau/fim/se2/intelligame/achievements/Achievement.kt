@@ -39,7 +39,7 @@ abstract class Achievement {
     open fun nextStep(): Int {
         val stepLevelMatrix = getStepLevelMatrix()
         val progress = progress()
-        for ((key, value) in stepLevelMatrix) {
+        for ((_, value) in stepLevelMatrix) {
             if (progress < value) {
                 return value
             }
@@ -57,12 +57,12 @@ abstract class Achievement {
                 NotificationType.INFORMATION
             )
             .addAction(
-                NotificationAction.createSimple("Show more information",
-                    Runnable {
-                        val dialog = MoreInformationDialog(null)
-                        dialog.show()
+                NotificationAction.createSimple("Show more information"
+                ) {
+                    val dialog = MoreInformationDialog(null)
+                    dialog.show()
 
-                    })
+                }
             )
             .notify(null)
     }
@@ -93,14 +93,17 @@ abstract class Achievement {
     protected fun handleProgress(progress: Int) {
         if (progress == nextStep()) {
             updateProgress(progress)
-            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the '" + getName() + "' achievement!")
+            showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the '"
+                    + getName() + "' achievement!")
         } else {
             val progressGroupBeforeUpdate = getProgressGroup()
             updateProgress(progress)
             val progressGroupAfterUpdate = getProgressGroup()
             if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
                 showAchievementNotification(
-                    "You are making progress on an achievement! You have already reached " + progressGroupAfterUpdate.second + "% of the next level of the '" + getName() + "' achievement!"
+                    "You are making progress on an achievement! You have already reached " +
+                            progressGroupAfterUpdate.second + "% of the next level of the '" +
+                            getName() + "' achievement!"
                 )
             }
         }

@@ -28,23 +28,17 @@ object AddTestsAchievement : Achievement(), PsiTreeChangeListener {
         return linkedMapOf(0 to 10, 1 to 100, 2 to 1000, 3 to 10000)
     }
 
-    override fun beforeChildAddition(event: PsiTreeChangeEvent) {
-    }
+    override fun beforeChildAddition(event: PsiTreeChangeEvent) = Unit
 
-    override fun beforeChildRemoval(event: PsiTreeChangeEvent) {
-    }
+    override fun beforeChildRemoval(event: PsiTreeChangeEvent) = Unit
 
-    override fun beforeChildReplacement(event: PsiTreeChangeEvent) {
-    }
+    override fun beforeChildReplacement(event: PsiTreeChangeEvent) = Unit
 
-    override fun beforeChildMovement(event: PsiTreeChangeEvent) {
-    }
+    override fun beforeChildMovement(event: PsiTreeChangeEvent) = Unit
 
-    override fun beforeChildrenChange(event: PsiTreeChangeEvent) {
-    }
+    override fun beforeChildrenChange(event: PsiTreeChangeEvent) = Unit
 
-    override fun beforePropertyChange(event: PsiTreeChangeEvent) {
-    }
+    override fun beforePropertyChange(event: PsiTreeChangeEvent) = Unit
 
     override fun childAdded(event: PsiTreeChangeEvent) {
         if ((event.child is PsiModifierListImpl) && (event.child as PsiModifierListImpl).text.equals("@Test")) {
@@ -54,18 +48,13 @@ object AddTestsAchievement : Achievement(), PsiTreeChangeListener {
         }
     }
 
-    override fun childRemoved(event: PsiTreeChangeEvent) {
-    }
+    override fun childRemoved(event: PsiTreeChangeEvent) = Unit
 
-    override fun childReplaced(event: PsiTreeChangeEvent) {
-    }
+    override fun childReplaced(event: PsiTreeChangeEvent) = Unit
 
-    override fun childrenChanged(event: PsiTreeChangeEvent) {
-    }
+    override fun childrenChanged(event: PsiTreeChangeEvent) = Unit
 
-    override fun childMoved(event: PsiTreeChangeEvent) {
-    }
+    override fun childMoved(event: PsiTreeChangeEvent) = Unit
 
-    override fun propertyChanged(event: PsiTreeChangeEvent) {
-    }
+    override fun propertyChanged(event: PsiTreeChangeEvent) = Unit
 }

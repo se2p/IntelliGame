@@ -16,12 +16,12 @@ class Util {
                     NotificationType.INFORMATION
                 )
                 .addAction(
-                    NotificationAction.createSimple("Show more information",
-                        Runnable {
-                            val dialog = MoreInformationDialog(null)
-                            dialog.show()
+                    NotificationAction.createSimple("Show more information"
+                    ) {
+                        val dialog = MoreInformationDialog(null)
+                        dialog.show()
 
-                        })
+                    }
                 )
                 .notify(null)
         }

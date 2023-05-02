@@ -4,13 +4,12 @@ import org.apache.commons.text.diff.CommandVisitor
 
 
 class CountChangesCommandVisitor : CommandVisitor<Char> {
-    var counter: Int = 0
+    private var counter: Int = 0
     override fun visitInsertCommand(`object`: Char?) {
         counter++
     }
 
-    override fun visitKeepCommand(`object`: Char?) {
-    }
+    override fun visitKeepCommand(`object`: Char?) = Unit
 
     override fun visitDeleteCommand(`object`: Char?) {
         counter++

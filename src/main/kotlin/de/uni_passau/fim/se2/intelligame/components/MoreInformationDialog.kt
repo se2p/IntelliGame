@@ -5,10 +5,10 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.components.JBScrollPane
+import com.intellij.ui.dsl.builder.Align
+import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.RowLayout
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
-import com.intellij.ui.dsl.gridLayout.VerticalAlign
 import com.intellij.util.ui.JBEmptyBorder
 import com.intellij.util.ui.UIUtil
 import de.uni_passau.fim.se2.intelligame.icons.TrophyIcons
@@ -23,11 +23,10 @@ import javax.swing.JProgressBar
 class MoreInformationDialog(val project: Project?) :
     DialogWrapper(project, null, true, IdeModalityType.MODELESS, false) {
     @Nullable
-    override fun createCenterPanel(): JComponent? {
+    override fun createCenterPanel(): JComponent {
 
         val main = JPanel()
         main.minimumSize = Dimension(400, 300)
-//        main.maximumSize = Dimension(600, 400)
         main.border = JBEmptyBorder(5)
         val content = panel {
             row {
@@ -46,8 +45,7 @@ class MoreInformationDialog(val project: Project?) :
             val dialogPanel = achievementList(myDisposable)
             row {
                 dialogPanel.border = JBEmptyBorder(5)
-                cell(dialogPanel).horizontalAlign(HorizontalAlign.FILL).verticalAlign(VerticalAlign.FILL)
-                    .resizableColumn()
+                cell(dialogPanel).align(Align.FILL).resizableColumn()
             }.resizableRow()
         }
         main.add(content)
@@ -78,19 +76,19 @@ class MoreInformationDialog(val project: Project?) :
                                 icon(TrophyIcons.trophyPlatinIcon)
                             }
                         }
-                        label(achievement.getName()).horizontalAlign(HorizontalAlign.LEFT)
+                        label(achievement.getName()).align(AlignX.LEFT)
                         contextHelp(achievement.getDescription(), achievement.getName())
                         if (achievement.getLevel() > 3) {
                             val progressBar = JProgressBar(1, 1)
                             progressBar.value = achievement.progress()
                             progressBar.isStringPainted = false
-                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            cell(progressBar).align(AlignX.RIGHT)
                             label(achievement.progress().toString())
                         } else {
                             val progressBar = JProgressBar(0, achievement.nextStep())
                             progressBar.value = achievement.progress()
                             progressBar.isStringPainted = false
-                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            cell(progressBar).align(AlignX.RIGHT)
                             label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
                         }
                     }.layout(RowLayout.PARENT_GRID)
@@ -112,19 +110,19 @@ class MoreInformationDialog(val project: Project?) :
                                 icon(TrophyIcons.trophyPlatinIcon)
                             }
                         }
-                        label(achievement.getName()).horizontalAlign(HorizontalAlign.LEFT)
+                        label(achievement.getName()).align(AlignX.LEFT)
                         contextHelp(achievement.getDescription(), achievement.getName())
                         if (achievement.getLevel() > 3) {
                             val progressBar = JProgressBar(1, 1)
                             progressBar.value = achievement.progress()
                             progressBar.isStringPainted = false
-                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            cell(progressBar).align(AlignX.RIGHT)
                             label(achievement.progress().toString())
                         } else {
                             val progressBar = JProgressBar(0, achievement.nextStep())
                             progressBar.value = achievement.progress()
                             progressBar.isStringPainted = false
-                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            cell(progressBar).align(AlignX.RIGHT)
                             label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
                         }
                     }.layout(RowLayout.PARENT_GRID)
@@ -146,19 +144,19 @@ class MoreInformationDialog(val project: Project?) :
                                 icon(TrophyIcons.trophyPlatinIcon)
                             }
                         }
-                        label(achievement.getName()).horizontalAlign(HorizontalAlign.LEFT)
+                        label(achievement.getName()).align(AlignX.LEFT)
                         contextHelp(achievement.getDescription(), achievement.getName())
                         if (achievement.getLevel() > 3) {
                             val progressBar = JProgressBar(1, 1)
                             progressBar.value = achievement.progress()
                             progressBar.isStringPainted = false
-                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            cell(progressBar).align(AlignX.RIGHT)
                             label(achievement.progress().toString())
                         } else {
                             val progressBar = JProgressBar(0, achievement.nextStep())
                             progressBar.value = achievement.progress()
                             progressBar.isStringPainted = false
-                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            cell(progressBar).align(AlignX.RIGHT)
                             label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
                         }
                     }.layout(RowLayout.PARENT_GRID)
@@ -180,19 +178,19 @@ class MoreInformationDialog(val project: Project?) :
                                 icon(TrophyIcons.trophyPlatinIcon)
                             }
                         }
-                        label(achievement.getName()).horizontalAlign(HorizontalAlign.LEFT)
+                        label(achievement.getName()).align(AlignX.LEFT)
                         contextHelp(achievement.getDescription(), achievement.getName())
                         if (achievement.getLevel() > 3) {
                             val progressBar = JProgressBar(1, 1)
                             progressBar.value = achievement.progress()
                             progressBar.isStringPainted = false
-                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            cell(progressBar).align(AlignX.RIGHT)
                             label(achievement.progress().toString())
                         } else {
                             val progressBar = JProgressBar(0, achievement.nextStep())
                             progressBar.value = achievement.progress()
                             progressBar.isStringPainted = false
-                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            cell(progressBar).align(AlignX.RIGHT)
                             label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
                         }
                     }.layout(RowLayout.PARENT_GRID)
@@ -214,19 +212,19 @@ class MoreInformationDialog(val project: Project?) :
                                 icon(TrophyIcons.trophyPlatinIcon)
                             }
                         }
-                        label(achievement.getName()).horizontalAlign(HorizontalAlign.LEFT)
+                        label(achievement.getName()).align(AlignX.LEFT)
                         contextHelp(achievement.getDescription(), achievement.getName())
                         if (achievement.getLevel() > 3) {
                             val progressBar = JProgressBar(1, 1)
                             progressBar.value = achievement.progress()
                             progressBar.isStringPainted = false
-                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            cell(progressBar).align(AlignX.RIGHT)
                             label(achievement.progress().toString())
                         } else {
                             val progressBar = JProgressBar(0, achievement.nextStep())
                             progressBar.value = achievement.progress()
                             progressBar.isStringPainted = false
-                            cell(progressBar).horizontalAlign(HorizontalAlign.RIGHT)
+                            cell(progressBar).align(AlignX.RIGHT)
                             label(achievement.progress().toString() + " / " + achievement.nextStep().toString())
                         }
                     }.layout(RowLayout.PARENT_GRID)

@@ -19,8 +19,7 @@ object CoverageListener : CoverageSuiteListener {
         super.coverageGathered(suite)
     }
 
-    override fun beforeSuiteChosen() {
-    }
+    override fun beforeSuiteChosen() = Unit
 
     override fun afterSuiteChosen() {
         val dataManager = CoverageDataManagerImpl.getInstance(myProject)
