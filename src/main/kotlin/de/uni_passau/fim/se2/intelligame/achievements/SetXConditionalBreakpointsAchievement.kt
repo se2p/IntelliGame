@@ -9,12 +9,12 @@ object SetXConditionalBreakpointsAchievement : XBreakpointListener<XBreakpoint<*
     Achievement() {
 
     override fun breakpointChanged(breakpoint: XBreakpoint<*>) {
-        if (breakpoint is XBreakpointBase<*, *, *>) {
-            if (breakpoint.isConditionEnabled && breakpoint.getConditionExpression() != null) {
-                var progress = progress()
-                progress += 1
-                handleProgress(progress)
-            }
+        if (breakpoint is XBreakpointBase<*, *, *>
+            && breakpoint.isConditionEnabled
+            && breakpoint.getConditionExpression() != null) {
+            var progress = progress()
+            progress += 1
+            handleProgress(progress)
         }
         super.breakpointChanged(breakpoint)
     }

@@ -9,24 +9,9 @@ object RunXTestsAchievement : SMTRunnerEventsListener, Achievement() {
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
         var progress = progress()
+        progress += testsRoot.children.filter { it.isLeaf }.size
         progress += testsRoot.children.sumOf { it.children.size }
-        if (progress >= nextStep()) {
-            updateProgress(progress)
-            showAchievementNotification("Congratulations! You unlocked level " +
-                    getLevel() + " of the '" + getName() + "' - Achievement")
-        } else {
-            val progressGroupBeforeUpdate = getProgressGroup()
-            updateProgress(progress)
-            val progressGroupAfterUpdate = getProgressGroup()
-            if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
-                showAchievementNotification(
-                    "You are making progress on an achievement! You have already reached " +
-                            progressGroupAfterUpdate.second + "% of the next level of the '" +
-                            getName() + "' achievement!"
-                )
-            }
-        }
-
+        handleProgress(progress)
     }
 
     override fun onTestsCountInSuite(count: Int) = Unit

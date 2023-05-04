@@ -30,6 +30,7 @@ object RunXTestSuitesWithXTestsAchievement : SMTRunnerEventsListener, Achievemen
                 }
             }
         }
+        refreshWindow()
     }
 
     override fun onTestsCountInSuite(count: Int) = Unit

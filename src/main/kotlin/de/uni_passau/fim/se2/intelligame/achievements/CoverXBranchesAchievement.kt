@@ -23,6 +23,7 @@ object CoverXBranchesAchievement : Achievement() {
                 )
             }
         }
+        refreshWindow()
     }
 
     override fun progress(): Int {

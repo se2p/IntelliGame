@@ -2,6 +2,7 @@ package de.uni_passau.fim.se2.intelligame.listeners
 
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
+import de.uni_passau.fim.se2.intelligame.achievements.RefactorCodeAchievement
 import de.uni_passau.fim.se2.intelligame.achievements.RefactorExtractXMethodsAchievement
 import de.uni_passau.fim.se2.intelligame.achievements.RefactorInlineXMethodsAchievement
 import de.uni_passau.fim.se2.intelligame.achievements.RefactorXTestNamesAchievement
@@ -20,7 +21,7 @@ object BulkFileListenerImpl : BulkFileListener {
 
     override fun before(events: MutableList<out VFileEvent>) {
         for (event in events) {
-            if (event.path.endsWith(".java")) {
+            if (event.path.endsWith("Test.java")) {
                 val file = File(event.path)
                 if (file.exists()) {
                     val folder = file.parentFile
@@ -34,7 +35,7 @@ object BulkFileListenerImpl : BulkFileListener {
 
     override fun after(events: MutableList<out VFileEvent>) {
         for (event in events) {
-            if (event.path.endsWith(".java")) {
+            if (event.path.endsWith("Test.java")) {
                 val file = File(event.path)
                 if (file.exists()) {
                     val folder = file.parentFile
@@ -45,10 +46,8 @@ object BulkFileListenerImpl : BulkFileListener {
                     for (refactoring in refactorings) {
                         when (refactoring) {
                             is RenameOperationRefactoring -> {
-                                if (refactoring.originalOperation.name.length
-                                    < refactoring.renamedOperation.name.length) {
-                                    RefactorXTestNamesAchievement.triggerAchievement()
-                                }
+                                if (!refactoring.renamedOperation.name.contains("\\d".toRegex()))
+                                RefactorXTestNamesAchievement.triggerAchievement()
                             }
                             is ExtractOperationRefactoring -> {
                                 RefactorExtractXMethodsAchievement.triggerAchievement()
@@ -56,15 +55,14 @@ object BulkFileListenerImpl : BulkFileListener {
                             is InlineOperationRefactoring -> {
                                 RefactorInlineXMethodsAchievement.triggerAchievement()
                             }
+                            else -> {
+                                RefactorCodeAchievement.triggerAchievement()
+                            }
                         }
                     }
                 }
             }
         }
-        /*if (events.size > 0) {
-            var text = events[0].file?.let { LoadTextUtil.loadText(it) }
-            println("text$text")
-        }*/
         super.after(events)
     }
 

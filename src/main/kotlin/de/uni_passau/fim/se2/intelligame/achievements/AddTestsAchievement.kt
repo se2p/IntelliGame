@@ -1,11 +1,14 @@
 package de.uni_passau.fim.se2.intelligame.achievements
 
 import com.intellij.ide.util.PropertiesComponent
-import com.intellij.psi.PsiTreeChangeEvent
-import com.intellij.psi.PsiTreeChangeListener
-import com.intellij.psi.impl.source.PsiModifierListImpl
+import com.intellij.openapi.vfs.newvfs.BulkFileListener
+import com.intellij.openapi.vfs.newvfs.events.VFileEvent
+import java.io.File
 
-object AddTestsAchievement : Achievement(), PsiTreeChangeListener {
+object AddTestsAchievement : Achievement(), BulkFileListener {
+
+    private var filesUnderObservation = hashMapOf<String, Int>()
+
     override fun progress(): Int {
         val properties = PropertiesComponent.getInstance()
         return properties.getInt("AddTestsAchievement", 0)
@@ -28,33 +31,45 @@ object AddTestsAchievement : Achievement(), PsiTreeChangeListener {
         return linkedMapOf(0 to 10, 1 to 100, 2 to 1000, 3 to 10000)
     }
 
-    override fun beforeChildAddition(event: PsiTreeChangeEvent) = Unit
-
-    override fun beforeChildRemoval(event: PsiTreeChangeEvent) = Unit
-
-    override fun beforeChildReplacement(event: PsiTreeChangeEvent) = Unit
-
-    override fun beforeChildMovement(event: PsiTreeChangeEvent) = Unit
-
-    override fun beforeChildrenChange(event: PsiTreeChangeEvent) = Unit
-
-    override fun beforePropertyChange(event: PsiTreeChangeEvent) = Unit
-
-    override fun childAdded(event: PsiTreeChangeEvent) {
-        if ((event.child is PsiModifierListImpl) && (event.child as PsiModifierListImpl).text.equals("@Test")) {
-            var progress = progress()
-            progress++
-            handleProgress(progress)
+    override fun before(events: MutableList<out VFileEvent>) {
+        for (event in events) {
+            if (event.path.endsWith("Test.java")) {
+                val file = File(event.path)
+                if (file.exists()) {
+                    val counter =
+                        countTests(
+                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                        )
+                    filesUnderObservation[event.path] = counter
+                }
+            }
+            super.before(events)
         }
     }
 
-    override fun childRemoved(event: PsiTreeChangeEvent) = Unit
+    override fun after(events: MutableList<out VFileEvent>) {
+        for (event in events) {
+            if (event.path.endsWith("Test.java")) {
+                val file = File(event.path)
+                if (file.exists()) {
+                    val counter =
+                        countTests(
+                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                        )
+                    if (filesUnderObservation.containsKey(event.path)
+                        && filesUnderObservation[event.path]!! < counter) {
+                        var progress = progress()
+                        progress += 1
+                        handleProgress(progress)
+                    }
+                    filesUnderObservation[event.path] = counter
+                }
+            }
+        }
+        super.after(events)
+    }
 
-    override fun childReplaced(event: PsiTreeChangeEvent) = Unit
-
-    override fun childrenChanged(event: PsiTreeChangeEvent) = Unit
-
-    override fun childMoved(event: PsiTreeChangeEvent) = Unit
-
-    override fun propertyChanged(event: PsiTreeChangeEvent) = Unit
+    private fun countTests(string: String): Int {
+        return (string.split("@Test").dropLastWhile { it.isEmpty() }.toTypedArray().size - 1).coerceAtLeast(0)
+    }
 }

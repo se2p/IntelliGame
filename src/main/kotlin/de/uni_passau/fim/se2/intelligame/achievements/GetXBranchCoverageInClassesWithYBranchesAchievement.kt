@@ -31,6 +31,7 @@ object GetXBranchCoverageInClassesWithYBranchesAchievement : Achievement() {
                 )
             }
         }
+        refreshWindow()
     }
 
     override fun progress(): Int {

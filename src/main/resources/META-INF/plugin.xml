@@ -12,21 +12,11 @@
         <applicationService serviceImplementation="de.uni_passau.fim.se2.intelligame.services.MyApplicationService"/>
         <projectService serviceImplementation="de.uni_passau.fim.se2.intelligame.services.ProjectService"/>
         <notificationGroup id="Custom Notification Group" displayType="BALLOON"/>
+        <toolWindow factoryClass="de.uni_passau.fim.se2.intelligame.components.AchievementToolWindow" id="Achievements"/>
     </extensions>
 
     <applicationListeners>
         <listener class="de.uni_passau.fim.se2.intelligame.listeners.ProjectManagerImpl"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
-
-    <projectListeners>
-        <listener class="de.uni_passau.fim.se2.intelligame.listeners.TestListener" topic="com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener"/>
-    </projectListeners>
-    <actions>
-        <action id="de.uni_passau.fim.se2.intelligame.actions.OpenInformationDialogAction"
-                class="de.uni_passau.fim.se2.intelligame.actions.OpenInformationDialogAction"
-                text="Show Achievement Progress" description="Opens the dialog with all achievements ">
-            <add-to-group group-id="ToolsMenu" anchor="first"/>
-        </action>
-    </actions>
 </idea-plugin>

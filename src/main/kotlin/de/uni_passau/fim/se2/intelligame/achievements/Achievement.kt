@@ -1,11 +1,30 @@
 package de.uni_passau.fim.se2.intelligame.achievements
 
+import com.intellij.ide.DataManager
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
-import de.uni_passau.fim.se2.intelligame.components.MoreInformationDialog
+import com.intellij.openapi.actionSystem.PlatformDataKeys
+import com.intellij.openapi.wm.ToolWindowManager
+import com.intellij.ui.content.ContentFactory
+import de.uni_passau.fim.se2.intelligame.components.AchievementToolWindow
+import javax.swing.SwingUtilities
 
 abstract class Achievement {
+
+    companion object {
+        fun refreshWindow() {
+            val project = DataManager.getInstance().dataContextFromFocus.resultSync.getData(PlatformDataKeys.PROJECT)
+            val toolWindow = ToolWindowManager.getInstance(project!!).getToolWindow("Achievements")!!
+            SwingUtilities.invokeLater {
+                toolWindow.contentManager.removeAllContents(true)
+                val content = ContentFactory.getInstance()
+                    .createContent(AchievementToolWindow.createPanel(), null, false)
+                toolWindow.contentManager.addContent(content)
+            }
+        }
+    }
+
     // absolute number of calling the action of the achievement
     abstract fun progress(): Int
 
@@ -59,9 +78,11 @@ abstract class Achievement {
             .addAction(
                 NotificationAction.createSimple("Show more information"
                 ) {
-                    val dialog = MoreInformationDialog(null)
-                    dialog.show()
-
+                    val project = DataManager.getInstance().dataContextFromFocus.resultSync
+                        .getData(PlatformDataKeys.PROJECT)
+                    val toolWindow = ToolWindowManager.getInstance(project!!).getToolWindow("Achievements")!!
+                    refreshWindow()
+                    toolWindow.show()
                 }
             )
             .notify(null)
@@ -91,7 +112,7 @@ abstract class Achievement {
     }
 
     protected fun handleProgress(progress: Int) {
-        if (progress == nextStep()) {
+        if (progress >= nextStep()) {
             updateProgress(progress)
             showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the '"
                     + getName() + "' achievement!")
@@ -107,5 +128,6 @@ abstract class Achievement {
                 )
             }
         }
+        refreshWindow()
     }
 }

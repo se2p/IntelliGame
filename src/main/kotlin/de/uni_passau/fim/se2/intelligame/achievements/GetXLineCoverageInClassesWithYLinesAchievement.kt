@@ -31,6 +31,7 @@ object GetXLineCoverageInClassesWithYLinesAchievement : Achievement() {
                 )
             }
         }
+        refreshWindow()
     }
 
     override fun progress(): Int {

@@ -31,6 +31,7 @@ object GetXMethodCoverageInClassesWithYMethodsAchievement : Achievement() {
                 )
             }
         }
+        refreshWindow()
     }
 
     override fun progress(): Int {

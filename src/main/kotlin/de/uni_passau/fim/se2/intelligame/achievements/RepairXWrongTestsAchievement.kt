@@ -36,7 +36,7 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
             PROJECT?.basePath + "/src/test/java/" + fileUrl + ".java"
         val pathToCode =
             PROJECT?.basePath + "/src/main/java/" + fileUrl.dropLast(4) + ".java"
-        val testFile = File(pathToTest);
+        val testFile = File(pathToTest)
         val codeFile = File(pathToCode)
         if (key != null && testFile.exists() && codeFile.exists()) {
             val testFileContent = FileUtils.readFileToString(testFile, Charset.defaultCharset())

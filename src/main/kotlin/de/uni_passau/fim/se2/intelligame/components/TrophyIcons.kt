@@ -1,4 +1,4 @@
-package de.uni_passau.fim.se2.intelligame.icons
+package de.uni_passau.fim.se2.intelligame.components
 
 import com.intellij.openapi.util.IconLoader
 

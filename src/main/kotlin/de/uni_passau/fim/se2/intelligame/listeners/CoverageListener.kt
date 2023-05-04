@@ -30,28 +30,8 @@ object CoverageListener : CoverageSuiteListener {
 
         val annotator = suitesBundle.coverageEngine.getCoverageAnnotator(myProject)
 
-
-//        SwingUtilities.invokeLater(Runnable {
-//            // Check for class coverage information
-//            val classCoverageInfosField: Field = annotator.javaClass.getDeclaredField("myClassCoverageInfos")
-//            classCoverageInfosField.isAccessible = true
-//            val classCoverageInfosValue: Map<Any, Any> = classCoverageInfosField.get(annotator) as Map<Any, Any>
-//            for ((key, value) in classCoverageInfosValue) {
-//                val coverageInfo = extractCoverageInfos(value)
-//                GetXLineCoverageInClassesWithYLinesAchievement.triggerAchievement(
-//                    coverageInfo,
-//                    key as String
-//                )
-//                GetXBranchCoverageInClassesWithYBranchesAchievement.triggerAchievement(coverageInfo, key)
-//                GetXMethodCoverageInClassesWithYMethodsAchievement.triggerAchievement(coverageInfo, key)
-//                CoverXLinesAchievement.triggerAchievement(coverageInfo)
-//                CoverXMethodsAchievement.triggerAchievement(coverageInfo)
-//                CoverXClassesAchievement.triggerAchievement(coverageInfo)
-//                CoverXBranchesAchievement.triggerAchievement(coverageInfo)
-//            }
-//        })
         val modalTask: Task.Modal =
-            object : Task.Modal(myProject, "Modal cancelable task", false) {
+            object : Task.Modal(myProject, "Modal Cancelable Task", false) {
 
                 override fun run(indicator: ProgressIndicator) {
                     // Check for class coverage information
@@ -93,31 +73,6 @@ object CoverageListener : CoverageSuiteListener {
         ApplicationManager.getApplication().invokeLater(fun() {
             ProgressManager.getInstance().run(modalTask)
         })
-//        ProgressManager.getInstance()
-//            .run(object : Backgroundable(myProject, CoverageBundle.message("coverage.report.building")) {
-//                override fun run(indicator: ProgressIndicator) {
-//                }
-//
-//                override fun onSuccess() {
-//                    // Check for class coverage information
-//                    val classCoverageInfosField: Field = annotator.javaClass.getDeclaredField("myClassCoverageInfos")
-//                    classCoverageInfosField.isAccessible = true
-//                    val classCoverageInfosValue: Map<Any, Any> = classCoverageInfosField.get(annotator) as Map<Any, Any>
-//                    for ((key, value) in classCoverageInfosValue) {
-//                        val coverageInfo = extractCoverageInfos(value)
-//                        GetXLineCoverageInClassesWithYLinesAchievement.triggerAchievement(
-//                            coverageInfo,
-//                            key as String
-//                        )
-//                        GetXBranchCoverageInClassesWithYBranchesAchievement.triggerAchievement(coverageInfo, key)
-//                        GetXMethodCoverageInClassesWithYMethodsAchievement.triggerAchievement(coverageInfo, key)
-//                        CoverXLinesAchievement.triggerAchievement(coverageInfo)
-//                        CoverXMethodsAchievement.triggerAchievement(coverageInfo)
-//                        CoverXClassesAchievement.triggerAchievement(coverageInfo)
-//                        CoverXBranchesAchievement.triggerAchievement(coverageInfo)
-//                    }
-//                }
-//            })
     }
 
     private fun extractCoverageInfos(coverageInfo: Any): CoverageInfo {
