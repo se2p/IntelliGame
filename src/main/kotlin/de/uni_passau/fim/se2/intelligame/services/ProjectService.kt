@@ -1,6 +1,7 @@
 package de.uni_passau.fim.se2.intelligame.services
 
 import com.intellij.coverage.CoverageDataManagerImpl
+import com.intellij.execution.ExecutionManager
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
@@ -34,6 +35,7 @@ class ProjectService(project: Project) {
         project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, RefactorAddXAssertionsAchievement)
         project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, AddTestsAchievement)
         project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, BulkFileListenerImpl)
+        project.messageBus.connect().subscribe(ExecutionManager.EXECUTION_TOPIC, ConsoleListener)
 
         FindXBugsAchievement.setProject(project)
         RepairXWrongTestsAchievement.setProject(project)

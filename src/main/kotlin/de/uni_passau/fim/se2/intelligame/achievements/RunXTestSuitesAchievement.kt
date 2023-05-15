@@ -17,6 +17,12 @@ object RunXTestSuitesAchievement : SMTRunnerEventsListener, Achievement() {
         }
     }
 
+    fun triggerAchievement() {
+        var progress = progress()
+        progress += 1
+        handleProgress(progress)
+    }
+
     override fun onTestsCountInSuite(count: Int) = Unit
 
     override fun onTestStarted(test: SMTestProxy) = Unit
@@ -63,5 +69,9 @@ object RunXTestSuitesAchievement : SMTRunnerEventsListener, Achievement() {
 
     override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {
         return linkedMapOf(0 to 3, 1 to 100, 2 to 1000, 3 to 10000)
+    }
+
+    override fun supportsLanguages(): List<Language> {
+        return listOf(Language.Java, Language.JavaScript)
     }
 }

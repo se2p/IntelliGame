@@ -31,17 +31,27 @@ object AddTestsAchievement : Achievement(), BulkFileListener {
         return linkedMapOf(0 to 10, 1 to 100, 2 to 1000, 3 to 10000)
     }
 
+    override fun supportsLanguages(): List<Language> {
+        return listOf(Language.Java, Language.JavaScript)
+    }
+
     override fun before(events: MutableList<out VFileEvent>) {
         for (event in events) {
-            if (event.path.endsWith("Test.java")) {
-                val file = File(event.path)
-                if (file.exists()) {
-                    val counter =
+            val file = File(event.path)
+            if (file.exists()) {
+                var counter = 0
+                if (event.path.endsWith("Test.java")) {
+                    counter =
                         countTests(
                             file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
                         )
-                    filesUnderObservation[event.path] = counter
+                } else if (event.path.endsWith("test.js")) {
+                    counter =
+                        countJestTests(
+                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                        )
                 }
+                filesUnderObservation[event.path] = counter
             }
             super.before(events)
         }
@@ -49,17 +59,26 @@ object AddTestsAchievement : Achievement(), BulkFileListener {
 
     override fun after(events: MutableList<out VFileEvent>) {
         for (event in events) {
-            if (event.path.endsWith("Test.java")) {
-                val file = File(event.path)
-                if (file.exists()) {
-                    val counter =
+            val file = File(event.path)
+            if (file.exists()) {
+                var counter = 0
+                if (event.path.endsWith("Test.java")) {
+                    counter =
                         countTests(
                             file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
                         )
+                } else if (event.path.endsWith("test.js")) {
+                    counter =
+                        countJestTests(
+                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                        )
+                }
+
+                if (counter != 0) {
                     if (filesUnderObservation.containsKey(event.path)
                         && filesUnderObservation[event.path]!! < counter) {
                         var progress = progress()
-                        progress += 1
+                        progress += (counter - filesUnderObservation[event.path]!!)
                         handleProgress(progress)
                     }
                     filesUnderObservation[event.path] = counter
@@ -71,5 +90,9 @@ object AddTestsAchievement : Achievement(), BulkFileListener {
 
     private fun countTests(string: String): Int {
         return (string.split("@Test").dropLastWhile { it.isEmpty() }.toTypedArray().size - 1).coerceAtLeast(0)
+    }
+
+    private fun countJestTests(string: String): Int {
+        return "\\stest\\(".toRegex().findAll(string).count()
     }
 }

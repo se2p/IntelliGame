@@ -1,6 +1,7 @@
 package de.uni_passau.fim.se2.intelligame.components
 
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.IconLoader
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowAnchor
 import com.intellij.openapi.wm.ToolWindowFactory
@@ -12,6 +13,8 @@ import com.intellij.ui.dsl.builder.RowLayout
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.util.ui.JBEmptyBorder
 import com.intellij.util.ui.UIUtil
+import de.uni_passau.fim.se2.intelligame.achievements.Achievement
+import de.uni_passau.fim.se2.intelligame.achievements.Achievement.Language
 import de.uni_passau.fim.se2.intelligame.util.Util
 import java.awt.Dimension
 import javax.swing.JComponent
@@ -74,6 +77,16 @@ class AchievementToolWindow : ToolWindowFactory {
                             }
                             label(achievement.getName()).align(AlignX.LEFT)
                             contextHelp(achievement.getDescription(), achievement.getName())
+                            if (achievement.supportsLanguages().contains(Language.Java)) {
+                                icon(TrophyIcons.javaIcon)
+                            } else {
+                                cell()
+                            }
+                            if (achievement.supportsLanguages().contains(Language.JavaScript)) {
+                                icon(TrophyIcons.javaScriptIcon)
+                            } else {
+                                cell()
+                            }
                             if (achievement.getLevel() > 3) {
                                 val progressBar = JProgressBar(1, 1)
                                 progressBar.value = achievement.progress()
@@ -108,6 +121,16 @@ class AchievementToolWindow : ToolWindowFactory {
                             }
                             label(achievement.getName()).align(AlignX.LEFT)
                             contextHelp(achievement.getDescription(), achievement.getName())
+                            if (achievement.supportsLanguages().contains(Language.Java)) {
+                                icon(TrophyIcons.javaIcon)
+                            } else {
+                                cell()
+                            }
+                            if (achievement.supportsLanguages().contains(Language.JavaScript)) {
+                                icon(TrophyIcons.javaScriptIcon)
+                            } else {
+                                cell()
+                            }
                             if (achievement.getLevel() > 3) {
                                 val progressBar = JProgressBar(1, 1)
                                 progressBar.value = achievement.progress()
@@ -142,6 +165,16 @@ class AchievementToolWindow : ToolWindowFactory {
                             }
                             label(achievement.getName()).align(AlignX.LEFT)
                             contextHelp(achievement.getDescription(), achievement.getName())
+                            if (achievement.supportsLanguages().contains(Language.Java)) {
+                                icon(TrophyIcons.javaIcon)
+                            } else {
+                                cell()
+                            }
+                            if (achievement.supportsLanguages().contains(Language.JavaScript)) {
+                                icon(TrophyIcons.javaScriptIcon)
+                            } else {
+                                cell()
+                            }
                             if (achievement.getLevel() > 3) {
                                 val progressBar = JProgressBar(1, 1)
                                 progressBar.value = achievement.progress()
@@ -176,6 +209,16 @@ class AchievementToolWindow : ToolWindowFactory {
                             }
                             label(achievement.getName()).align(AlignX.LEFT)
                             contextHelp(achievement.getDescription(), achievement.getName())
+                            if (achievement.supportsLanguages().contains(Language.Java)) {
+                                icon(TrophyIcons.javaIcon)
+                            } else {
+                                cell()
+                            }
+                            if (achievement.supportsLanguages().contains(Language.JavaScript)) {
+                                icon(TrophyIcons.javaScriptIcon)
+                            } else {
+                                cell()
+                            }
                             if (achievement.getLevel() > 3) {
                                 val progressBar = JProgressBar(1, 1)
                                 progressBar.value = achievement.progress()
@@ -210,6 +253,16 @@ class AchievementToolWindow : ToolWindowFactory {
                             }
                             label(achievement.getName()).align(AlignX.LEFT)
                             contextHelp(achievement.getDescription(), achievement.getName())
+                            if (achievement.supportsLanguages().contains(Language.Java)) {
+                                icon(TrophyIcons.javaIcon)
+                            } else {
+                                cell()
+                            }
+                            if (achievement.supportsLanguages().contains(Language.JavaScript)) {
+                                icon(TrophyIcons.javaScriptIcon)
+                            } else {
+                                cell()
+                            }
                             if (achievement.getLevel() > 3) {
                                 val progressBar = JProgressBar(1, 1)
                                 progressBar.value = achievement.progress()

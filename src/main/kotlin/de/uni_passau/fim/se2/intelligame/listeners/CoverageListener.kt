@@ -34,6 +34,14 @@ object CoverageListener : CoverageSuiteListener {
             object : Task.Modal(myProject, "Modal Cancelable Task", false) {
 
                 override fun run(indicator: ProgressIndicator) {
+                    if (annotator::class.simpleName == "JavaCoverageAnnotator") {
+                        javaCoverage()
+                    } else if (annotator::class.simpleName == "JestCoverageAnnotator") {
+                        jestCoverage()
+                    }
+                }
+
+                fun javaCoverage() {
                     // Check for class coverage information
                     val classCoverageInfosField: Field =
                         annotator.javaClass.getDeclaredField("myClassCoverageInfos")
@@ -68,6 +76,23 @@ object CoverageListener : CoverageSuiteListener {
                     }
                 }
 
+                fun jestCoverage() {
+                    // Check for file coverage information
+                    val fileCoverageInfosField: Field =
+                        annotator.javaClass.superclass.getDeclaredField("myFileCoverageInfos")
+                    fileCoverageInfosField.isAccessible = true
+                    val fileCoverageInfosValue: Map<Any, Any> =
+                        fileCoverageInfosField.get(annotator) as Map<Any, Any>
+                    for ((key, value) in fileCoverageInfosValue) {
+                        val coverageInfo = extractJestCoverageInfos(value)
+                        GetXLineCoverageInClassesWithYLinesAchievement.triggerAchievement(
+                            coverageInfo,
+                            key as String
+                        )
+                        CoverXLinesAchievement.triggerAchievement(coverageInfo)
+                        CoverXClassesAchievement.triggerAchievement(coverageInfo)
+                    }
+                }
             }
 
         ApplicationManager.getApplication().invokeLater(fun() {
@@ -94,6 +119,21 @@ object CoverageListener : CoverageSuiteListener {
             coveredLineCount,
             totalBranchCount,
             coveredBranchCount
+        )
+    }
+
+    private fun extractJestCoverageInfos(coverageInfo: Any): CoverageInfo {
+        val coveredLineCount = getFieldAsInt(coverageInfo, "coveredLineCount")
+        val totalLineCount = getFieldAsInt(coverageInfo, "totalLineCount")
+        return CoverageInfo(
+            1,
+            1,
+            0,
+            0,
+            totalLineCount,
+            coveredLineCount,
+            0,
+            0
         )
     }
 

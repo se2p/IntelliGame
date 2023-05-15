@@ -106,4 +106,8 @@ object GetXMethodCoverageInClassesWithYMethodsAchievement : Achievement() {
         }
         return 3
     }
+
+    override fun supportsLanguages(): List<Language> {
+        return listOf(Language.Java, Language.JavaScript)
+    }
 }

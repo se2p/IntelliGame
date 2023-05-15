@@ -9,8 +9,26 @@ object RunXTestsAchievement : SMTRunnerEventsListener, Achievement() {
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
         var progress = progress()
-        progress += testsRoot.children.filter { it.isLeaf }.size
-        progress += testsRoot.children.sumOf { it.children.size }
+        progress += getAllTests(testsRoot.children)
+        handleProgress(progress)
+    }
+
+    fun getAllTests(tests: List<SMTestProxy>): Int {
+        var number = 0
+        for (test in tests) {
+            if (test.isLeaf) {
+                number++
+            } else {
+                number += getAllTests(test.children)
+            }
+        }
+
+        return number
+    }
+
+    fun triggerAchievement(tests: Int) {
+        var progress = progress()
+        progress += tests
         handleProgress(progress)
     }
 
@@ -60,5 +78,9 @@ object RunXTestsAchievement : SMTRunnerEventsListener, Achievement() {
 
     override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {
         return linkedMapOf(0 to 3, 1 to 100, 2 to 1000, 3 to 10000)
+    }
+
+    override fun supportsLanguages(): List<Language> {
+        return listOf(Language.Java, Language.JavaScript)
     }
 }

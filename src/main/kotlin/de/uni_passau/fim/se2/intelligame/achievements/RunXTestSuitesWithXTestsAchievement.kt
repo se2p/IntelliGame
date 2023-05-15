@@ -8,8 +8,12 @@ object RunXTestSuitesWithXTestsAchievement : SMTRunnerEventsListener, Achievemen
     override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
-        val testCounter = testsRoot.children.sumOf { it.children.size }
-        if (testCounter >= requiredTestsInSuite()) {
+        val testCounter = RunXTestsAchievement.getAllTests(testsRoot.children)
+        triggerAchievement(testCounter)
+    }
+
+    fun triggerAchievement(tests: Int) {
+        if (tests >= requiredTestsInSuite()) {
             var progress = progress()
             progress += 1
             if (progress == nextStep()) {
@@ -103,5 +107,9 @@ object RunXTestSuitesWithXTestsAchievement : SMTRunnerEventsListener, Achievemen
             return 500
         }
         return 100
+    }
+
+    override fun supportsLanguages(): List<Language> {
+        return listOf(Language.Java, Language.JavaScript)
     }
 }

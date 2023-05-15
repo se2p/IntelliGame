@@ -10,4 +10,6 @@ object TrophyIcons {
     val trophySilverLightIcon = IconLoader.getIcon("/icons/trophy-silver-light.svg", javaClass)
     val trophyGoldIcon = IconLoader.getIcon("/icons/trophy-gold.svg", javaClass)
     val trophyPlatinIcon = IconLoader.getIcon("/icons/trophy-platin.svg", javaClass)
+    val javaIcon = IconLoader.getIcon("/icons/java.svg", javaClass)
+    val javaScriptIcon = IconLoader.getIcon("/icons/javascript.svg", javaClass)
 }

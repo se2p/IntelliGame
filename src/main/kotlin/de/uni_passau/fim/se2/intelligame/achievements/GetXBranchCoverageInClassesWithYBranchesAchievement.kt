@@ -108,4 +108,8 @@ object GetXBranchCoverageInClassesWithYBranchesAchievement : Achievement() {
         }
         return 15
     }
+
+    override fun supportsLanguages(): List<Language> {
+        return listOf(Language.Java, Language.JavaScript)
+    }
 }

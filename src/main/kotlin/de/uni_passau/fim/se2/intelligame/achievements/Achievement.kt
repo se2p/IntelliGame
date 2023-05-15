@@ -12,6 +12,10 @@ import javax.swing.SwingUtilities
 
 abstract class Achievement {
 
+    enum class Language {
+        Java, JavaScript
+    }
+
     companion object {
         fun refreshWindow() {
             val project = DataManager.getInstance().dataContextFromFocus.resultSync.getData(PlatformDataKeys.PROJECT)
@@ -130,4 +134,6 @@ abstract class Achievement {
         }
         refreshWindow()
     }
+
+    abstract fun supportsLanguages(): List<Language>
 }

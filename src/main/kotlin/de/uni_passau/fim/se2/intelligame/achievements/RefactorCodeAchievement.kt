@@ -32,4 +32,8 @@ object RefactorCodeAchievement : Achievement() {
     override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {
         return linkedMapOf(0 to 5, 1 to 50, 2 to 500, 3 to 2500)
     }
+
+    override fun supportsLanguages(): List<Language> {
+        return listOf(Language.Java)
+    }
 }

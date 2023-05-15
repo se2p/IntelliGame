@@ -7,7 +7,7 @@ import com.intellij.xdebugger.breakpoints.XBreakpointListener
 object SetXLineBreakpointsAchievement : XBreakpointListener<XBreakpoint<*>>,
     Achievement() {
     override fun breakpointAdded(breakpoint: XBreakpoint<*>) {
-        if (breakpoint.type.id == "java-line") {
+        if (breakpoint.type.id == "java-line" || breakpoint.type.title == "JavaScript Line Breakpoints") {
             var progress = progress()
             progress += 1
             handleProgress(progress)
@@ -35,5 +35,9 @@ object SetXLineBreakpointsAchievement : XBreakpointListener<XBreakpoint<*>>,
 
     override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {
         return linkedMapOf(0 to 3, 1 to 10, 2 to 100, 3 to 1000)
+    }
+
+    override fun supportsLanguages(): List<Language> {
+        return listOf(Language.Java, Language.JavaScript)
     }
 }

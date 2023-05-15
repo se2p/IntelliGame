@@ -106,4 +106,8 @@ object GetXLineCoverageInClassesWithYLinesAchievement : Achievement() {
         }
         return 5
     }
+
+    override fun supportsLanguages(): List<Language> {
+        return listOf(Language.Java, Language.JavaScript)
+    }
 }

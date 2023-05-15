@@ -5,8 +5,8 @@ import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.ide.DataManager
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.roots.FileIndexFacade
+import com.intellij.openapi.vfs.readText
 import com.intellij.psi.search.ProjectScopeImpl
 import javax.swing.SwingUtilities
 
@@ -22,13 +22,25 @@ object TriggerXAssertsByTestsAchievement : SMTRunnerEventsListener,
 
     override fun onTestFinished(test: SMTestProxy) {
         if (test.isPassed) {
-            ApplicationManager.getApplication().isReadAccessAllowed
             val project = DataManager.getInstance().dataContextFromFocus.resultSync.getData(PlatformDataKeys.PROJECT)!!
             SwingUtilities.invokeLater {
-                val testText =
-                    test.getLocation(project, ProjectScopeImpl(project, FileIndexFacade.getInstance(project)))!!
-                    .psiElement.text
-                val count = "assert".toRegex().findAll(testText).count()
+                val file = test.getLocation(project, ProjectScopeImpl(project, FileIndexFacade.getInstance(project)))!!
+                    .virtualFile
+                var count = 0
+                if (file!!.path.endsWith("Test.java")) {
+                    val testText =
+                        test.getLocation(project, ProjectScopeImpl(project, FileIndexFacade.getInstance(project)))!!
+                            .psiElement.text
+                    count = "assert".toRegex().findAll(testText).count()
+                } else if (file.path.endsWith("test.js")) {
+                    val testTitle =
+                        test.getLocation(project, ProjectScopeImpl(project, FileIndexFacade.getInstance(project)))!!
+                            .psiElement.text
+                    val testText = "\\stest\\($testTitle(.|\\n|\\r)*?(?=test\\()".toRegex()
+                        .find(file.readText())!!.value
+                    count = "expect".toRegex().findAll(testText).count()
+                }
+
                 var progress = progress()
                 progress += count
                 handleProgress(progress)
@@ -76,5 +88,9 @@ object TriggerXAssertsByTestsAchievement : SMTRunnerEventsListener,
 
     override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {
         return linkedMapOf(0 to 3, 1 to 100, 2 to 1000, 3 to 10000)
+    }
+
+    override fun supportsLanguages(): List<Language> {
+        return listOf(Language.Java, Language.JavaScript)
     }
 }

@@ -31,4 +31,8 @@ object CoverXLinesAchievement : Achievement() {
     override fun getStepLevelMatrix(): LinkedHashMap<Int, Int> {
         return linkedMapOf(0 to 100, 1 to 1000, 2 to 10000, 3 to 100000)
     }
+
+    override fun supportsLanguages(): List<Language> {
+        return listOf(Language.Java, Language.JavaScript)
+    }
 }
