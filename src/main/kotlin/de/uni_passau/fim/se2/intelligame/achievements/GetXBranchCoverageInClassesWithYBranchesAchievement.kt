@@ -1,10 +1,11 @@
 package de.uni_passau.fim.se2.intelligame.achievements
 
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.project.Project
 import de.uni_passau.fim.se2.intelligame.util.CoverageInfo
 
 object GetXBranchCoverageInClassesWithYBranchesAchievement : Achievement() {
-    fun triggerAchievement(coverageInfo: CoverageInfo, className: String) {
+    fun triggerAchievement(coverageInfo: CoverageInfo, className: String, project: Project?) {
         if (coverageInfo.totalBranchCount >= requiredTotalBranches()
             && !getClassesWhichFulfillRequirements().split(",").contains(className)
         ) {
@@ -19,7 +20,7 @@ object GetXBranchCoverageInClassesWithYBranchesAchievement : Achievement() {
                 updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
                 if (progress() == nextStep()) {
                     showAchievementNotification("Congratulations! You unlocked level " +
-                            (getLevel() + 1) + " of the 'Class Reviewer - Branches' Achievement")
+                            (getLevel() + 1) + " of the 'Class Reviewer - Branches' Achievement", project)
                     updateClassesWhichFulfillRequirements("")
                     increaseLevel()
                 }
@@ -27,7 +28,7 @@ object GetXBranchCoverageInClassesWithYBranchesAchievement : Achievement() {
                 showAchievementNotification(
                     "Hey you are about to fulfill a requirement for an Achievement progress! Only " + "%.2f".format(
                         (requiredCoverage() - achievedCoverage) * 100
-                    ) + "% Branch-coverage missing in the class " + className + ". Keep going!"
+                    ) + "% Branch-coverage missing in the class " + className + ". Keep going!", project
                 )
             }
         }

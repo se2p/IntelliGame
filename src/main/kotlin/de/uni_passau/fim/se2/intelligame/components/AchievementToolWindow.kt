@@ -1,7 +1,6 @@
 package de.uni_passau.fim.se2.intelligame.components
 
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.IconLoader
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowAnchor
 import com.intellij.openapi.wm.ToolWindowFactory
@@ -13,7 +12,6 @@ import com.intellij.ui.dsl.builder.RowLayout
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.util.ui.JBEmptyBorder
 import com.intellij.util.ui.UIUtil
-import de.uni_passau.fim.se2.intelligame.achievements.Achievement
 import de.uni_passau.fim.se2.intelligame.achievements.Achievement.Language
 import de.uni_passau.fim.se2.intelligame.util.Util
 import java.awt.Dimension

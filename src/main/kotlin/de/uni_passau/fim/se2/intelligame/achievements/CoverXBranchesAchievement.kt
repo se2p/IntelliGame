@@ -2,28 +2,13 @@ package de.uni_passau.fim.se2.intelligame.achievements
 
 import de.uni_passau.fim.se2.intelligame.util.CoverageInfo
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.project.Project
 
 object CoverXBranchesAchievement : Achievement() {
-    fun triggerAchievement(coverageInfo: CoverageInfo) {
+    fun triggerAchievement(coverageInfo: CoverageInfo, project: Project?) {
         var progress = progress()
         progress += coverageInfo.coveredBranchCount
-        if (progress >= nextStep()) {
-            updateProgress(progress)
-            showAchievementNotification("Congratulations! You unlocked level " + getLevel()
-                    + " of the  '" + getName() + "' achievement!")
-        } else {
-            val progressGroupBeforeUpdate = getProgressGroup()
-            updateProgress(progress)
-            val progressGroupAfterUpdate = getProgressGroup()
-            if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
-                showAchievementNotification(
-                    "You are making progress on an achievement! You have already reached " +
-                            progressGroupAfterUpdate.second + "% of the next level of the '" +
-                            getName() + "' achievement!"
-                )
-            }
-        }
-        refreshWindow()
+        handleProgress(progress, project)
     }
 
     override fun progress(): Int {

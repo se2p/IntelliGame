@@ -5,9 +5,12 @@ import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.PlatformDataKeys
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.ui.content.ContentFactory
 import de.uni_passau.fim.se2.intelligame.components.AchievementToolWindow
+import de.uni_passau.fim.se2.intelligame.util.CSVReportGenerator
+import de.uni_passau.fim.se2.intelligame.util.Logger
 import javax.swing.SwingUtilities
 
 abstract class Achievement {
@@ -73,7 +76,7 @@ abstract class Achievement {
     /**
      * Shows the balloon with the given message.
      */
-    fun showAchievementNotification(message: String) {
+    fun showAchievementNotification(message: String, project: Project?) {
         NotificationGroupManager.getInstance().getNotificationGroup("Custom Notification Group")
             .createNotification(
                 message,
@@ -82,14 +85,16 @@ abstract class Achievement {
             .addAction(
                 NotificationAction.createSimple("Show more information"
                 ) {
-                    val project = DataManager.getInstance().dataContextFromFocus.resultSync
+                    val myProject = DataManager.getInstance().dataContextFromFocus.resultSync
                         .getData(PlatformDataKeys.PROJECT)
-                    val toolWindow = ToolWindowManager.getInstance(project!!).getToolWindow("Achievements")!!
+                    val toolWindow = ToolWindowManager.getInstance(myProject!!).getToolWindow("Achievements")!!
                     refreshWindow()
                     toolWindow.show()
                 }
             )
             .notify(null)
+
+        Logger.logStatus(message, Logger.Kind.Notification, project)
     }
 
     /**
@@ -100,7 +105,7 @@ abstract class Achievement {
      * 2: 50% - 74,9%
      * 3: 75% - 100%
      */
-    protected fun getProgressGroup(): Pair<Int, String> {
+    private fun getProgressGroup(): Pair<Int, String> {
         val progressInPercent = (progress().toFloat() / nextStep())
         val reachedPercentage = "%.2f".format((progressInPercent * 100))
         if (progressInPercent >= 0.25) {
@@ -115,11 +120,11 @@ abstract class Achievement {
         return Pair(0, reachedPercentage)
     }
 
-    protected fun handleProgress(progress: Int) {
+    protected fun handleProgress(progress: Int, project: Project?) {
         if (progress >= nextStep()) {
             updateProgress(progress)
             showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the '"
-                    + getName() + "' achievement!")
+                    + getName() + "' achievement!", project)
         } else {
             val progressGroupBeforeUpdate = getProgressGroup()
             updateProgress(progress)
@@ -128,11 +133,12 @@ abstract class Achievement {
                 showAchievementNotification(
                     "You are making progress on an achievement! You have already reached " +
                             progressGroupAfterUpdate.second + "% of the next level of the '" +
-                            getName() + "' achievement!"
+                            getName() + "' achievement!", project
                 )
             }
         }
         refreshWindow()
+        CSVReportGenerator.generateCSVReport(project)
     }
 
     abstract fun supportsLanguages(): List<Language>

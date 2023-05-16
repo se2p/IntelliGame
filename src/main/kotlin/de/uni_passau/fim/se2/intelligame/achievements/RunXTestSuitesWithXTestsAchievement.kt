@@ -3,9 +3,20 @@ package de.uni_passau.fim.se2.intelligame.achievements
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
 import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
 
 object RunXTestSuitesWithXTestsAchievement : SMTRunnerEventsListener, Achievement() {
-    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
+    private var project: Project? = null
+
+    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
+        val projects = ProjectManager.getInstance().openProjects
+        for (p in projects) {
+            if (p.basePath?.let { testsRoot.locationUrl?.contains(it) } == true) {
+                project = p
+            }
+        }
+    }
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
         val testCounter = RunXTestsAchievement.getAllTests(testsRoot.children)
@@ -16,25 +27,8 @@ object RunXTestSuitesWithXTestsAchievement : SMTRunnerEventsListener, Achievemen
         if (tests >= requiredTestsInSuite()) {
             var progress = progress()
             progress += 1
-            if (progress == nextStep()) {
-                updateProgress(0)
-                increaseLevel()
-                showAchievementNotification("Congratulations! You unlocked level " + getLevel() + " of the '" +
-                        getName() + "' - Achievement")
-            } else {
-                val progressGroupBeforeUpdate = getProgressGroup()
-                updateProgress(progress)
-                val progressGroupAfterUpdate = getProgressGroup()
-                if (progressGroupAfterUpdate.first > progressGroupBeforeUpdate.first) {
-                    showAchievementNotification(
-                        "You are making progress on an achievement! You have already reached " +
-                                progressGroupAfterUpdate.second + "% of the next level of the '" +
-                                getName() + "' achievement!"
-                    )
-                }
-            }
+            handleProgress(progress, project)
         }
-        refreshWindow()
     }
 
     override fun onTestsCountInSuite(count: Int) = Unit
@@ -81,6 +75,7 @@ object RunXTestSuitesWithXTestsAchievement : SMTRunnerEventsListener, Achievemen
     override fun updateProgress(progress: Int) {
         val properties = PropertiesComponent.getInstance()
         properties.setValue("runXTestSuitesWithXTestsAchievement", progress, 0)
+        if (progress >= nextStep()) increaseLevel()
     }
 
     override fun getDescription(): String {

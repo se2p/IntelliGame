@@ -1,6 +1,7 @@
 package de.uni_passau.fim.se2.intelligame.achievements
 
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 import java.io.File
@@ -8,6 +9,7 @@ import java.io.File
 object AddTestsAchievement : Achievement(), BulkFileListener {
 
     private var filesUnderObservation = hashMapOf<String, Int>()
+    private val regex = "/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex()
 
     override fun progress(): Int {
         val properties = PropertiesComponent.getInstance()
@@ -43,12 +45,12 @@ object AddTestsAchievement : Achievement(), BulkFileListener {
                 if (event.path.endsWith("Test.java")) {
                     counter =
                         countTests(
-                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                            file.readText().replace(regex, "")
                         )
                 } else if (event.path.endsWith("test.js")) {
                     counter =
                         countJestTests(
-                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                            file.readText().replace(regex, "")
                         )
                 }
                 filesUnderObservation[event.path] = counter
@@ -65,12 +67,12 @@ object AddTestsAchievement : Achievement(), BulkFileListener {
                 if (event.path.endsWith("Test.java")) {
                     counter =
                         countTests(
-                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                            file.readText().replace(regex, "")
                         )
                 } else if (event.path.endsWith("test.js")) {
                     counter =
                         countJestTests(
-                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                            file.readText().replace(regex, "")
                         )
                 }
 
@@ -79,7 +81,8 @@ object AddTestsAchievement : Achievement(), BulkFileListener {
                         && filesUnderObservation[event.path]!! < counter) {
                         var progress = progress()
                         progress += (counter - filesUnderObservation[event.path]!!)
-                        handleProgress(progress)
+                        val project = event.file?.let { ProjectLocator.getInstance().guessProjectForFile(it) }
+                        handleProgress(progress, project)
                     }
                     filesUnderObservation[event.path] = counter
                 }

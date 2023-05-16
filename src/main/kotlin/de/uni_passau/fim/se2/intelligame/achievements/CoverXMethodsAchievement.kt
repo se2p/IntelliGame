@@ -1,13 +1,14 @@
 package de.uni_passau.fim.se2.intelligame.achievements
 
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.project.Project
 import de.uni_passau.fim.se2.intelligame.util.CoverageInfo
 
 object CoverXMethodsAchievement : Achievement() {
-    fun triggerAchievement(coverageInfo: CoverageInfo) {
+    fun triggerAchievement(coverageInfo: CoverageInfo, project: Project?) {
         var progress = progress()
         progress += coverageInfo.coveredMethodCount
-        handleProgress(progress)
+        handleProgress(progress, project)
     }
 
     override fun progress(): Int {

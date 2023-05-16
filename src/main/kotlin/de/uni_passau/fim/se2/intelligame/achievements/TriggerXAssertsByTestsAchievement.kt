@@ -5,14 +5,24 @@ import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.ide.DataManager
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.roots.FileIndexFacade
 import com.intellij.openapi.vfs.readText
 import com.intellij.psi.search.ProjectScopeImpl
 import javax.swing.SwingUtilities
 
-object TriggerXAssertsByTestsAchievement : SMTRunnerEventsListener,
-    Achievement() {
-    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
+object TriggerXAssertsByTestsAchievement : SMTRunnerEventsListener, Achievement() {
+    private var project: Project? = null
+
+    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
+        val projects = ProjectManager.getInstance().openProjects
+        for (p in projects) {
+            if (p.basePath?.let { testsRoot.locationUrl?.contains(it) } == true) {
+                project = p
+            }
+        }
+    }
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
 
@@ -43,7 +53,7 @@ object TriggerXAssertsByTestsAchievement : SMTRunnerEventsListener,
 
                 var progress = progress()
                 progress += count
-                handleProgress(progress)
+                handleProgress(progress, project)
             }
         }
     }

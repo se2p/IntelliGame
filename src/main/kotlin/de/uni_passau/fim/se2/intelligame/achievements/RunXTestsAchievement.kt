@@ -3,14 +3,25 @@ package de.uni_passau.fim.se2.intelligame.achievements
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
 import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
 
 object RunXTestsAchievement : SMTRunnerEventsListener, Achievement() {
-    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
+    private var project: Project? = null
+
+    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
+        val projects = ProjectManager.getInstance().openProjects
+        for (p in projects) {
+            if (p.basePath?.let { testsRoot.locationUrl?.contains(it) } == true) {
+                project = p
+            }
+        }
+    }
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
         var progress = progress()
         progress += getAllTests(testsRoot.children)
-        handleProgress(progress)
+        handleProgress(progress, project)
     }
 
     fun getAllTests(tests: List<SMTestProxy>): Int {
@@ -29,7 +40,7 @@ object RunXTestsAchievement : SMTRunnerEventsListener, Achievement() {
     fun triggerAchievement(tests: Int) {
         var progress = progress()
         progress += tests
-        handleProgress(progress)
+        handleProgress(progress, project)
     }
 
     override fun onTestsCountInSuite(count: Int) = Unit

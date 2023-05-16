@@ -5,19 +5,23 @@ import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.execution.testframework.sm.runner.states.TestStateInfo
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.nio.charset.Charset
 
 object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
     private var testsUnderObservation = hashMapOf<String, String>()
-    private var PROJECT: Project? = null
+    private var project: Project? = null
 
-    fun setProject(project: Project) {
-        PROJECT = project
+    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
+        val projects = ProjectManager.getInstance().openProjects
+        for (p in projects) {
+            if (p.basePath?.let { testsRoot.locationUrl?.contains(it) } == true) {
+                project = p
+            }
+        }
     }
-
-    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
 
@@ -29,7 +33,7 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
         val key = test.locationUrl
         // Find the correct absolute path to the test class therefore the test-identifier and prefix is removed
         val path =
-            PROJECT?.basePath + "/src/test/java/" + (test.locationUrl?.removeRange(
+            project?.basePath + "/src/test/java/" + (test.locationUrl?.removeRange(
                 test.locationUrl!!.lastIndexOf("/"),
                 test.locationUrl!!.length
             )
@@ -55,7 +59,7 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
                 ) {
                     var progress = progress()
                     progress++
-                    handleProgress(progress)
+                    handleProgress(progress, project)
                     testsUnderObservation.remove(key)
                 } else {
                     testsUnderObservation.remove(key)
@@ -112,13 +116,13 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
         if (progress() > 3) {
             if (progress() > 10) {
                 if (progress() > 100) {
-                    return 1000;
+                    return 1000
                 }
-                return 100;
+                return 100
             }
-            return 10;
+            return 10
         }
-        return 3;
+        return 3
     }
 
     override fun supportsLanguages(): List<Language> {

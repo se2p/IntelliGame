@@ -1,6 +1,7 @@
 package de.uni_passau.fim.se2.intelligame.achievements
 
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.project.ProjectLocator
 import com.intellij.xdebugger.breakpoints.XBreakpoint
 import com.intellij.xdebugger.breakpoints.XBreakpointListener
 
@@ -9,7 +10,8 @@ object SetXBreakpointsAchievement : XBreakpointListener<XBreakpoint<*>>,
     override fun breakpointAdded(breakpoint: XBreakpoint<*>) {
         var progress = progress()
         progress += 1
-        handleProgress(progress)
+        val project = breakpoint.sourcePosition?.file?.let { ProjectLocator.getInstance().guessProjectForFile(it) }
+        handleProgress(progress, project)
         super.breakpointAdded(breakpoint)
     }
 

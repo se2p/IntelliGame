@@ -1,10 +1,11 @@
 package de.uni_passau.fim.se2.intelligame.achievements
 
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.project.Project
 import de.uni_passau.fim.se2.intelligame.util.CoverageInfo
 
 object GetXLineCoverageInClassesWithYLinesAchievement : Achievement() {
-    fun triggerAchievement(coverageInfo: CoverageInfo, className: String) {
+    fun triggerAchievement(coverageInfo: CoverageInfo, className: String, project: Project?) {
         if (coverageInfo.totalLineCount >= requiredTotalLines()
             && !getClassesWhichFulfillRequirements().split(",").contains(className)
         ) {
@@ -19,7 +20,7 @@ object GetXLineCoverageInClassesWithYLinesAchievement : Achievement() {
                 updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
                 if (progress() == nextStep()) {
                     showAchievementNotification("Congratulations! You unlocked level " + (getLevel() + 1)
-                            + " of the 'Class Reviewer - Lines' Achievement")
+                            + " of the 'Class Reviewer - Lines' Achievement", project)
                     updateClassesWhichFulfillRequirements("")
                     increaseLevel()
                 }
@@ -27,7 +28,7 @@ object GetXLineCoverageInClassesWithYLinesAchievement : Achievement() {
                 showAchievementNotification(
                     "Hey you are about to fulfill a requirement for an Achievement progress! Only " + "%.2f".format(
                         (requiredCoverage() - achievedCoverage) * 100
-                    ) + "% Line-coverage missing in the class " + className + ". Keep going!"
+                    ) + "% Line-coverage missing in the class " + className + ". Keep going!", project
                 )
             }
         }

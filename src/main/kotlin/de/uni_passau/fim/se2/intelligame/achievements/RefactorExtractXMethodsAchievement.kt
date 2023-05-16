@@ -1,12 +1,13 @@
 package de.uni_passau.fim.se2.intelligame.achievements
 
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.project.Project
 
 object RefactorExtractXMethodsAchievement : Achievement() {
-    fun triggerAchievement() {
+    fun triggerAchievement(project: Project?) {
         var progress = progress()
         progress++
-        handleProgress(progress)
+        handleProgress(progress, project)
     }
 
     override fun progress(): Int {

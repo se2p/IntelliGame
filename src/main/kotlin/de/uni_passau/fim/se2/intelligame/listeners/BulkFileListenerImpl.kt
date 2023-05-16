@@ -1,5 +1,6 @@
 package de.uni_passau.fim.se2.intelligame.listeners
 
+import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 import de.uni_passau.fim.se2.intelligame.achievements.RefactorCodeAchievement
@@ -43,20 +44,21 @@ object BulkFileListenerImpl : BulkFileListener {
                     val modelBefore = filesUnderObservation[folder.path]
                     val modelDiff: UMLModelDiff? = modelBefore?.diff(modelAfter)
                     val refactorings: List<Refactoring> = modelDiff?.refactorings ?: listOf()
+                    val project = event.file?.let { ProjectLocator.getInstance().guessProjectForFile(it) }
                     for (refactoring in refactorings) {
                         when (refactoring) {
                             is RenameOperationRefactoring -> {
                                 if (!refactoring.renamedOperation.name.contains("\\d".toRegex()))
-                                RefactorXTestNamesAchievement.triggerAchievement()
+                                RefactorXTestNamesAchievement.triggerAchievement(project)
                             }
                             is ExtractOperationRefactoring -> {
-                                RefactorExtractXMethodsAchievement.triggerAchievement()
+                                RefactorExtractXMethodsAchievement.triggerAchievement(project)
                             }
                             is InlineOperationRefactoring -> {
-                                RefactorInlineXMethodsAchievement.triggerAchievement()
+                                RefactorInlineXMethodsAchievement.triggerAchievement(project)
                             }
                             else -> {
-                                RefactorCodeAchievement.triggerAchievement()
+                                RefactorCodeAchievement.triggerAchievement(project)
                             }
                         }
                     }

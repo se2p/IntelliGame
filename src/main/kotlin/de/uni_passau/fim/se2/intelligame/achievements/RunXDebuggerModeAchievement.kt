@@ -9,7 +9,7 @@ object RunXDebuggerModeAchievement : XDebuggerManagerListener,
     override fun processStarted(debugProcess: XDebugProcess) {
         var progress = progress()
         progress += 1
-        handleProgress(progress)
+        handleProgress(progress, debugProcess.session.project)
         super.processStarted(debugProcess)
     }
 

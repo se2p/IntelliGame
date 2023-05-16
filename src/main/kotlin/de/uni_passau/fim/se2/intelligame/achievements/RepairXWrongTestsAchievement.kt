@@ -5,6 +5,7 @@ import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.execution.testframework.sm.runner.states.TestStateInfo
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.nio.charset.Charset
@@ -12,13 +13,16 @@ import java.nio.charset.Charset
 object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
     private var testsUnderObservation = hashMapOf<String, String>()
     private var classesUnderObservation = hashMapOf<String, String>()
-    private var PROJECT: Project? = null
+    private var project: Project? = null
 
-    fun setProject(project: Project) {
-        PROJECT = project
+    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
+        val projects = ProjectManager.getInstance().openProjects
+        for (p in projects) {
+            if (p.basePath?.let { testsRoot.locationUrl?.contains(it) } == true) {
+                project = p
+            }
+        }
     }
-
-    override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
 
@@ -33,9 +37,9 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
             ?.replace(".", "/")
             ?: "")
         val pathToTest =
-            PROJECT?.basePath + "/src/test/java/" + fileUrl + ".java"
+            project?.basePath + "/src/test/java/" + fileUrl + ".java"
         val pathToCode =
-            PROJECT?.basePath + "/src/main/java/" + fileUrl.dropLast(4) + ".java"
+            project?.basePath + "/src/main/java/" + fileUrl.dropLast(4) + ".java"
         val testFile = File(pathToTest)
         val codeFile = File(pathToCode)
         if (key != null && testFile.exists() && codeFile.exists()) {
@@ -54,7 +58,7 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
                 ) {
                     var progress = progress()
                     progress += 1
-                    handleProgress(progress)
+                    handleProgress(progress, project)
                     testsUnderObservation.remove(key)
                     classesUnderObservation.remove(key)
                 } else {

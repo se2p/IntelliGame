@@ -1,12 +1,15 @@
 package de.uni_passau.fim.se2.intelligame.achievements
 
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 import java.io.File
 
 object RefactorAddXAssertionsAchievement : BulkFileListener, Achievement() {
     private var filesUnderObservation = hashMapOf<String, Int>()
+    private val regex = "/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex()
+
     override fun before(events: MutableList<out VFileEvent>) {
         for (event in events) {
             val file = File(event.path)
@@ -15,12 +18,12 @@ object RefactorAddXAssertionsAchievement : BulkFileListener, Achievement() {
                 if (event.path.endsWith("Test.java")) {
                     counter =
                         countAsserts(
-                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                            file.readText().replace(regex, "")
                         )
                 } else if (event.path.endsWith("test.js")) {
                     counter =
                         countJestAsserts(
-                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                            file.readText().replace(regex, "")
                         )
                 }
                 filesUnderObservation[event.path] = counter
@@ -37,12 +40,12 @@ object RefactorAddXAssertionsAchievement : BulkFileListener, Achievement() {
                 if (event.path.endsWith("Test.java")) {
                     counter =
                         countAsserts(
-                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                            file.readText().replace(regex, "")
                         )
                 } else if (event.path.endsWith("test.js")) {
                     counter =
                         countJestAsserts(
-                            file.readText().replace("/\\*(?:[^*]|\\*+[^*/])*\\*+/|//.*".toRegex(), "")
+                            file.readText().replace(regex, "")
                         )
                 }
 
@@ -51,7 +54,8 @@ object RefactorAddXAssertionsAchievement : BulkFileListener, Achievement() {
                         && filesUnderObservation[event.path]!! < counter) {
                         var progress = progress()
                         progress += (counter - filesUnderObservation[event.path]!!)
-                        handleProgress(progress)
+                        val project = event.file?.let { ProjectLocator.getInstance().guessProjectForFile(it) }
+                        handleProgress(progress, project)
                     }
                     filesUnderObservation[event.path] = counter
                 }

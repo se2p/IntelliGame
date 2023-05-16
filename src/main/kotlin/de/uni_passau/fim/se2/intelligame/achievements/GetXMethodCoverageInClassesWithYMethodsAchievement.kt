@@ -1,10 +1,11 @@
 package de.uni_passau.fim.se2.intelligame.achievements
 
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.project.Project
 import de.uni_passau.fim.se2.intelligame.util.CoverageInfo
 
 object GetXMethodCoverageInClassesWithYMethodsAchievement : Achievement() {
-    fun triggerAchievement(coverageInfo: CoverageInfo, className: String) {
+    fun triggerAchievement(coverageInfo: CoverageInfo, className: String, project: Project?) {
         if (coverageInfo.totalMethodCount >= requiredTotalMethods()
             && !getClassesWhichFulfillRequirements().split(",").contains(className)
         ) {
@@ -19,7 +20,7 @@ object GetXMethodCoverageInClassesWithYMethodsAchievement : Achievement() {
                 updateClassesWhichFulfillRequirements(classesWhichFulfillRequirements)
                 if (progress() == nextStep()) {
                     showAchievementNotification("Congratulations! You unlocked level " +
-                            (getLevel() + 1) + " of the  'Class Reviewer - Methods' Achievement")
+                            (getLevel() + 1) + " of the  'Class Reviewer - Methods' Achievement", project)
                     updateClassesWhichFulfillRequirements("")
                     increaseLevel()
                 }
@@ -27,7 +28,7 @@ object GetXMethodCoverageInClassesWithYMethodsAchievement : Achievement() {
                 showAchievementNotification(
                     "Hey you are about to fulfill a requirement for an Achievement progress! Only " + "%.2f".format(
                         (requiredCoverage() - achievedCoverage) * 100
-                    ) + "% Method-coverage missing in the class " + className + ". Keep going!"
+                    ) + "% Method-coverage missing in the class " + className + ". Keep going!", project
                 )
             }
         }

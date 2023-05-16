@@ -5,6 +5,37 @@ import de.uni_passau.fim.se2.intelligame.achievements.*
 class Util {
     companion object {
 
+        fun getAchievements(): List<Achievement> {
+            return listOf(
+                AddTestsAchievement,
+                CoverXBranchesAchievement,
+                CoverXClassesAchievement,
+                CoverXLinesAchievement,
+                CoverXMethodsAchievement,
+                FindXBugsAchievement,
+                GetXBranchCoverageInClassesWithYBranchesAchievement,
+                GetXLineCoverageInClassesWithYLinesAchievement,
+                GetXMethodCoverageInClassesWithYMethodsAchievement,
+                RefactorAddXAssertionsAchievement,
+                RefactorCodeAchievement,
+                RefactorExtractXMethodsAchievement,
+                RefactorInlineXMethodsAchievement,
+                RefactorXTestNamesAchievement,
+                RepairXWrongTestsAchievement,
+                RunWithCoverageAchievement,
+                RunXDebuggerModeAchievement,
+                RunXTestsAchievement,
+                RunXTestSuitesAchievement,
+                RunXTestSuitesWithXTestsAchievement,
+                SetXBreakpointsAchievement,
+                SetXConditionalBreakpointsAchievement,
+                SetXFieldWatchpointsAchievement,
+                SetXLineBreakpointsAchievement,
+                SetXMethodBreakpointsAchievement,
+                TriggerXAssertsByTestsAchievement
+            )
+        }
+
         fun getRefactoringAchievements(): List<Achievement> {
             return listOf(
                 RefactorCodeAchievement,

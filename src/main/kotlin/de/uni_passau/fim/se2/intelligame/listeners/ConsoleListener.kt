@@ -6,6 +6,7 @@ import com.intellij.execution.process.ProcessEvent
 import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.execution.runners.ExecutionEnvironment
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.util.Key
 import de.uni_passau.fim.se2.intelligame.achievements.*
@@ -15,9 +16,11 @@ import java.io.File
 object ConsoleListener : ExecutionListener {
 
     var coverageRun = false
+    var project: Project? = null
 
     override fun processStarted(executorId: String, env: ExecutionEnvironment, handler: ProcessHandler) {
         handler.addProcessListener(ConsoleAdapter())
+        project = env.project
         coverageRun = false
     }
 
@@ -52,10 +55,10 @@ object ConsoleListener : ExecutionListener {
                     groupValues[9].toInt(),
                 )
 
-                GetXLineCoverageInClassesWithYLinesAchievement.triggerAchievement(coverageInfo, fileName)
-                GetXBranchCoverageInClassesWithYBranchesAchievement.triggerAchievement(coverageInfo, fileName)
-                GetXMethodCoverageInClassesWithYMethodsAchievement.triggerAchievement(coverageInfo, fileName)
-                CoverXClassesAchievement.triggerAchievement(coverageInfo)
+                GetXLineCoverageInClassesWithYLinesAchievement.triggerAchievement(coverageInfo, fileName, project)
+                GetXBranchCoverageInClassesWithYBranchesAchievement.triggerAchievement(coverageInfo, fileName, project)
+                GetXMethodCoverageInClassesWithYMethodsAchievement.triggerAchievement(coverageInfo, fileName, project)
+                CoverXClassesAchievement.triggerAchievement(coverageInfo, project)
             }
             RunXTestSuitesAchievement.triggerAchievement()
             coverageRun = false
@@ -71,10 +74,10 @@ object ConsoleListener : ExecutionListener {
             if (coverageInfo.isEmpty()) return
             triggerTestsAchievements(event.text)
             coverageRun = true
-            RunWithCoverageAchievement.triggerAchievement()
-            CoverXLinesAchievement.triggerAchievement(coverageInfo)
-            CoverXMethodsAchievement.triggerAchievement(coverageInfo)
-            CoverXBranchesAchievement.triggerAchievement(coverageInfo)
+            RunWithCoverageAchievement.triggerAchievement(project)
+            CoverXLinesAchievement.triggerAchievement(coverageInfo, project)
+            CoverXMethodsAchievement.triggerAchievement(coverageInfo, project)
+            CoverXBranchesAchievement.triggerAchievement(coverageInfo, project)
         }
 
         private fun triggerTestsAchievements(output: String) {

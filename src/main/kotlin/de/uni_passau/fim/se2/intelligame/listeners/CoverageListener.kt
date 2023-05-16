@@ -12,26 +12,26 @@ import java.lang.reflect.Field
 
 
 object CoverageListener : CoverageSuiteListener {
-    lateinit var myProject: Project
+    lateinit var project: Project
     override fun coverageGathered(suite: CoverageSuite) {
-        myProject = suite.project
-        RunWithCoverageAchievement.triggerAchievement()
+        project = suite.project
+        RunWithCoverageAchievement.triggerAchievement(project)
         super.coverageGathered(suite)
     }
 
     override fun beforeSuiteChosen() = Unit
 
     override fun afterSuiteChosen() {
-        val dataManager = CoverageDataManagerImpl.getInstance(myProject)
+        val dataManager = CoverageDataManagerImpl.getInstance(project)
         if (ApplicationManager.getApplication().isUnitTestMode) {
             return
         }
         val suitesBundle: CoverageSuitesBundle = dataManager.currentSuitesBundle ?: return
 
-        val annotator = suitesBundle.coverageEngine.getCoverageAnnotator(myProject)
+        val annotator = suitesBundle.coverageEngine.getCoverageAnnotator(project)
 
         val modalTask: Task.Modal =
-            object : Task.Modal(myProject, "Modal Cancelable Task", false) {
+            object : Task.Modal(project, "Modal Cancelable Task", false) {
 
                 override fun run(indicator: ProgressIndicator) {
                     if (annotator::class.simpleName == "JavaCoverageAnnotator") {
@@ -52,17 +52,23 @@ object CoverageListener : CoverageSuiteListener {
                         val coverageInfo = extractCoverageInfos(value)
                         GetXLineCoverageInClassesWithYLinesAchievement.triggerAchievement(
                             coverageInfo,
-                            key as String
+                            key as String,
+                            project
                         )
                         GetXBranchCoverageInClassesWithYBranchesAchievement.triggerAchievement(
                             coverageInfo,
-                            key
+                            key,
+                            project
                         )
-                        GetXMethodCoverageInClassesWithYMethodsAchievement.triggerAchievement(coverageInfo, key)
-                        CoverXLinesAchievement.triggerAchievement(coverageInfo)
-                        CoverXMethodsAchievement.triggerAchievement(coverageInfo)
-                        CoverXClassesAchievement.triggerAchievement(coverageInfo)
-                        CoverXBranchesAchievement.triggerAchievement(coverageInfo)
+                        GetXMethodCoverageInClassesWithYMethodsAchievement.triggerAchievement(
+                            coverageInfo,
+                            key,
+                            project
+                        )
+                        CoverXLinesAchievement.triggerAchievement(coverageInfo, project)
+                        CoverXMethodsAchievement.triggerAchievement(coverageInfo, project)
+                        CoverXClassesAchievement.triggerAchievement(coverageInfo, project)
+                        CoverXBranchesAchievement.triggerAchievement(coverageInfo, project)
                     }
                     val extensionCoverageField: Field =
                         annotator.javaClass.getDeclaredField("myDirCoverageInfos")
@@ -87,10 +93,11 @@ object CoverageListener : CoverageSuiteListener {
                         val coverageInfo = extractJestCoverageInfos(value)
                         GetXLineCoverageInClassesWithYLinesAchievement.triggerAchievement(
                             coverageInfo,
-                            key as String
+                            key as String,
+                            project
                         )
-                        CoverXLinesAchievement.triggerAchievement(coverageInfo)
-                        CoverXClassesAchievement.triggerAchievement(coverageInfo)
+                        CoverXLinesAchievement.triggerAchievement(coverageInfo, project)
+                        CoverXClassesAchievement.triggerAchievement(coverageInfo, project)
                     }
                 }
             }

@@ -37,9 +37,6 @@ class ProjectService(project: Project) {
         project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, BulkFileListenerImpl)
         project.messageBus.connect().subscribe(ExecutionManager.EXECUTION_TOPIC, ConsoleListener)
 
-        FindXBugsAchievement.setProject(project)
-        RepairXWrongTestsAchievement.setProject(project)
-
         CoverageDataManagerImpl.getInstance(project)?.addSuiteListener(CoverageListener, Disposer.newDisposable())
     }
 }
