@@ -13,10 +13,6 @@
         <projectService serviceImplementation="de.uni_passau.fim.se2.intelligame.services.ProjectService"/>
         <notificationGroup id="Custom Notification Group" displayType="BALLOON"/>
         <toolWindow factoryClass="de.uni_passau.fim.se2.intelligame.components.AchievementToolWindow" id="Achievements"/>
+        <postStartupActivity implementation="de.uni_passau.fim.se2.intelligame.listeners.ProjectActivity" />
     </extensions>
-
-    <applicationListeners>
-        <listener class="de.uni_passau.fim.se2.intelligame.listeners.ProjectManagerImpl"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
 </idea-plugin>

@@ -70,9 +70,9 @@ object ConsoleListener : ExecutionListener {
 
         override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
             if (outputType != ProcessOutputTypes.STDOUT) return
+            triggerTestsAchievements(event.text)
             val coverageInfo = extractCoverageInfo(event.text)
             if (coverageInfo.isEmpty()) return
-            triggerTestsAchievements(event.text)
             coverageRun = true
             RunWithCoverageAchievement.triggerAchievement(project)
             CoverXLinesAchievement.triggerAchievement(coverageInfo, project)

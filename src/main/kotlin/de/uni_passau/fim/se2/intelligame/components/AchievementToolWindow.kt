@@ -284,7 +284,7 @@ class AchievementToolWindow : ToolWindowFactory {
     }
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-        toolWindow.setIcon(TrophyIcons.trophyDefaultIcon)
+        toolWindow.setIcon(TrophyIcons.trophyToolWindowIcon)
         val content = contentFactory.createContent(createPanel(), null, false)
         toolWindow.contentManager.addContent(content)
     }
