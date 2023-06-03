@@ -11,19 +11,22 @@ import java.sql.Timestamp
 object Logger {
 
     enum class Kind {
-        Achievement, Notification
+        Achievement, Notification, Main, Debug
     }
 
     fun logStatus(text: String, kind: Kind, project: Project?) {
 
         if (project != null) {
-            val path = ProjectRootManager.getInstance(project).contentRoots[0].path + "/.evaluation/evaluationLogs.txt"
-            val output: Writer
-            output = BufferedWriter(FileWriter(File(path), true))
+            try {
+                val path = ProjectRootManager.getInstance(project).contentRoots[0].path+
+                        "${File.separator}.evaluation${File.separator}evaluationLogs.txt"
+                val output: Writer
+                output = BufferedWriter(FileWriter(File(path), true))
 
-            val timestamp = Timestamp(System.currentTimeMillis()).toString()
-            output.appendLine("$timestamp - ${kind.name} - $text")
-            output.close()
+                val timestamp = Timestamp(System.currentTimeMillis()).toString()
+                output.appendLine("$timestamp - ${kind.name} - $text")
+                output.close()
+            } catch (_: Exception) {}
         }
     }
 }

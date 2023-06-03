@@ -5,7 +5,7 @@ import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.execution.testframework.sm.runner.states.TestStateInfo
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.ProjectManager
+import de.uni_passau.fim.se2.intelligame.util.Util
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.nio.charset.Charset
@@ -16,19 +16,16 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
     private var project: Project? = null
 
     override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
-        val projects = ProjectManager.getInstance().openProjects
-        for (p in projects) {
-            if (p.basePath?.let { testsRoot.locationUrl?.contains(it) } == true) {
-                project = p
-            }
-        }
+        project = Util.getProject(testsRoot.locationUrl)
     }
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
 
     override fun onTestsCountInSuite(count: Int) = Unit
 
-    override fun onTestStarted(test: SMTestProxy) = Unit
+    override fun onTestStarted(test: SMTestProxy) {
+        if (project == null) project = Util.getProject(test.locationUrl)
+    }
 
     override fun onTestFinished(test: SMTestProxy) {
         val key = test.locationUrl
@@ -37,9 +34,11 @@ object RepairXWrongTestsAchievement : SMTRunnerEventsListener, Achievement() {
             ?.replace(".", "/")
             ?: "")
         val pathToTest =
-            project?.basePath + "/src/test/java/" + fileUrl + ".java"
+            project?.basePath + "${File.separator}src${File.separator}test${File.separator}java${File.separator}" +
+                    fileUrl + ".java"
         val pathToCode =
-            project?.basePath + "/src/main/java/" + fileUrl.dropLast(4) + ".java"
+            project?.basePath + "${File.separator}src${File.separator}main${File.separator}java${File.separator}" +
+                    fileUrl.dropLast(4) + ".java"
         val testFile = File(pathToTest)
         val codeFile = File(pathToCode)
         if (key != null && testFile.exists() && codeFile.exists()) {

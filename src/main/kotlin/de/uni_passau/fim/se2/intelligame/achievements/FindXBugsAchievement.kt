@@ -5,64 +5,57 @@ import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.execution.testframework.sm.runner.states.TestStateInfo
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.ProjectManager
-import org.apache.commons.io.FileUtils
-import java.io.File
-import java.nio.charset.Charset
+import com.intellij.openapi.vfs.readText
+import com.intellij.psi.search.GlobalSearchScope
+import de.uni_passau.fim.se2.intelligame.util.Util
+import javax.swing.SwingUtilities
 
 object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
     private var testsUnderObservation = hashMapOf<String, String>()
     private var project: Project? = null
 
     override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
-        val projects = ProjectManager.getInstance().openProjects
-        for (p in projects) {
-            if (p.basePath?.let { testsRoot.locationUrl?.contains(it) } == true) {
-                project = p
-            }
-        }
+        project = Util.getProject(testsRoot.locationUrl)
     }
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) = Unit
 
     override fun onTestsCountInSuite(count: Int) = Unit
 
-    override fun onTestStarted(test: SMTestProxy) = Unit
+    override fun onTestStarted(test: SMTestProxy) {
+        if (project == null) project = Util.getProject(test.locationUrl)
+    }
 
     override fun onTestFinished(test: SMTestProxy) {
-        val key = test.locationUrl
-        // Find the correct absolute path to the test class therefore the test-identifier and prefix is removed
-        val path =
-            project?.basePath + "/src/test/java/" + (test.locationUrl?.removeRange(
-                test.locationUrl!!.lastIndexOf("/"),
-                test.locationUrl!!.length
-            )
-                ?.removePrefix("java:test://")
-                ?.replace(".", "/")
-                ?: "") + ".java"
-        val testFile = File(path)
-        // Check if test file exists (if the path was built correctly)
-        if (key != null && testFile.exists()) {
-            // File content as String
-            val fileContent = FileUtils.readFileToString(testFile, Charset.defaultCharset())
-                .replace(System.getProperty("line.separator"), "")
-            // If the test fails check if the file content was already saved before, if not add content
-            if (test.magnitudeInfo == TestStateInfo.Magnitude.FAILED_INDEX
-                || test.magnitudeInfo == TestStateInfo.Magnitude.ERROR_INDEX) {
-                if (!testsUnderObservation.containsKey(key)) {
-                    testsUnderObservation[key] = fileContent
-                }
-            } else if (test.magnitudeInfo == TestStateInfo.Magnitude.PASSED_INDEX) {
-                // If test passes check if the content is still the same
-                if (testsUnderObservation.containsKey(key) &&
-                    testsUnderObservation[key] == fileContent
-                ) {
-                    var progress = progress()
-                    progress++
-                    handleProgress(progress, project)
-                    testsUnderObservation.remove(key)
-                } else {
-                    testsUnderObservation.remove(key)
+        SwingUtilities.invokeLater {
+            val fileContent =
+                test
+                .getLocation(project!!, GlobalSearchScope.allScope(project!!))
+                ?.virtualFile
+                ?.readText()
+                ?.replace("\n", "")
+                ?.replace("\r", "")
+            val key = test.locationUrl
+
+            if (key != null && fileContent != null) {
+                // If the test fails check if the file content was already saved before, if not add content
+                if (test.magnitudeInfo == TestStateInfo.Magnitude.FAILED_INDEX
+                    || test.magnitudeInfo == TestStateInfo.Magnitude.ERROR_INDEX) {
+                    if (!testsUnderObservation.containsKey(key)) {
+                        testsUnderObservation[key] = fileContent
+                    }
+                } else if (test.magnitudeInfo == TestStateInfo.Magnitude.PASSED_INDEX) {
+                    // If test passes check if the content is still the same
+                    if (testsUnderObservation.containsKey(key) &&
+                        testsUnderObservation[key] == fileContent
+                    ) {
+                        var progress = progress()
+                        progress++
+                        handleProgress(progress, project)
+                        testsUnderObservation.remove(key)
+                    } else {
+                        testsUnderObservation.remove(key)
+                    }
                 }
             }
         }
@@ -126,6 +119,6 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
     }
 
     override fun supportsLanguages(): List<Language> {
-        return listOf(Language.Java)
+        return listOf(Language.Java, Language.JavaScript)
     }
 }

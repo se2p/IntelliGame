@@ -149,8 +149,7 @@ object CoverageListener : CoverageSuiteListener {
         do {
             try {
                 return current.getDeclaredField(fieldName)
-            } catch (_: Exception) {
-            }
+            } catch (_: Exception) {}
         } while (current.superclass.also { current = it } != null)
         return null
     }

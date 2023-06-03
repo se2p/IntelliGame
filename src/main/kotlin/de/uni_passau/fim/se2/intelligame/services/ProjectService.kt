@@ -4,20 +4,27 @@ import com.intellij.coverage.CoverageDataManagerImpl
 import com.intellij.execution.ExecutionManager
 import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
 import com.intellij.ide.util.PropertiesComponent
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.xdebugger.XDebuggerManager
 import com.intellij.xdebugger.breakpoints.XBreakpointListener
 import de.uni_passau.fim.se2.intelligame.MyBundle
 import de.uni_passau.fim.se2.intelligame.achievements.*
 import de.uni_passau.fim.se2.intelligame.listeners.*
+import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider
+import java.io.File
+import java.sql.Timestamp
+import java.util.UUID
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
-class ProjectService(project: Project) {
+
+class ProjectService(project: Project): Disposable {
 
     init {
         println(MyBundle.message("projectService", project.name))
-        PropertiesComponent.getInstance()
 
         project.messageBus.connect().subscribe(SMTRunnerEventsListener.TEST_STATUS, TriggerXAssertsByTestsAchievement)
         project.messageBus.connect().subscribe(XDebuggerManager.TOPIC, RunXDebuggerModeAchievement)
@@ -37,6 +44,69 @@ class ProjectService(project: Project) {
         project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, BulkFileListenerImpl)
         project.messageBus.connect().subscribe(ExecutionManager.EXECUTION_TOPIC, ConsoleListener)
 
-        CoverageDataManagerImpl.getInstance(project)?.addSuiteListener(CoverageListener, Disposer.newDisposable())
+        CoverageDataManagerImpl.getInstance(project)?.addSuiteListener(CoverageListener, this)
+
+        if (MyBundle.message("projectURL").isNotEmpty() && MyBundle.message("projectToken").isNotEmpty()) {
+            val properties = PropertiesComponent.getInstance()
+            if (properties.getValue("uuid") == null)
+                properties.setValue("uuid", UUID.randomUUID().toString())
+            val projectPath = project.basePath
+
+            if (project.name == MyBundle.message("projectName")) {
+                createBranch(projectPath!!)
+                commitAllFilesToBranch(projectPath, properties.getValue("uuid")!!)
+            }
+
+            val executorService = Executors.newScheduledThreadPool(1)
+            executorService.scheduleAtFixedRate({
+                try {
+                    if (project.name == MyBundle.message("projectName")) {
+                        commitAllFilesToBranch(projectPath!!, properties.getValue("uuid")!!)
+                    }
+                } catch (_: java.lang.Exception) {}
+            }, 0, 1, TimeUnit.MINUTES)
+        }
     }
+
+    private fun createBranch(projectPath: String) {
+        val properties = PropertiesComponent.getInstance()
+        val uuid = properties.getValue("uuid")
+        val gitWorkDir = File(projectPath)
+        try {
+            Git.open(gitWorkDir).use { git ->
+                git.checkout().setName("main").call()
+                git.checkout().setName(uuid).setCreateBranch(true).call()
+            }
+        } catch (_: Exception) {}
+    }
+
+    private fun commitAllFilesToBranch(projectPath: String, branch: String) {
+        val gitWorkDir = File(projectPath)
+        val user = UsernamePasswordCredentialsProvider(
+            MyBundle.message("projectToken"), "")
+        try {
+            Git.open(gitWorkDir).use { git ->
+                checkoutBranch(projectPath, branch)
+                if (git.repository.branch != branch) return
+                git.add().addFilepattern(".").call()
+                val timestamp = Timestamp(System.currentTimeMillis())
+                git.commit().setMessage(timestamp.toString()).call()
+                git.push().setRemote(MyBundle.message("projectURL"))
+                    .setCredentialsProvider(user).call()
+            }
+        } catch (_: Exception) {}
+
+    }
+
+    private fun checkoutBranch(projectPath: String, name: String) {
+        val gitWorkDir = File(projectPath)
+        try {
+            Git.open(gitWorkDir).use { git ->
+                if (git.branchList().call().find { it.name == name } == null) createBranch(projectPath)
+                git.checkout().setName(name).call()
+            }
+        } catch (_: Exception) {}
+    }
+
+    override fun dispose() = Unit
 }

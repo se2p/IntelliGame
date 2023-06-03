@@ -1,20 +1,18 @@
 package de.uni_passau.fim.se2.intelligame.components
 
+import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowAnchor
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.content.ContentFactory
-import com.intellij.ui.dsl.builder.Align
-import com.intellij.ui.dsl.builder.AlignX
-import com.intellij.ui.dsl.builder.RowLayout
-import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.*
 import com.intellij.util.ui.JBEmptyBorder
 import com.intellij.util.ui.UIUtil
+import de.uni_passau.fim.se2.intelligame.MyBundle
 import de.uni_passau.fim.se2.intelligame.achievements.Achievement.Language
 import de.uni_passau.fim.se2.intelligame.util.Util
-import java.awt.Dimension
 import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.JProgressBar
@@ -28,27 +26,44 @@ class AchievementToolWindow : ToolWindowFactory {
         fun createPanel(): JComponent {
 
             val main = JPanel()
-            main.minimumSize = Dimension(400, 300)
             main.border = JBEmptyBorder(5)
             val content = panel {
-                row {
-                    label("").resizableColumn()
-                    icon(TrophyIcons.trophyDefaultIcon)
-                    icon(TrophyIcons.trophyBronzeIcon)
-                    if (UIUtil.isUnderDarcula()) {
-                        icon(TrophyIcons.trophySilverIcon)
-                    } else {
-                        icon(TrophyIcons.trophySilverLightIcon)
-                    }
-                    icon(TrophyIcons.trophyGoldIcon)
-                    icon(TrophyIcons.trophyPlatinIcon)
-                    label("").resizableColumn()
-                }.resizableRow()
-                val dialogPanel = achievementList()
-                row {
-                    dialogPanel.border = JBEmptyBorder(5)
-                    cell(dialogPanel).align(Align.FILL).resizableColumn()
-                }.resizableRow()
+
+                if (MyBundle.message("group") != "control") {
+                    row {
+                        label("").resizableColumn()
+                        icon(TrophyIcons.trophyDefaultIcon)
+                        icon(TrophyIcons.trophyBronzeIcon)
+                        if (UIUtil.isUnderDarcula()) {
+                            icon(TrophyIcons.trophySilverIcon)
+                        } else {
+                            icon(TrophyIcons.trophySilverLightIcon)
+                        }
+                        icon(TrophyIcons.trophyGoldIcon)
+                        icon(TrophyIcons.trophyPlatinIcon)
+                        label("").resizableColumn()
+                    }.resizableRow()
+
+                    val dialogPanel = achievementList()
+
+                    row {
+                        dialogPanel.border = JBEmptyBorder(5)
+                        cell(dialogPanel).align(Align.FILL).resizableColumn()
+                    }.resizableRow()
+                }
+
+                if (MyBundle.message("projectURL").isNotEmpty() && MyBundle.message("projectToken").isNotEmpty()) {
+                    val properties = PropertiesComponent.getInstance()
+                    val uuid = properties.getValue("uuid")
+
+                    separator()
+                    row {
+                        label("").resizableColumn()
+                        label(uuid!!).bold()
+                        actionButton(CopyToClipboardAction(uuid))
+                        label("").resizableColumn()
+                    }.resizableRow()
+                }
             }
             main.add(content)
             return JBScrollPane(main)
@@ -284,8 +299,13 @@ class AchievementToolWindow : ToolWindowFactory {
     }
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-        toolWindow.setIcon(TrophyIcons.trophyToolWindowIcon)
-        val content = contentFactory.createContent(createPanel(), null, false)
+        val content = if (MyBundle.message("group") == "control") {
+            contentFactory.createContent(createPanel(), null, false)
+        } else {
+            toolWindow.setIcon(TrophyIcons.trophyToolWindowIcon)
+            contentFactory.createContent(createPanel(), null, false)
+        }
+
         toolWindow.contentManager.addContent(content)
     }
 

@@ -8,6 +8,7 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.ui.content.ContentFactory
+import de.uni_passau.fim.se2.intelligame.MyBundle
 import de.uni_passau.fim.se2.intelligame.components.AchievementToolWindow
 import de.uni_passau.fim.se2.intelligame.util.CSVReportGenerator
 import de.uni_passau.fim.se2.intelligame.util.Logger
@@ -21,13 +22,16 @@ abstract class Achievement {
 
     companion object {
         fun refreshWindow() {
-            val project = DataManager.getInstance().dataContextFromFocus.resultSync.getData(PlatformDataKeys.PROJECT)
-            val toolWindow = ToolWindowManager.getInstance(project!!).getToolWindow("Achievements")!!
-            SwingUtilities.invokeLater {
-                toolWindow.contentManager.removeAllContents(true)
-                val content = ContentFactory.getInstance()
-                    .createContent(AchievementToolWindow.createPanel(), null, false)
-                toolWindow.contentManager.addContent(content)
+            if (MyBundle.message("group") != "control") {
+                val project = DataManager.getInstance().dataContextFromFocus.resultSync
+                    .getData(PlatformDataKeys.PROJECT)
+                val toolWindow = ToolWindowManager.getInstance(project!!).getToolWindow("Achievements")!!
+                SwingUtilities.invokeLater {
+                    toolWindow.contentManager.removeAllContents(true)
+                    val content = ContentFactory.getInstance()
+                        .createContent(AchievementToolWindow.createPanel(), null, false)
+                    toolWindow.contentManager.addContent(content)
+                }
             }
         }
     }
@@ -77,22 +81,24 @@ abstract class Achievement {
      * Shows the balloon with the given message.
      */
     fun showAchievementNotification(message: String, project: Project?) {
-        NotificationGroupManager.getInstance().getNotificationGroup("Custom Notification Group")
-            .createNotification(
-                message,
-                NotificationType.INFORMATION
-            )
-            .addAction(
-                NotificationAction.createSimple("Show more information"
-                ) {
-                    val myProject = DataManager.getInstance().dataContextFromFocus.resultSync
-                        .getData(PlatformDataKeys.PROJECT)
-                    val toolWindow = ToolWindowManager.getInstance(myProject!!).getToolWindow("Achievements")!!
-                    refreshWindow()
-                    toolWindow.show()
-                }
-            )
-            .notify(null)
+        if (MyBundle.message("group") != "control") {
+            NotificationGroupManager.getInstance().getNotificationGroup("Custom Notification Group")
+                .createNotification(
+                    message,
+                    NotificationType.INFORMATION
+                )
+                .addAction(
+                    NotificationAction.createSimple("Show more information"
+                    ) {
+                        val myProject = DataManager.getInstance().dataContextFromFocus.resultSync
+                            .getData(PlatformDataKeys.PROJECT)
+                        val toolWindow = ToolWindowManager.getInstance(myProject!!).getToolWindow("Achievements")!!
+                        refreshWindow()
+                        toolWindow.show()
+                    }
+                )
+                .notify(null)
+        }
 
         Logger.logStatus(message, Logger.Kind.Notification, project)
     }

@@ -25,15 +25,17 @@ object CSVReportGenerator {
         headers += listOf("Timestamp")
         headers += achievementNamesLevel
         headers += achievementNamesProgress
-        val path = ProjectRootManager.getInstance(project).contentRoots[0].path + "/.evaluation"
-        val printer = getNewPrinter("TestReport.csv", path, headers)
-        val timestamp = Timestamp(System.currentTimeMillis()).toString()
-        val row = mutableListOf<String>()
-        row += listOf(timestamp)
-        row += Util.getAchievements().stream().map { it.getLevel().toString() }.collect(Collectors.toList())
-        row += Util.getAchievements().stream().map { it.progress().toString() }.collect(Collectors.toList())
-        printer.printRecord(row)
-        printer.flush()
+        try {
+            val path = ProjectRootManager.getInstance(project).contentRoots[0].path + "${File.separator}.evaluation"
+            val printer = getNewPrinter("TestReport.csv", path, headers)
+            val timestamp = Timestamp(System.currentTimeMillis()).toString()
+            val row = mutableListOf<String>()
+            row += listOf(timestamp)
+            row += Util.getAchievements().stream().map { it.getLevel().toString() }.collect(Collectors.toList())
+            row += Util.getAchievements().stream().map { it.progress().toString() }.collect(Collectors.toList())
+            printer.printRecord(row)
+            printer.flush()
+        } catch (_: Exception) {}
     }
 
     @Throws(IOException::class)
@@ -45,7 +47,7 @@ object CSVReportGenerator {
             filePath = namePath
             folder = File(filePath.parent.toString())
         } else {
-            filePath = Paths.get(path + System.getProperty("file.separator") + name)
+            filePath = Paths.get(path + File.separator + name)
             folder = File(path)
         }
         if (!folder.exists()) {

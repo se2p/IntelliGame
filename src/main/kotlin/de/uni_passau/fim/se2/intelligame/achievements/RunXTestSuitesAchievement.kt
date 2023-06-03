@@ -4,18 +4,13 @@ import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener
 import com.intellij.execution.testframework.sm.runner.SMTestProxy
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.ProjectManager
+import de.uni_passau.fim.se2.intelligame.util.Util
 
 object RunXTestSuitesAchievement : SMTRunnerEventsListener, Achievement() {
     private var project: Project? = null
 
     override fun onTestingStarted(testsRoot: SMTestProxy.SMRootTestProxy) {
-        val projects = ProjectManager.getInstance().openProjects
-        for (p in projects) {
-            if (p.basePath?.let { testsRoot.locationUrl?.contains(it) } == true) {
-                project = p
-            }
-        }
+        project = Util.getProject(testsRoot.locationUrl)
     }
 
     override fun onTestingFinished(testsRoot: SMTestProxy.SMRootTestProxy) {
@@ -37,7 +32,9 @@ object RunXTestSuitesAchievement : SMTRunnerEventsListener, Achievement() {
 
     override fun onTestsCountInSuite(count: Int) = Unit
 
-    override fun onTestStarted(test: SMTestProxy) = Unit
+    override fun onTestStarted(test: SMTestProxy) {
+        if (project == null) project = Util.getProject(test.locationUrl)
+    }
 
     override fun onTestFinished(test: SMTestProxy) = Unit
 

@@ -30,10 +30,12 @@ dependencies {
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("com.github.tsantalis:refactoring-miner:2.2.0")
     implementation("org.apache.commons:commons-csv:1.10.0")
+    implementation("org.eclipse.jgit:org.eclipse.jgit:5.13.0.202109080827-r")
 }
 
 configurations.all {
     exclude(group = "org.slf4j", module = "slf4j-log4j12")
+    exclude(group = "org.slf4j", module = "slf4j-api")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin

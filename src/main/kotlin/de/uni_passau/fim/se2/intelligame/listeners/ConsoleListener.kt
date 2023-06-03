@@ -11,12 +11,14 @@ import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.util.Key
 import de.uni_passau.fim.se2.intelligame.achievements.*
 import de.uni_passau.fim.se2.intelligame.util.CoverageInfo
+import de.uni_passau.fim.se2.intelligame.util.Logger
 import java.io.File
 
 object ConsoleListener : ExecutionListener {
 
     var coverageRun = false
     var project: Project? = null
+    var triggered = false
 
     override fun processStarted(executorId: String, env: ExecutionEnvironment, handler: ProcessHandler) {
         handler.addProcessListener(ConsoleAdapter())
@@ -32,7 +34,7 @@ object ConsoleListener : ExecutionListener {
     ) {
         if (coverageRun) {
             val path = ProjectRootManager.getInstance(env.project).contentRoots[0].path
-            val file = File("$path/coverage/coverage-summary.json")
+            val file = File("$path${File.separator}coverage${File.separator}coverage-summary.json")
             if (!file.exists()) return
             val coverageData = file.readText().split("\n")
             for(line in coverageData) {
@@ -70,14 +72,17 @@ object ConsoleListener : ExecutionListener {
 
         override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
             if (outputType != ProcessOutputTypes.STDOUT) return
-            triggerTestsAchievements(event.text)
+            if (!triggered) triggerTestsAchievements(event.text)
             val coverageInfo = extractCoverageInfo(event.text)
             if (coverageInfo.isEmpty()) return
             coverageRun = true
-            RunWithCoverageAchievement.triggerAchievement(project)
-            CoverXLinesAchievement.triggerAchievement(coverageInfo, project)
-            CoverXMethodsAchievement.triggerAchievement(coverageInfo, project)
-            CoverXBranchesAchievement.triggerAchievement(coverageInfo, project)
+            if (!triggered) {
+                RunWithCoverageAchievement.triggerAchievement(project)
+                CoverXLinesAchievement.triggerAchievement(coverageInfo, project)
+                CoverXMethodsAchievement.triggerAchievement(coverageInfo, project)
+                CoverXBranchesAchievement.triggerAchievement(coverageInfo, project)
+                triggered = true
+            }
         }
 
         private fun triggerTestsAchievements(output: String) {
@@ -85,6 +90,7 @@ object ConsoleListener : ExecutionListener {
             val tests = regex.find(output)?.groupValues?.get(1)?.toInt()
             if (tests != null) {
                 RunXTestsAchievement.triggerAchievement(tests)
+                RunXTestSuitesAchievement.triggerAchievement()
                 RunXTestSuitesWithXTestsAchievement.triggerAchievement(tests)
             }
         }
@@ -109,6 +115,14 @@ object ConsoleListener : ExecutionListener {
                 totalBranchesCount ?: 0,
                 coveredBranchesCount ?: 0
             )
+        }
+
+        override fun processTerminated(event: ProcessEvent) {
+            if (event.toString().contains("run start")) {
+                Logger.logStatus("Main executed", Logger.Kind.Main, project)
+            }
+            triggered = false
+            super.processTerminated(event)
         }
     }
 }
