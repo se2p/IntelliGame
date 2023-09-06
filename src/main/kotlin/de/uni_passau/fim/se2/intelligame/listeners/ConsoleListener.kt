@@ -96,9 +96,9 @@ object ConsoleListener : ExecutionListener {
         }
 
         private fun extractCoverageInfo(output: String): CoverageInfo {
-            val branchesRegex = Regex("Branches\\s*:\\s\\d+.\\d+%\\s\\(\\s(\\d+)/(\\d+)\\s\\)")
-            val linesRegex = Regex("Lines\\s*:\\s\\d+.\\d+%\\s\\(\\s(\\d+)/(\\d+)\\s\\)")
-            val functionsRegex = Regex("Functions\\s*:\\s\\d+.\\d+%\\s\\(\\s(\\d+)/(\\d+)\\s\\)")
+            val branchesRegex = Regex("Branches\\s*:\\s[\\d.]+%\\s\\(\\s(\\d+)/(\\d+)\\s\\)")
+            val linesRegex = Regex("Lines\\s*:\\s[\\d.]+%\\s\\(\\s(\\d+)/(\\d+)\\s\\)")
+            val functionsRegex = Regex("Functions\\s*:\\s[\\d.]+%\\s\\(\\s(\\d+)/(\\d+)\\s\\)")
             val coveredLinesCount = linesRegex.find(output)?.groupValues?.get(1)?.toInt()
             val totalLinesCount = linesRegex.find(output)?.groupValues?.get(2)?.toInt()
             val coveredMethodsCount = functionsRegex.find(output)?.groupValues?.get(1)?.toInt()
