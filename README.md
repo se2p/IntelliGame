@@ -1,4 +1,13 @@
 # IntelliGame
+This is the repository of the IntelliGame Plugin for IntelliJ to integrate Gamification into IntelliJ.
+
+IntelliGame is a plugin for IntelliJ which rewards developers
+for positive testing behavior using a multi-level achievement
+system: A total of 27 different achievements, each with incremental
+levels, provide affirming feedback when developers exhibit commendable
+testing behavior, and provide an incentive to further continue and
+improve this behavior.
+
 ## Development - How to add new Achievements
 
 During development, the [IntelliJ Platform SDK](https://plugins.jetbrains.com/docs/intellij/welcome.html) serves as the primary source for documentation.
