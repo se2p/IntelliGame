@@ -25,7 +25,7 @@ import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.content.ContentFactory
 import com.intellij.ui.dsl.builder.*
 import com.intellij.util.ui.JBEmptyBorder
-import com.intellij.util.ui.UIUtil
+import com.intellij.util.ui.StartupUiUtil.isDarkTheme
 import de.uni_passau.fim.se2.intelligame.MyBundle
 import de.uni_passau.fim.se2.intelligame.achievements.Achievement.Language
 import de.uni_passau.fim.se2.intelligame.util.Util
@@ -50,7 +50,7 @@ class AchievementToolWindow : ToolWindowFactory {
                         label("").resizableColumn()
                         icon(TrophyIcons.trophyDefaultIcon)
                         icon(TrophyIcons.trophyBronzeIcon)
-                        if (UIUtil.isUnderDarcula()) {
+                        if (isDarkTheme) {
                             icon(TrophyIcons.trophySilverIcon)
                         } else {
                             icon(TrophyIcons.trophySilverLightIcon)
@@ -94,7 +94,7 @@ class AchievementToolWindow : ToolWindowFactory {
                             when (achievement.getLevel()) {
                                 0 -> icon(TrophyIcons.trophyDefaultIcon)
                                 1 -> icon(TrophyIcons.trophyBronzeIcon)
-                                2 -> if (UIUtil.isUnderDarcula()) {
+                                2 -> if (isDarkTheme) {
                                     icon(TrophyIcons.trophySilverIcon)
                                 } else {
                                     icon(TrophyIcons.trophySilverLightIcon)
@@ -138,7 +138,7 @@ class AchievementToolWindow : ToolWindowFactory {
                             when (achievement.getLevel()) {
                                 0 -> icon(TrophyIcons.trophyDefaultIcon)
                                 1 -> icon(TrophyIcons.trophyBronzeIcon)
-                                2 -> if (UIUtil.isUnderDarcula()) {
+                                2 -> if (isDarkTheme) {
                                     icon(TrophyIcons.trophySilverIcon)
                                 } else {
                                     icon(TrophyIcons.trophySilverLightIcon)
@@ -182,7 +182,7 @@ class AchievementToolWindow : ToolWindowFactory {
                             when (achievement.getLevel()) {
                                 0 -> icon(TrophyIcons.trophyDefaultIcon)
                                 1 -> icon(TrophyIcons.trophyBronzeIcon)
-                                2 -> if (UIUtil.isUnderDarcula()) {
+                                2 -> if (isDarkTheme) {
                                     icon(TrophyIcons.trophySilverIcon)
                                 } else {
                                     icon(TrophyIcons.trophySilverLightIcon)
@@ -226,7 +226,7 @@ class AchievementToolWindow : ToolWindowFactory {
                             when (achievement.getLevel()) {
                                 0 -> icon(TrophyIcons.trophyDefaultIcon)
                                 1 -> icon(TrophyIcons.trophyBronzeIcon)
-                                2 -> if (UIUtil.isUnderDarcula()) {
+                                2 -> if (isDarkTheme) {
                                     icon(TrophyIcons.trophySilverIcon)
                                 } else {
                                     icon(TrophyIcons.trophySilverLightIcon)
@@ -270,7 +270,7 @@ class AchievementToolWindow : ToolWindowFactory {
                             when (achievement.getLevel()) {
                                 0 -> icon(TrophyIcons.trophyDefaultIcon)
                                 1 -> icon(TrophyIcons.trophyBronzeIcon)
-                                2 -> if (UIUtil.isUnderDarcula()) {
+                                2 -> if (isDarkTheme) {
                                     icon(TrophyIcons.trophySilverIcon)
                                 } else {
                                     icon(TrophyIcons.trophySilverLightIcon)
@@ -323,10 +323,6 @@ class AchievementToolWindow : ToolWindowFactory {
         }
 
         toolWindow.contentManager.addContent(content)
-    }
-
-    override fun getAnchor(): ToolWindowAnchor {
-        return ToolWindowAnchor.RIGHT
     }
 
     override fun shouldBeAvailable(project: Project) = true

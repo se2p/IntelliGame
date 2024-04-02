@@ -2,8 +2,6 @@
 
 # IntelliGame Changelog
 
-## [Unreleased]
-### Added
-- Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+## 0.1.0
 
-## 0.0.15
+Full version of the plugin including 26 achievements for both Java and JavaScript.

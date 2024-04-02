@@ -1,8 +1,17 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
-<idea-plugin>
+<idea-plugin url="https://github.com/se2p/IntelliGame">
     <id>de.uni_passau.fim.se2.intelligame</id>
     <name>IntelliGame</name>
-    <vendor>philippstraubinger</vendor>
+    <vendor url="https://www.fim.uni-passau.de/en/chair-for-software-engineering-ii">Chair for Software Engineering II</vendor>
+    <description><![CDATA[
+        A gamified plugin which rewards developers for positive testing behavior using a multi-level achievement system. It supports the following types of achievements for Java and JavaScript:
+    <ul>
+        <li>Testing</li>
+        <li>Coverage</li>
+        <li>Debugging</li>
+        <li>Test Refactoring</li>
+    </ul>
+    ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
