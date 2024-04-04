@@ -28,6 +28,7 @@ import de.uni_passau.fim.se2.intelligame.MyBundle
 import de.uni_passau.fim.se2.intelligame.components.AchievementToolWindow
 import de.uni_passau.fim.se2.intelligame.util.CSVReportGenerator
 import de.uni_passau.fim.se2.intelligame.util.Logger
+import java.util.concurrent.TimeUnit
 import javax.swing.SwingUtilities
 
 abstract class Achievement {
@@ -39,8 +40,8 @@ abstract class Achievement {
     companion object {
         fun refreshWindow() {
             if (MyBundle.message("group") != "control") {
-                val project = DataManager.getInstance().dataContextFromFocus.resultSync
-                    .getData(PlatformDataKeys.PROJECT)
+                val project = DataManager.getInstance().dataContextFromFocusAsync
+                    .blockingGet(10, TimeUnit.SECONDS)!!.getData(PlatformDataKeys.PROJECT)
                 val toolWindow = ToolWindowManager.getInstance(project!!).getToolWindow("Achievements")!!
                 SwingUtilities.invokeLater {
                     toolWindow.contentManager.removeAllContents(true)
@@ -106,8 +107,8 @@ abstract class Achievement {
                 .addAction(
                     NotificationAction.createSimple("Show more information"
                     ) {
-                        val myProject = DataManager.getInstance().dataContextFromFocus.resultSync
-                            .getData(PlatformDataKeys.PROJECT)
+                        val myProject = DataManager.getInstance().dataContextFromFocusAsync
+                            .blockingGet(10, TimeUnit.SECONDS)!!.getData(PlatformDataKeys.PROJECT)
                         val toolWindow = ToolWindowManager.getInstance(myProject!!).getToolWindow("Achievements")!!
                         refreshWindow()
                         toolWindow.show()

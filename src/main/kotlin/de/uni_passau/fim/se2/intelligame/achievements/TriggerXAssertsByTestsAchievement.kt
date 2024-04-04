@@ -26,6 +26,7 @@ import com.intellij.openapi.roots.FileIndexFacade
 import com.intellij.openapi.vfs.readText
 import com.intellij.psi.search.ProjectScopeImpl
 import de.uni_passau.fim.se2.intelligame.util.Util
+import java.util.concurrent.TimeUnit
 import javax.swing.SwingUtilities
 
 object TriggerXAssertsByTestsAchievement : SMTRunnerEventsListener, Achievement() {
@@ -45,7 +46,7 @@ object TriggerXAssertsByTestsAchievement : SMTRunnerEventsListener, Achievement(
 
     override fun onTestFinished(test: SMTestProxy) {
         if (test.isPassed) {
-            val project = DataManager.getInstance().dataContextFromFocus.resultSync.getData(PlatformDataKeys.PROJECT)!!
+            val project = DataManager.getInstance().dataContextFromFocusAsync.blockingGet(10, TimeUnit.SECONDS)!!.getData(PlatformDataKeys.PROJECT)!!
             SwingUtilities.invokeLater {
                 val file = test.getLocation(project, ProjectScopeImpl(project, FileIndexFacade.getInstance(project)))!!
                     .virtualFile

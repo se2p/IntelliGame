@@ -19,7 +19,6 @@ package de.uni_passau.fim.se2.intelligame.components
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
-import com.intellij.openapi.wm.ToolWindowAnchor
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.content.ContentFactory
@@ -32,6 +31,7 @@ import de.uni_passau.fim.se2.intelligame.util.Util
 import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.JProgressBar
+import javax.swing.UIManager
 
 
 class AchievementToolWindow : ToolWindowFactory {
