@@ -20,18 +20,17 @@ import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
+import com.intellij.ui.JBColor.isBright
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.content.ContentFactory
 import com.intellij.ui.dsl.builder.*
 import com.intellij.util.ui.JBEmptyBorder
-import com.intellij.util.ui.StartupUiUtil.isDarkTheme
 import de.uni_passau.fim.se2.intelligame.MyBundle
 import de.uni_passau.fim.se2.intelligame.achievements.Achievement.Language
 import de.uni_passau.fim.se2.intelligame.util.Util
 import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.JProgressBar
-import javax.swing.UIManager
 
 
 class AchievementToolWindow : ToolWindowFactory {
@@ -50,7 +49,7 @@ class AchievementToolWindow : ToolWindowFactory {
                         label("").resizableColumn()
                         icon(TrophyIcons.trophyDefaultIcon)
                         icon(TrophyIcons.trophyBronzeIcon)
-                        if (isDarkTheme) {
+                        if (!isBright()) {
                             icon(TrophyIcons.trophySilverIcon)
                         } else {
                             icon(TrophyIcons.trophySilverLightIcon)
@@ -94,7 +93,7 @@ class AchievementToolWindow : ToolWindowFactory {
                             when (achievement.getLevel()) {
                                 0 -> icon(TrophyIcons.trophyDefaultIcon)
                                 1 -> icon(TrophyIcons.trophyBronzeIcon)
-                                2 -> if (isDarkTheme) {
+                                2 -> if (!isBright()) {
                                     icon(TrophyIcons.trophySilverIcon)
                                 } else {
                                     icon(TrophyIcons.trophySilverLightIcon)
@@ -138,7 +137,7 @@ class AchievementToolWindow : ToolWindowFactory {
                             when (achievement.getLevel()) {
                                 0 -> icon(TrophyIcons.trophyDefaultIcon)
                                 1 -> icon(TrophyIcons.trophyBronzeIcon)
-                                2 -> if (isDarkTheme) {
+                                2 -> if (!isBright()) {
                                     icon(TrophyIcons.trophySilverIcon)
                                 } else {
                                     icon(TrophyIcons.trophySilverLightIcon)
@@ -182,7 +181,7 @@ class AchievementToolWindow : ToolWindowFactory {
                             when (achievement.getLevel()) {
                                 0 -> icon(TrophyIcons.trophyDefaultIcon)
                                 1 -> icon(TrophyIcons.trophyBronzeIcon)
-                                2 -> if (isDarkTheme) {
+                                2 -> if (!isBright()) {
                                     icon(TrophyIcons.trophySilverIcon)
                                 } else {
                                     icon(TrophyIcons.trophySilverLightIcon)
@@ -226,7 +225,7 @@ class AchievementToolWindow : ToolWindowFactory {
                             when (achievement.getLevel()) {
                                 0 -> icon(TrophyIcons.trophyDefaultIcon)
                                 1 -> icon(TrophyIcons.trophyBronzeIcon)
-                                2 -> if (isDarkTheme) {
+                                2 -> if (!isBright()) {
                                     icon(TrophyIcons.trophySilverIcon)
                                 } else {
                                     icon(TrophyIcons.trophySilverLightIcon)
@@ -270,7 +269,7 @@ class AchievementToolWindow : ToolWindowFactory {
                             when (achievement.getLevel()) {
                                 0 -> icon(TrophyIcons.trophyDefaultIcon)
                                 1 -> icon(TrophyIcons.trophyBronzeIcon)
-                                2 -> if (isDarkTheme) {
+                                2 -> if (!isBright()) {
                                     icon(TrophyIcons.trophySilverIcon)
                                 } else {
                                     icon(TrophyIcons.trophySilverLightIcon)
