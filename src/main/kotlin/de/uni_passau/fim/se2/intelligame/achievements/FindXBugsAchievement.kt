@@ -54,7 +54,7 @@ object FindXBugsAchievement : SMTRunnerEventsListener, Achievement() {
             val key = test.locationUrl
 
             if (key != null && fileContent != null) {
-                // If the test fails check if the file content was already saved before, if not add content
+                // If the test fails, check if the file content was already saved before, if not add content
                 if (test.magnitudeInfo == TestStateInfo.Magnitude.FAILED_INDEX
                     || test.magnitudeInfo == TestStateInfo.Magnitude.ERROR_INDEX) {
                     if (!testsUnderObservation.containsKey(key)) {

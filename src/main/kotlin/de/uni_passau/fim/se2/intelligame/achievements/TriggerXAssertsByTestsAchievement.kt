@@ -56,11 +56,11 @@ object TriggerXAssertsByTestsAchievement : SMTRunnerEventsListener, Achievement(
                         test.getLocation(project, ProjectScopeImpl(project, FileIndexFacade.getInstance(project)))!!
                             .psiElement.text
                     count = "assert".toRegex().findAll(testText).count()
-                } else if (file.path.endsWith("test.js")) {
+                } else if (file.path.endsWith("test.js") || file.path.endsWith("test.ts")) {
                     val testTitle =
                         test.getLocation(project, ProjectScopeImpl(project, FileIndexFacade.getInstance(project)))!!
                             .psiElement.text
-                    val testText = "\\stest\\($testTitle(.|\\n|\\r)*?(?=test\\(|\\Z|describe\\()".toRegex()
+                    val testText = "\\s(?:test|it)\\($testTitle(.|\\n|\\r)*?(?=test\\(|\\Z|describe\\(|it\\()".toRegex()
                         .find(file.readText())?.value ?: ""
                     count = "expect".toRegex().findAll(testText).count()
                 }

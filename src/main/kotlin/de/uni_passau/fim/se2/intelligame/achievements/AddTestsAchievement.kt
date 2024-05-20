@@ -63,7 +63,7 @@ object AddTestsAchievement : Achievement(), BulkFileListener {
                         countTests(
                             file.readText().replace(regex, "")
                         )
-                } else if (event.path.endsWith("test.js")) {
+                } else if (event.path.endsWith("test.js") || file.path.endsWith("test.ts")) {
                     counter =
                         countJestTests(
                             file.readText().replace(regex, "")
@@ -85,7 +85,7 @@ object AddTestsAchievement : Achievement(), BulkFileListener {
                         countTests(
                             file.readText().replace(regex, "")
                         )
-                } else if (event.path.endsWith("test.js")) {
+                } else if (event.path.endsWith("test.js") || file.path.endsWith("test.ts")) {
                     counter =
                         countJestTests(
                             file.readText().replace(regex, "")
@@ -112,6 +112,6 @@ object AddTestsAchievement : Achievement(), BulkFileListener {
     }
 
     private fun countJestTests(string: String): Int {
-        return "\\stest\\(".toRegex().findAll(string).count()
+        return "\\s(?:test|it)\\(".toRegex().findAll(string).count()
     }
 }

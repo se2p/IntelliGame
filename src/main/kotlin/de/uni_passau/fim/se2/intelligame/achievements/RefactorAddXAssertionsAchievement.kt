@@ -36,7 +36,7 @@ object RefactorAddXAssertionsAchievement : BulkFileListener, Achievement() {
                         countAsserts(
                             file.readText().replace(regex, "")
                         )
-                } else if (event.path.endsWith("test.js")) {
+                } else if (event.path.endsWith("test.js") || file.path.endsWith("test.ts")) {
                     counter =
                         countJestAsserts(
                             file.readText().replace(regex, "")
@@ -58,7 +58,7 @@ object RefactorAddXAssertionsAchievement : BulkFileListener, Achievement() {
                         countAsserts(
                             file.readText().replace(regex, "")
                         )
-                } else if (event.path.endsWith("test.js")) {
+                } else if (event.path.endsWith("test.js") || file.path.endsWith("test.ts")) {
                     counter =
                         countJestAsserts(
                             file.readText().replace(regex, "")
